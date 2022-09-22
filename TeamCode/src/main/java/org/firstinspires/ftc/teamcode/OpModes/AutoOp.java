@@ -25,7 +25,7 @@ public class AutoOp extends LinearOpMode {
     BNO055IMU imu;
     private ElapsedTime runtime = new ElapsedTime();
 
-    final double TICKS_PER_REV = 400.6;
+    final double TICKS_PER_REV = 537.7;
     final double DRIVE_GEAR_REDUCTION = 1;
     final double WHEEL_DIAMETER_INCHES = 3.93701;
     double COUNTS_PER_INCH = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -72,7 +72,24 @@ public class AutoOp extends LinearOpMode {
             telemetry.addData("Starting Location ", startingLocationString);
             telemetry.addData("Autonomous Routine ", currentAuto);
             telemetry.update();
-            //if (gamepad1.dpad_down)
+            if (gamepad1.dpad_up) {
+                if (allianceColorString == "Blue") {
+                    allianceColorString = "Red";
+                }
+                else if (allianceColorString == "Red"){
+                    allianceColorString = "Blue";
+                }
+                sleep(500);
+            }
+            if (gamepad1.dpad_down) {
+                if (startingLocationString == "Row 2") {
+                    startingLocationString = "Row 5";
+                }
+                else if (startingLocationString == "Row 5") {
+                    startingLocationString = "Row 2";
+                }
+                sleep(500);
+            }
 
         }
 
