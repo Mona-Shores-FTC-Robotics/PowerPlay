@@ -268,18 +268,24 @@ public class DriveTrain
 
     public void turnDegrees(int targetAngle, LinearOpMode activeOpMode) {
 
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //imu is the internal gyro and things
+        currAngle = lastAngles.firstAngle;
+
         strafe = 0;
         drive = 0;
         turn = .4;
-        if (targetAngle < 0) {turn = turn*(-1);}
+        if (targetAngle < currAngle) {turn = turn*(-1);}
+        activeOpMode.telemetry.addData("Current Angle", currAngle);
+        activeOpMode.telemetry.addData("Target Angle", targetAngle);
+        activeOpMode.telemetry.update();
+        activeOpMode.sleep(5000);
         MecanumDrive();
-
-        currAngle = 0;
+        double offsetangle = currAngle;
         while ( (activeOpMode.opModeIsActive() &&
-                (abs(currAngle) < abs(targetAngle))))
+                (abs(currAngle - offsetangle) < abs(targetAngle))))
             {
                 lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //imu is the internal gyro and things
-                currAngle = lastAngles.firstAngle;
+                currAngle = lastAngles.firstAngle - offsetangle;
 
             activeOpMode.telemetry.addData("Current Angle", currAngle);
             activeOpMode.telemetry.addData("Target Angle", targetAngle);

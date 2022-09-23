@@ -18,10 +18,17 @@ public class AutoOp extends LinearOpMode {
     @Override
 
     public void runOpMode() {
+        telemetry.addData("Status", "Initializing");
+        telemetry.update();
 
         MecDrive.init(hardwareMap);
         Vision.init(hardwareMap);
         ButtonConfig.init();
+
+        // Tell the driver that initialization is complete.
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+        sleep(1000);
 
         while (!isStarted()) {
             ButtonConfig.ConfigureAllianceColor(this);
@@ -38,8 +45,8 @@ public class AutoOp extends LinearOpMode {
         //MecDrive.strafeDrive(.3, -10, -10, this);
 
         MecDrive.turnDegrees(-90,this);
-
-        MecDrive.turnToAngle(45,this);
+        MecDrive.turnDegrees(45,this);
+        //MecDrive.turnToAngle(90,this);
 
     }
 }
