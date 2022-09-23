@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.ObjectClasses;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -65,13 +66,18 @@ public class DriveTrain
     public double turn = 0;
     public Orientation lastAngles = new Orientation();
     public double currAngle = 0.0;
-
-
     BNO055IMU imu;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
-    private ElapsedTime period  = new ElapsedTime();
+    private final ElapsedTime period  = new ElapsedTime();
+
+    //motor and wheel parameters
+    final double TICKS_PER_REV = 537.7;
+    final double DRIVE_GEAR_REDUCTION = 1;
+    final double WHEEL_DIAMETER_INCHES = 3.93701;
+    double COUNTS_PER_INCH = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+
 
     /* Constructor */
     public DriveTrain(){
@@ -110,8 +116,7 @@ public class DriveTrain
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-
-    }
+      }
 
     //Set power to all motors
     public void setAllPower(double p){setMotorPower(p,p,p,p);}
@@ -141,10 +146,118 @@ public class DriveTrain
         LBDrive.setPower(leftBackPower);
         RBDrive.setPower(rightBackPower);
 
-
     }
 
-    public void resetAngle() {
+        public void encoderDrive(double speed, int leftInches, int rightInches, LinearOpMode activeOpMode) {
+
+            int newLeftFrontTarget = (int) (leftInches * COUNTS_PER_INCH);
+            int newRightFrontTarget = (int) (rightInches * COUNTS_PER_INCH);
+            int newLeftBackTarget = (int) (leftInches * COUNTS_PER_INCH);
+            int newRightBackTarget = (int) (rightInches * COUNTS_PER_INCH);
+
+            LFDrive.setTargetPosition(newLeftFrontTarget);
+            RFDrive.setTargetPosition(newRightFrontTarget);
+            LBDrive.setTargetPosition(newLeftBackTarget);
+            RBDrive.setTargetPosition(newRightBackTarget);
+
+            LFDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RFDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LBDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RBDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            period.reset();
+            RFDrive.setPower(Math.abs(speed));
+            LFDrive.setPower(Math.abs(speed));
+            LBDrive.setPower(Math.abs(speed));
+            RBDrive.setPower(Math.abs(speed));
+
+            while (activeOpMode.opModeIsActive() &&
+                    (period.seconds() < 5) &&
+                    (RFDrive.isBusy() && LFDrive.isBusy() && LBDrive.isBusy() && RBDrive.isBusy())) {
+                activeOpMode.telemetry.addData("Encoder BL", LFDrive.getCurrentPosition());
+                activeOpMode.telemetry.addData("Encoder FR", RFDrive.getCurrentPosition());
+                activeOpMode.telemetry.addData("Encoder BL", LBDrive.getCurrentPosition());
+                activeOpMode.telemetry.addData("Encoder BR", RBDrive.getCurrentPosition());
+
+                activeOpMode.telemetry.addData("Encoder Target", newLeftFrontTarget);
+
+                activeOpMode.telemetry.update();
+            }
+
+            RFDrive.setPower(0);
+            LFDrive.setPower(0);
+            RBDrive.setPower(0);
+            LBDrive.setPower(0);
+
+            LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            activeOpMode.sleep(250);
+        }
+
+    public void strafeDrive(double speed, int leftInches, int rightInches, LinearOpMode activeOpMode) {
+
+        int newLeftFrontTarget = (int) (leftInches * COUNTS_PER_INCH);
+        int newRightFrontTarget = (int) (rightInches * COUNTS_PER_INCH);
+        int newLeftBackTarget = (int) (leftInches * COUNTS_PER_INCH);
+        int newRightBackTarget = (int) (rightInches * COUNTS_PER_INCH);
+
+        LFDrive.setTargetPosition(newLeftFrontTarget);
+        RFDrive.setTargetPosition(-newRightFrontTarget);
+        LBDrive.setTargetPosition(-newLeftBackTarget);
+        RBDrive.setTargetPosition(newRightBackTarget);
+
+        LFDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RFDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        LBDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        RBDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        period.reset();
+        RFDrive.setPower(Math.abs(speed));
+        LFDrive.setPower(Math.abs(speed));
+        LBDrive.setPower(Math.abs(speed));
+        RBDrive.setPower(Math.abs(speed));
+
+        while (activeOpMode.opModeIsActive() &&
+                (period.seconds() < 5) &&
+                (RFDrive.isBusy() && LFDrive.isBusy() && LBDrive.isBusy() && RBDrive.isBusy())) {
+            activeOpMode.telemetry.addData("Encoder BL", LFDrive.getCurrentPosition());
+            activeOpMode.telemetry.addData("Encoder FR", RFDrive.getCurrentPosition());
+            activeOpMode.telemetry.addData("Encoder BL", LBDrive.getCurrentPosition());
+            activeOpMode.telemetry.addData("Encoder BR", RBDrive.getCurrentPosition());
+
+            activeOpMode.telemetry.addData("Encoder Target", newLeftFrontTarget);
+
+            activeOpMode.telemetry.update();
+        }
+
+        RFDrive.setPower(0);
+        LFDrive.setPower(0);
+        RBDrive.setPower(0);
+        LBDrive.setPower(0);
+
+        LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        activeOpMode.sleep(250);
+    }
+
+
+        public void resetAngle() {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //imu is the internal gyro and things
         currAngle = 0;
     }

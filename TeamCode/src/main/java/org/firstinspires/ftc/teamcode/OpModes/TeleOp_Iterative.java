@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 
 /**
@@ -55,7 +56,7 @@ public class TeleOp_Iterative extends OpMode
 {
     // Declare OpMode members.
     DriveTrain MecDrive = new DriveTrain();
-    private ElapsedTime runtime = new ElapsedTime();
+    private final ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void init() {
@@ -79,12 +80,13 @@ public class TeleOp_Iterative extends OpMode
         // GamePad Inputs
         MecDrive.drive = -gamepad1.left_stick_y; //-1.0 to 1.0
         MecDrive.strafe = gamepad1.left_stick_x; //-1.0 to 1.0 // right trigger strafe right, left trigger strafe left
-        MecDrive.turn  =  gamepad1.right_stick_x; //-1.0 to 1.0
+        MecDrive.turn  = -gamepad1.right_stick_x; //-1.0 to 1.0
 
        //  Robot Functions
         MecDrive.MecanumDrive();
         // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.setDisplayFormat(Telemetry.DisplayFormat.CLASSIC);
+        telemetry.addData("Status", "Run Time: " + runtime);
         telemetry.addData("Motors", "leftfront(%.2f), rightfront (%.2f)",MecDrive.leftFrontPower,MecDrive.rightFrontPower);
         telemetry.addData("Motors", "leftback (%.2f), rightback (%.2f)",MecDrive.leftBackPower,MecDrive.rightBackPower);
         telemetry.update();
