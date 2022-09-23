@@ -34,8 +34,13 @@ public class AutoOp extends LinearOpMode {
         }
 
         //Autonomous Routine Example
-        MecDrive.encoderDrive(.3, 10, 10, this);
-        MecDrive.strafeDrive(.3, -10, -10, this);
+        //MecDrive.encoderDrive(.3, 10, 10, this);
+        //MecDrive.strafeDrive(.3, -10, -10, this);
+
+        MecDrive.turnDegrees(-90,this);
+
+        MecDrive.turnToAngle(45,this);
+
     }
 }
 
