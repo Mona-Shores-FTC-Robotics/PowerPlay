@@ -44,9 +44,10 @@ public class AutoOp extends LinearOpMode {
         //MecDrive.encoderDrive(.3, 10, 10, this);
         //MecDrive.strafeDrive(.3, -10, -10, this);
 
-        MecDrive.turnDegrees(-90,this);
-        MecDrive.turnDegrees(45,this);
-        //MecDrive.turnToAngle(90,this);
+        MecDrive.encoderDrive(.4, 30, 30, this);
+        MecDrive.turn(45,this);
+        sleep(1000);
+        MecDrive.turnTo(0,this);
 
     }
 }

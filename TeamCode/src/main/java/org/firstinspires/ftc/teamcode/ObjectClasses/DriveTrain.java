@@ -38,6 +38,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.checkerframework.checker.index.qual.LTEqLengthOf;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -131,10 +133,9 @@ public class DriveTrain
         LBDrive.setPower(lB);
         RBDrive.setPower(rB);
     }
+
     public void MecanumDrive(){
-
         // Put Mecanum Drive math and motor commands here.
-
         double dPercent = abs(drive) / (abs(drive) + abs(strafe) + abs(turn));
         double sPercent = abs(strafe) / (abs(drive) + abs(turn) + abs(strafe));
         double tPercent = abs(turn) / (abs(drive) + abs(turn) + abs(strafe));
@@ -150,7 +151,6 @@ public class DriveTrain
         LBDrive.setPower(leftBackPower);
         RBDrive.setPower(rightBackPower);
     }
-
         public void encoderDrive(double speed, int leftInches, int rightInches, LinearOpMode activeOpMode) {
 
             int newLeftFrontTarget = (int) (leftInches * COUNTS_PER_INCH);
@@ -192,16 +192,17 @@ public class DriveTrain
             RBDrive.setPower(0);
             LBDrive.setPower(0);
 
-            LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+            /*
             LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+            */
             activeOpMode.sleep(250);
         }
 
@@ -246,85 +247,74 @@ public class DriveTrain
         RBDrive.setPower(0);
         LBDrive.setPower(0);
 
-        LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        /*
         LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        */
         activeOpMode.sleep(250);
     }
 
 
         public void resetAngle() {
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //imu is the internal gyro and things
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         currAngle = 0;
     }
 
+    public double getAngle() {
+        Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double deltaAngle = orientation.firstAngle - lastAngles.firstAngle;
 
-    public void turnDegrees(int targetAngle, LinearOpMode activeOpMode) {
-
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //imu is the internal gyro and things
-        currAngle = lastAngles.firstAngle;
-
-        strafe = 0;
-        drive = 0;
-        turn = .4;
-        if (targetAngle < currAngle) {turn = turn*(-1);}
-        activeOpMode.telemetry.addData("Current Angle", currAngle);
-        activeOpMode.telemetry.addData("Target Angle", targetAngle);
-        activeOpMode.telemetry.update();
-        activeOpMode.sleep(5000);
-        MecanumDrive();
-        double offsetangle = currAngle;
-        while ( (activeOpMode.opModeIsActive() &&
-                (abs(currAngle - offsetangle) < abs(targetAngle))))
-            {
-                lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //imu is the internal gyro and things
-                currAngle = lastAngles.firstAngle - offsetangle;
-
-            activeOpMode.telemetry.addData("Current Angle", currAngle);
-            activeOpMode.telemetry.addData("Target Angle", targetAngle);
-            activeOpMode.telemetry.update();
-        }
-        strafe = 0;
-        drive = 0;
-        turn = 0;
-        MecanumDrive();
-    }
-
-    public void turnToAngle(int targetAngle, LinearOpMode activeOpMode) {
-
-        imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //imu is the internal gyro and things
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //imu is the internal gyro and things
-        double difference =  lastAngles.firstAngle - targetAngle;
-        strafe = 0;
-        drive = 0;
-        turn = .4;
-        if (difference < 0) {turn = turn*(-1);}
-
-        MecanumDrive();
-
-        currAngle = 0;
-        while ( (activeOpMode.opModeIsActive() &&
-                (abs(currAngle) < abs(difference))))
+        if (deltaAngle > 180)
         {
-            lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES); //imu is the internal gyro and things
-            currAngle = lastAngles.firstAngle;
+            deltaAngle -= 360;
+        }
+        else if (deltaAngle <= -180)
+        {
+            deltaAngle+=360;
+        }
+        currAngle += deltaAngle;
+        lastAngles = orientation;
+        return currAngle;
+    }
 
-            activeOpMode.telemetry.addData("Current Angle", currAngle);
-            activeOpMode.telemetry.addData("Target Angle", difference);
+    public void turn (double degrees, LinearOpMode activeOpMode)
+    {
+        resetAngle();
+        double error = degrees;
+        while (activeOpMode.opModeIsActive() && Math.abs(error) > 1)
+        {
+            double motorPower = (error < 0 ? .3 : -.3);
+            setMotorPower(-motorPower, motorPower, -motorPower, motorPower);
+            error = degrees - getAngle();
+            activeOpMode.telemetry.addData("error ", error);
             activeOpMode.telemetry.update();
         }
-        strafe = 0;
-        drive = 0;
-        turn = 0;
-        MecanumDrive();
+        setAllPower(0);
     }
+
+    public void turnTo(double degrees, LinearOpMode activeOpMode)
+    {
+        Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double error = degrees - orientation.firstAngle;
+
+        if (error > 180)
+        {
+            error -= 360;
+        }
+        else if (error <= -180)
+        {
+            error+=360;
+        }
+        turn(error, activeOpMode);
+    }
+
 
 
  }
