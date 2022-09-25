@@ -23,7 +23,6 @@ public class AutoOp extends LinearOpMode {
 
         MecDrive.init(hardwareMap);
         Vision.init(hardwareMap);
-        ButtonConfig.init();
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -33,6 +32,7 @@ public class AutoOp extends LinearOpMode {
         while (!isStarted()) {
             ButtonConfig.ConfigureAllianceColor(this);
             ButtonConfig.ConfigureStartingLocation( this);
+
             telemetry.addData("Alliance Color ", ButtonConfig.allianceColorString);
             telemetry.addData("Starting Location ", ButtonConfig.startingLocationString);
             telemetry.update();
@@ -42,12 +42,16 @@ public class AutoOp extends LinearOpMode {
 
         //Autonomous Routine Example
         //MecDrive.encoderDrive(.3, 10, 10, this);
-        //MecDrive.strafeDrive(.3, -10, -10, this);
 
-        MecDrive.encoderDrive(.4, 30, 30, this);
+
+        MecDrive.encoderDrive(.2, -10, -10, this);
+        sleep(1000);
+        MecDrive.encoderDrive(.2, 40, 40, this);
+        sleep(1000);
+        MecDrive.strafeDrive(.3, -30, -30, this);
         MecDrive.turn(45,this);
         sleep(1000);
-        MecDrive.turnTo(0,this);
+        MecDrive.turnTo(-25,this);
 
     }
 }

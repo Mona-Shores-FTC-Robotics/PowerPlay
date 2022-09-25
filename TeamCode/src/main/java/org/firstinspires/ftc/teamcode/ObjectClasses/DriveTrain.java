@@ -83,6 +83,10 @@ public class DriveTrain
     final double WHEEL_DIAMETER_INCHES = 3.93701;
     double COUNTS_PER_INCH = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
+    public double multiplier = 1;
+    public double MINMULT = .5;
+    public double MAXMULT = 1;
+
 
     /* Constructor */
     public DriveTrain(){
@@ -128,10 +132,10 @@ public class DriveTrain
     public void setAllPower(double p){setMotorPower(p,p,p,p);}
 
     public void setMotorPower(double lF,double rF,double lB,double rB){
-        LFDrive.setPower(lF);
-        RFDrive.setPower(rF);
-        LBDrive.setPower(lB);
-        RBDrive.setPower(rB);
+        LFDrive.setPower(lF*multiplier);
+        RFDrive.setPower(rF*multiplier);
+        LBDrive.setPower(lB*multiplier);
+        RBDrive.setPower(rB*multiplier);
     }
 
     public void MecanumDrive(){
@@ -146,10 +150,10 @@ public class DriveTrain
         leftBackPower    = (drive * dPercent) + (-strafe * sPercent) + (turn * tPercent);
 
         // Send calculated power to wheels
-        LFDrive.setPower(leftFrontPower);
-        RFDrive.setPower(rightFrontPower);
-        LBDrive.setPower(leftBackPower);
-        RBDrive.setPower(rightBackPower);
+        LFDrive.setPower(leftFrontPower*multiplier);
+        RFDrive.setPower(rightFrontPower*multiplier);
+        LBDrive.setPower(leftBackPower*multiplier);
+        RBDrive.setPower(rightBackPower*multiplier);
     }
         public void encoderDrive(double speed, int leftInches, int rightInches, LinearOpMode activeOpMode) {
 
@@ -187,22 +191,18 @@ public class DriveTrain
                 activeOpMode.telemetry.update();
             }
 
-            RFDrive.setPower(0);
-            LFDrive.setPower(0);
-            RBDrive.setPower(0);
-            LBDrive.setPower(0);
+            setAllPower(0);
 
             LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             RBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            /*
             LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            */
+
             activeOpMode.sleep(250);
         }
 
@@ -242,22 +242,18 @@ public class DriveTrain
             activeOpMode.telemetry.update();
         }
 
-        RFDrive.setPower(0);
-        LFDrive.setPower(0);
-        RBDrive.setPower(0);
-        LBDrive.setPower(0);
+        setAllPower(0);
+
+        LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        /*
-        LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        */
         activeOpMode.sleep(250);
     }
 
