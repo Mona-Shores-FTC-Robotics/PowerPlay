@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 
 /**
@@ -56,6 +57,7 @@ public class TeleOp_Iterative extends OpMode
 {
     // Declare OpMode members.
     DriveTrain MecDrive = new DriveTrain();
+    ButtonConfig ButtonConfig = new ButtonConfig();
     private final ElapsedTime runtime = new ElapsedTime();
 
     @Override
@@ -65,6 +67,9 @@ public class TeleOp_Iterative extends OpMode
 
         MecDrive.init(hardwareMap);
 
+
+
+
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -72,6 +77,9 @@ public class TeleOp_Iterative extends OpMode
 
     @Override
     public void init_loop() {
+
+        ButtonConfig.ConfigureMultiplier(this, MecDrive);
+
     }
 
     @Override
@@ -93,6 +101,11 @@ public class TeleOp_Iterative extends OpMode
         telemetry.addData("Status", "Run Time: " + runtime);
         telemetry.addData("Motors", "leftfront(%.2f), rightfront (%.2f)",MecDrive.leftFrontPower,MecDrive.rightFrontPower);
         telemetry.addData("Motors", "leftback (%.2f), rightback (%.2f)",MecDrive.leftBackPower,MecDrive.rightBackPower);
+        telemetry.addData("Encoder BL", MecDrive.LFDrive.getCurrentPosition());
+        telemetry.addData("Encoder FR", MecDrive.RFDrive.getCurrentPosition());
+        telemetry.addData("Encoder BL", MecDrive.LBDrive.getCurrentPosition());
+        telemetry.addData("Encoder BR", MecDrive.RBDrive.getCurrentPosition());
+
         telemetry.update();
     }
 
