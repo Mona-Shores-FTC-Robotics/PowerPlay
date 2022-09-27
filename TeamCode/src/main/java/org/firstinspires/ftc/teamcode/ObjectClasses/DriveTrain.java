@@ -45,29 +45,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-/**
- * This is NOT an opmode.
- *
- * This class can be used to define all the specific hardware for a single robot.
- * In this case that robot is a Pushbot.
- * See PushbotTeleopTank_Iterative and others classes starting with "Pushbot" for usage examples.
- *
- */
-
 public class DriveTrain
 {
-    /* Public OpMode members. */
-    public DcMotor LFDrive = null;
-    public DcMotor RFDrive = null;
-    public DcMotor LBDrive = null;
-    public DcMotor RBDrive = null;
+
+
     public double leftFrontPower = 0;
     public double rightFrontPower = 0;
     public double leftBackPower = 0;
     public double rightBackPower = 0;
+
     public double drive = 0;
     public double strafe = 0;
     public double turn = 0;
+
     public Orientation lastAngles = new Orientation();
     public double currAngle = 0.0;
 
@@ -76,6 +66,10 @@ public class DriveTrain
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
     private final ElapsedTime period  = new ElapsedTime();
+    private DcMotor LFDrive = null;
+    private DcMotor RFDrive = null;
+    private DcMotor LBDrive = null;
+    private DcMotor RBDrive = null;
 
     //motor and wheel parameters
     final double TICKS_PER_REV = 537.7;
@@ -83,13 +77,11 @@ public class DriveTrain
     final double WHEEL_DIAMETER_INCHES = 3.93701;
     double COUNTS_PER_INCH = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
-
     /* Constructor */
     public DriveTrain(){
     }
 
     /* Initialize Hardware interfaces */
-
     public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
@@ -120,8 +112,6 @@ public class DriveTrain
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-
-
       }
 
     //Set power to all motors
@@ -151,8 +141,8 @@ public class DriveTrain
         LBDrive.setPower(leftBackPower);
         RBDrive.setPower(rightBackPower);
     }
-        public void encoderDrive(double speed, int leftInches, int rightInches, LinearOpMode activeOpMode) {
 
+        public void encoderDrive(double speed, int leftInches, int rightInches, LinearOpMode activeOpMode) {
             int newLeftFrontTarget = (int) (leftInches * COUNTS_PER_INCH);
             int newRightFrontTarget = (int) (rightInches * COUNTS_PER_INCH);
             int newLeftBackTarget = (int) (leftInches * COUNTS_PER_INCH);
