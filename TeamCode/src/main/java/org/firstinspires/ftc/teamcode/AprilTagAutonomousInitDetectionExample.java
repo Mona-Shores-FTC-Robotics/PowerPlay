@@ -52,7 +52,11 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
     // UNITS ARE METERS
     double tagsize = 0.166;
 
-    int ID_TAG_OF_INTEREST = 1; // Tag ID 18 from the 36h11 family
+    // Tags 1 2 and 3 from the 36h11 family
+    int LEFT = 1;
+    int MIDDLE = 2;
+    int RIGHT = 3;
+
 
     AprilTagDetection tagOfInterest = null;
 
@@ -95,8 +99,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
                 for(AprilTagDetection tag : currentDetections)
                 {
-                    if(tag.id == ID_TAG_OF_INTEREST)
-                    {
+                    if(tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT)                    {
                         tagOfInterest = tag;
                         tagFound = true;
                         break;

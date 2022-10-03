@@ -6,7 +6,13 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 
 //This import lets us reference our constants without having to use the GameConstants class name
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.*;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.HIGH_SPEED;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 
 @Autonomous(name = "AUTO_JUST_PARK_MJL")
 public class AUTO_MJL_JUST_PARK extends LinearOpMode {
@@ -32,6 +38,9 @@ public class AUTO_MJL_JUST_PARK extends LinearOpMode {
         sleep(1000);
 
         while (!isStarted()) {
+            //Use Webcam to find out Signal and store in Signal variable
+            Signal = 3;
+
             // Let the user set alliance color and starting location variables for use in code
             ButtonConfig.ConfigureAllianceColor(this);
             ButtonConfig.ConfigureStartingLocation( this);
@@ -39,8 +48,7 @@ public class AUTO_MJL_JUST_PARK extends LinearOpMode {
             telemetry.addData("Starting Location ", ButtonConfig.startingLocationString);
             telemetry.update();
 
-            //Use Webcam to find out Signal and store in Signal variable
-            Signal = 3;
+
         }
 
         //Drive backwards into wall to make sure we are aligned

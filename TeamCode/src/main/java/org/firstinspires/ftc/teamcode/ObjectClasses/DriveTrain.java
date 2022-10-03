@@ -78,7 +78,7 @@ public class DriveTrain
     //motor and wheel parameters
     final double TICKS_PER_REV = 537.7;
     final double DRIVE_GEAR_REDUCTION = 1;
-    final double WHEEL_DIAMETER_INCHES = 3.93701;
+    final double WHEEL_DIAMETER_INCHES = 3.779528;
     double COUNTS_PER_INCH = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     public static final double LOW_SPEED = .4;
@@ -86,7 +86,7 @@ public class DriveTrain
     public static final double HIGH_SPEED = 1;
 
     BNO055IMU imu;
-    public ColorSensor colorSensor;
+    //public ColorSensor colorSensor;
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
@@ -103,10 +103,10 @@ public class DriveTrain
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        LFDrive  = ahwMap.get(DcMotor.class, "front_left_motor");
-        RFDrive = ahwMap.get(DcMotor.class, "front_right_motor");
-        LBDrive  = ahwMap.get(DcMotor.class, "back_left_motor");
-        RBDrive = ahwMap.get(DcMotor.class, "back_right_motor");
+        LFDrive  = ahwMap.get(DcMotor.class, "LFDrive");
+        RFDrive = ahwMap.get(DcMotor.class, "RFDrive");
+        LBDrive  = ahwMap.get(DcMotor.class, "LBDrive");
+        RBDrive = ahwMap.get(DcMotor.class, "RBDrive");
 
         LFDrive.setDirection(DcMotor.Direction.FORWARD);
         RFDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -129,7 +129,7 @@ public class DriveTrain
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-       colorSensor = hwMap.colorSensor.get("color_sensor");
+       //colorSensor = hwMap.colorSensor.get("color_sensor");
 
     }
 
@@ -210,7 +210,7 @@ public class DriveTrain
                 activeOpMode.telemetry.addData("Encoder BL", LBDrive.getCurrentPosition());
                 activeOpMode.telemetry.addData("Encoder BR", RBDrive.getCurrentPosition());
                 activeOpMode.telemetry.addData("Encoder Target", newLeftFrontTarget);
-                activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+                //activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
                 activeOpMode.telemetry.addData("Status", "Run Time: " + activeOpMode.getRuntime());
                 activeOpMode.telemetry.update();
             }
@@ -349,7 +349,7 @@ public class DriveTrain
         turn(error, activeOpMode);
     }
 
-
+/*
     public void colorDrive(double speed, int allianceColor, LinearOpMode activeOpMode)
     {
 
@@ -406,7 +406,7 @@ public class DriveTrain
         activeOpMode.telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
         activeOpMode.telemetry.update();
     }
-
+*/
     public void calibrateGyro(LinearOpMode activeOpMode)
     {
         Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
