@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.*;
 
 @Autonomous(name = "AUTO_JUST_PARK_MJL")
-public class AUTO_JUST_PARK_MJL extends LinearOpMode {
+public class AUTO_MJL_JUST_PARK extends LinearOpMode {
 
     // Variable to store the Signal
     int Signal;

@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 
-@Autonomous(name = "AUTO_SCORE_AND_PARK_CTM")
-public class AUTO_SCORE_AND_PARK_CTM extends LinearOpMode {
+@Autonomous(name = "AUTO_CT_SCORE_ONE_AND_PARK")
+public class AUTO_CTM_SCORE_ONE_AND_PARK extends LinearOpMode {
 
     int Signal;
 

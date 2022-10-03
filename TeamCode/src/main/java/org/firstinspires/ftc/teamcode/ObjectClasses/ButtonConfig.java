@@ -70,4 +70,29 @@ public class ButtonConfig {
         activeOpMode.telemetry.update();
     }
 
+    public void ConfigureMultiplier(LinearOpMode activeOpMode, DriveTrain MecDrive) {
+        if (activeOpMode.gamepad1.left_stick_y > .25 && MecDrive.multiplier > MecDrive.MINMULT) {
+            MecDrive.multiplier = (MecDrive.multiplier * 10 - 1) / 10;
+
+            try {
+                sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            if (activeOpMode.gamepad1.left_stick_y < -.25 && MecDrive.multiplier < MecDrive.MAXMULT) {
+                MecDrive.multiplier = (MecDrive.multiplier * 10 + 1) / 10;
+            }
+
+            try {
+                sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        activeOpMode.telemetry.addData("Drive Multiplier", MecDrive.multiplier);
+        activeOpMode.telemetry.update();
+    }
+
 }
