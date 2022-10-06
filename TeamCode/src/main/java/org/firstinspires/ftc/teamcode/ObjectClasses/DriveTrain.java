@@ -170,15 +170,18 @@ public class DriveTrain
 
     public void encoderDrive(double speed, int leftInches, int rightInches, LinearOpMode activeOpMode) {
         if (activeOpMode.opModeIsActive()) {
-            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
 
             int newLeftFrontTarget = (int) (leftInches * COUNTS_PER_INCH);
             int newRightFrontTarget = (int) (rightInches * COUNTS_PER_INCH);
@@ -230,15 +233,16 @@ public class DriveTrain
 
     public void strafeDrive(double speed, int leftInches, int rightInches, LinearOpMode activeOpMode) {
         if (activeOpMode.opModeIsActive()) {
-            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             int newLeftFrontTarget = (int) (leftInches * COUNTS_PER_INCH);
             int newRightFrontTarget = (int) (rightInches * COUNTS_PER_INCH);
