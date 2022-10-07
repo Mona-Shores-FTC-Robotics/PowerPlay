@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
-    public static final double INTAKE_POWER = 1;
 
     public boolean intakeState;
     public Servo intake1;
@@ -18,7 +17,6 @@ public class Intake {
         intake1.setPosition(.5);
         intake2.setPosition(.5);
         intakeState = false;
-
     }
 
     public void toggleIntake() {
@@ -28,8 +26,7 @@ public class Intake {
             intake2.setPosition(.5);
             intakeState= false;
         }
-        else if(!intakeState)
-        {
+        else {
             intake1.setPosition(0);
             intake2.setPosition(1);
             intakeState= true;
