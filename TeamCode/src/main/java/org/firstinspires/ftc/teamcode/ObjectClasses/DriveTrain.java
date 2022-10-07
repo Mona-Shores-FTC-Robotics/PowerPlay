@@ -34,7 +34,7 @@ import static java.lang.Math.abs;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -144,10 +144,10 @@ public class DriveTrain
     }
     public void MecanumDrive() {
 
-        LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Put Mecanum Drive math and motor commands here.
         double dPercent = Math.abs(drive) / (Math.abs(drive) + Math.abs(strafe) + Math.abs(turn));
@@ -164,6 +164,13 @@ public class DriveTrain
             RFDrive.setPower(rightFrontPower);
             LBDrive.setPower(leftBackPower);
             RBDrive.setPower(rightBackPower);
+        }
+        else
+        {
+            LFDrive.setPower(0);
+            RFDrive.setPower(0);
+            LBDrive.setPower(0);
+            RBDrive.setPower(0);
         }
     }
 

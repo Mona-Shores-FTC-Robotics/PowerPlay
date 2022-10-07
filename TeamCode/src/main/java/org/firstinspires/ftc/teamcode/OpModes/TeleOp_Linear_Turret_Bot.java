@@ -1,45 +1,49 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_INTAKE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_RIGHT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.HIGH_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_INTAKE_HEIGHT_CHANGE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_INTAKE_HEIGHT_CHANGE_MM;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_MM;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_MM;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.W_3_JUNCTION;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.X_2_JUNCTION;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
+import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
+import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
+import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 /**
  * Example OpMode. Demonstrates use of gyro, color sensor, encoders, and telemetry.
  *
  */
 
-@TeleOp(name = "Teleop Mode w/ Turret WITH CANCEL", group = "TurretBot")
-public class TeleOp_Linear_Ready_For_Turret extends LinearOpMode {
+@TeleOp(name = "Teleop Mode w/ Turret Bot", group = "Turret Bot")
+public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
     DriveTrain MecDrive = new DriveTrain();
-    org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig ButtonConfig = new ButtonConfig();
+    ButtonConfig ButtonConfig = new ButtonConfig();
+    Arm ServoArm = new Arm();
+    Intake ServoIntake = new Intake();
+    Claw ServoClaw = new Claw();
+    org.firstinspires.ftc.teamcode.ObjectClasses.Lift Lift = new Lift();
+
     private final ElapsedTime runtime = new ElapsedTime();
-    public static final double TURRET_INTAKE = 0.0;
-    public static final double TURRET_INTAKE2 = 180.0 / 360.0;
-    public static final double TURRET_LEFT_OUTTAKE = 270.0 / 360.0;
-    public static final double TURRET_RIGHT_OUTTAKE = 90.0 / 360.0;
-    private Servo turret;
-    private Servo lift;
-    private ColorSensor colorSensor;
+
     private int teleopConeDeliveryTracker = 0;
 
     public void runOpMode() {
@@ -48,9 +52,11 @@ public class TeleOp_Linear_Ready_For_Turret extends LinearOpMode {
         telemetry.update();
 
         MecDrive.init(hardwareMap);
-        turret = hardwareMap.servo.get("turret_servo");
-        lift = hardwareMap.servo.get("elevation_servo");
-        colorSensor = hardwareMap.colorSensor.get("color_sensor");
+        ServoArm.init(hardwareMap);
+        ServoIntake.init(hardwareMap);
+        ServoClaw.init(hardwareMap);
+        //Lift.init(hardwareMap);
+       // Lift.moveLift(ONE_CONE_INTAKE_HEIGHT_MM,this);
 
         telemetry.addData("Status", "Initialized");
         telemetry.addData("Press Start When Ready", "");
@@ -74,32 +80,57 @@ public class TeleOp_Linear_Ready_For_Turret extends LinearOpMode {
             MecDrive.MecanumDrive();
 
             if (gamepad1.x) {
-                turret.setPosition(TURRET_LEFT_OUTTAKE);
-            } else if (gamepad1.b) {
-                turret.setPosition(TURRET_RIGHT_OUTTAKE);
+                ServoArm.setPosition(ARM_LEFT_OUTTAKE);
+                sleep(100);
+            }
+            else if (gamepad1.y) {
+                ServoArm.setPosition(ARM_INTAKE);
+                sleep(100);
+            }
+            else if (gamepad1.b) {
+                ServoArm.setPosition(ARM_RIGHT_OUTTAKE);
+                sleep(100);
             }
 
-            if (gamepad1.y) {
-                auto_deliver(W_3_JUNCTION);
-                teleopConeDeliveryTracker = teleopConeDeliveryTracker + 1;
-            } else if (gamepad1.a) {
-                auto_deliver(X_2_JUNCTION);
-                teleopConeDeliveryTracker = teleopConeDeliveryTracker + 1;
+            if (gamepad1.right_trigger > .25) {
+                ServoIntake.toggleIntake();
+                sleep(250);
+            }
+
+            if (gamepad1.a) {
+                ServoClaw.toggleClaw();
+                sleep(250);
             }
 
             if (gamepad1.left_bumper) {
-                lift.setPosition(ONE_CONE_INTAKE_HEIGHT);
+                Lift.moveLift(ONE_CONE_INTAKE_HEIGHT_MM, this);
             }
 
             if (gamepad1.right_bumper) {
-                lift.setPosition(HIGH_CONE_JUNCTION_SCORE_HEIGHT);
+                Lift.moveLift(HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM, this);
+            }
+
+            if (gamepad1.dpad_up){
+                MecDrive.turnTo(0, this);
+                MecDrive.encoderDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this );
+            }
+            if (gamepad1.dpad_down) {
+                MecDrive.turnTo(0, this);
+                MecDrive.encoderDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE, this);
+            }
+            if (gamepad1.dpad_left) {
+                MecDrive.turnTo(0, this);
+                MecDrive.strafeDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE, this);
+            }
+            if (gamepad1.dpad_right) {
+                MecDrive.turnTo(0, this);
+                MecDrive.strafeDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this);
             }
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime);
             telemetry.addData("Motors", "leftfront(%.2f), rightfront (%.2f)", MecDrive.leftFrontPower, MecDrive.rightFrontPower);
             telemetry.addData("Motors", "leftback (%.2f), rightback (%.2f)", MecDrive.leftBackPower, MecDrive.rightBackPower);
-            telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
             telemetry.addData("# of Cones Delivered", teleopConeDeliveryTracker);
             telemetry.update();
         }
@@ -118,7 +149,7 @@ public class TeleOp_Linear_Ready_For_Turret extends LinearOpMode {
         MecDrive.turnTo(0, this);
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
-            turret.setPosition(TURRET_INTAKE2);
+            ServoArm.setPosition(ARM_INTAKE);
         } else stopExecution = true;
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
@@ -127,19 +158,19 @@ public class TeleOp_Linear_Ready_For_Turret extends LinearOpMode {
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
             //lower lift by set amount based on current lift position
-            lift.setPosition(lift.getPosition() - CONE_INTAKE_HEIGHT_CHANGE);
+            Lift.moveLift(Lift.liftMotor.getCurrentPosition() - CONE_INTAKE_HEIGHT_CHANGE_MM, this);
         } else stopExecution = true;
 
         //activate intake to grab cone
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
             //raise lift by set amount based on current lift position
-            lift.setPosition(lift.getPosition() + CONE_INTAKE_HEIGHT_CHANGE);
+            Lift.moveLift(Lift.liftMotor.getCurrentPosition() + CONE_INTAKE_HEIGHT_CHANGE_MM, this);
         } else stopExecution = true;
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
             //raise lift to height to deliver to High Junction
-            lift.setPosition(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT);
+            Lift.moveLift(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_MM, this);
         } else stopExecution = true;
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
@@ -153,21 +184,20 @@ public class TeleOp_Linear_Ready_For_Turret extends LinearOpMode {
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
             //raise lift to height to deliver to High Junction
-            lift.setPosition(HIGH_CONE_JUNCTION_SCORE_HEIGHT);
+            Lift.moveLift(HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM, this);
         } else stopExecution = true;
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
 
             if (deliveryDestination == W_3_JUNCTION) {
                 //move turret to deliver position
-                turret.setPosition(TURRET_LEFT_OUTTAKE);
+                ServoArm.setPosition(ARM_LEFT_OUTTAKE);
             } else if (deliveryDestination == X_2_JUNCTION) {
-                turret.setPosition(TURRET_RIGHT_OUTTAKE);
+                ServoArm.setPosition(ARM_RIGHT_OUTTAKE);
             }
         } else stopExecution = true;
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
-
             if (deliveryDestination == W_3_JUNCTION) {
                 //Strafe left to the W 3 HIGH JUNCTION
                 MecDrive.strafeDrive(HIGH_SPEED, -(QUARTER_TILE_DISTANCE), -(QUARTER_TILE_DISTANCE), this);
@@ -191,12 +221,12 @@ public class TeleOp_Linear_Ready_For_Turret extends LinearOpMode {
 
             if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
                 //lower lift for next cone
-                lift.setPosition(ONE_CONE_INTAKE_HEIGHT);
+                Lift.moveLift(ONE_CONE_INTAKE_HEIGHT_MM, this);
             } else stopExecution = true;
 
             if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
                 //rotate turret for next cone
-                turret.setPosition(TURRET_INTAKE2);
+                ServoArm.setPosition(ARM_INTAKE);
             } else stopExecution = true;
 
             if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {

@@ -67,9 +67,6 @@ public class TeleOp_Iterative extends OpMode
 
         MecDrive.init(hardwareMap);
 
-
-
-
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         telemetry.update();

@@ -39,7 +39,7 @@ public class AUTO_MJL_JUST_PARK extends LinearOpMode {
 
         while (!isStarted()) {
             //Use Webcam to find out Signal and store in Signal variable
-            Signal = 3;
+            Signal = 1;
 
             // Let the user set alliance color and starting location variables for use in code
             ButtonConfig.ConfigureAllianceColor(this);

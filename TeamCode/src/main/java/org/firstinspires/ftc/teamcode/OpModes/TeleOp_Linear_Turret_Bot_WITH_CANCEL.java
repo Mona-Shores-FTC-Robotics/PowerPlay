@@ -2,13 +2,12 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.HIGH_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_INTAKE_HEIGHT_CHANGE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
+
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT;
+
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.W_3_JUNCTION;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.X_2_JUNCTION;
@@ -95,17 +94,17 @@ public class TeleOp_Linear_Turret_Bot_WITH_CANCEL extends LinearOpMode {
                 //lift.setPosition(HIGH_CONE_JUNCTION_SCORE_HEIGHT);
             }
             if (gamepad1.dpad_up){
-                MecDrive.encoderDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this );
+                MecDrive.encoderDrive(LOW_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this );
 
             }
             if (gamepad1.dpad_down) {
-                MecDrive.encoderDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE, this);
+                MecDrive.encoderDrive(LOW_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE, this);
             }
             if (gamepad1.dpad_left) {
-                MecDrive.strafeDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE, this);
+                MecDrive.strafeDrive(LOW_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE, this);
             }
             if (gamepad1.dpad_right) {
-                MecDrive.strafeDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this);
+                MecDrive.strafeDrive(LOW_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this);
             }
 
             // Show the elapsed game time and wheel power.
@@ -135,7 +134,7 @@ public class TeleOp_Linear_Turret_Bot_WITH_CANCEL extends LinearOpMode {
         } else stopExecution = true;
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
-            MecDrive.encoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE + QUARTER_TILE_DISTANCE), -(FULL_TILE_DISTANCE + QUARTER_TILE_DISTANCE), this);
+            MecDrive.encoderDrive(LOW_SPEED, -(FULL_TILE_DISTANCE + QUARTER_TILE_DISTANCE), -(FULL_TILE_DISTANCE + QUARTER_TILE_DISTANCE), this);
         } else stopExecution = true;
 
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
@@ -158,9 +157,9 @@ public class TeleOp_Linear_Turret_Bot_WITH_CANCEL extends LinearOpMode {
         if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
             //Drive toward middle of field
             if (deliveryDestination == W_3_JUNCTION) {
-                MecDrive.encoderDrive(HIGH_SPEED, (FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), this);
+                MecDrive.encoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), this);
             } else if (deliveryDestination == X_2_JUNCTION) {
-                MecDrive.encoderDrive(HIGH_SPEED, ((FULL_TILE_DISTANCE * 2) + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), ((FULL_TILE_DISTANCE * 2) + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), this);
+                MecDrive.encoderDrive(LOW_SPEED, ((FULL_TILE_DISTANCE * 2) + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), ((FULL_TILE_DISTANCE * 2) + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), this);
             }
         } else stopExecution = true;
 
@@ -183,10 +182,10 @@ public class TeleOp_Linear_Turret_Bot_WITH_CANCEL extends LinearOpMode {
 
             if (deliveryDestination == W_3_JUNCTION) {
                 //Strafe left to the W 3 HIGH JUNCTION
-                MecDrive.strafeDrive(HIGH_SPEED, -(QUARTER_TILE_DISTANCE), -(QUARTER_TILE_DISTANCE), this);
+                MecDrive.strafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE), -(QUARTER_TILE_DISTANCE), this);
             } else if (deliveryDestination == X_2_JUNCTION) {
                 //Strafe right to the W 3 HIGH JUNCTION
-                MecDrive.strafeDrive(HIGH_SPEED, (QUARTER_TILE_DISTANCE), (QUARTER_TILE_DISTANCE), this);
+                MecDrive.strafeDrive(LOW_SPEED, (QUARTER_TILE_DISTANCE), (QUARTER_TILE_DISTANCE), this);
             } else stopExecution = true;
 
             //drop off cone
@@ -195,10 +194,10 @@ public class TeleOp_Linear_Turret_Bot_WITH_CANCEL extends LinearOpMode {
 
                 if (deliveryDestination == W_3_JUNCTION) {
                     //strafe away from the W3 JUNCTION
-                    MecDrive.strafeDrive(HIGH_SPEED, (QUARTER_TILE_DISTANCE), (QUARTER_TILE_DISTANCE), this);
+                    MecDrive.strafeDrive(LOW_SPEED, (QUARTER_TILE_DISTANCE), (QUARTER_TILE_DISTANCE), this);
                 } else if (deliveryDestination == X_2_JUNCTION) {
                     //strafe away from the X2 JUNCTION
-                    MecDrive.strafeDrive(HIGH_SPEED, -(QUARTER_TILE_DISTANCE), -(QUARTER_TILE_DISTANCE), this);
+                    MecDrive.strafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE), -(QUARTER_TILE_DISTANCE), this);
                 }
             } else stopExecution = true;
 
@@ -215,9 +214,9 @@ public class TeleOp_Linear_Turret_Bot_WITH_CANCEL extends LinearOpMode {
             if (!gamepad1.right_bumper && !stopExecution && opModeIsActive()) {
                 if (deliveryDestination == W_3_JUNCTION) {
                     //Drive to Alliance Station
-                    MecDrive.encoderDrive(HIGH_SPEED, -(HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), -(HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), this);
+                    MecDrive.encoderDrive(LOW_SPEED, -(HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), -(HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), this);
                 } else if (deliveryDestination == X_2_JUNCTION) {
-                    MecDrive.encoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), this);
+                    MecDrive.encoderDrive(LOW_SPEED, -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), this);
                 }
             } else stopExecution = true;
 
