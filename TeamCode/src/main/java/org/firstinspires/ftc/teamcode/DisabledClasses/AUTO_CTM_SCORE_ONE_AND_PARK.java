@@ -1,20 +1,17 @@
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.DisabledClasses;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 
-@Autonomous(name = "AUTO_SCORE_AND_PARK_OTS")
-public class AUTO_SCORE_AND_PARK_OTS extends LinearOpMode {
+@Autonomous(name = "AUTO_CT_SCORE_ONE_AND_PARK")
+@Disabled
+public class AUTO_CTM_SCORE_ONE_AND_PARK extends LinearOpMode {
 
     int Signal;
-
-    int whole_tile_dis = 50;
-    int half_tile_dis = whole_tile_dis / 2;
-    int quarter_tile_dis = half_tile_dis / 2;
-    int eighth_tile_dis = quarter_tile_dis / 2;
 
     DriveTrain MecDrive = new DriveTrain();
     ButtonConfig ButtonConfig = new ButtonConfig();
@@ -33,7 +30,7 @@ public class AUTO_SCORE_AND_PARK_OTS extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         sleep(1000);
-
+        Signal = 1;
         while (!isStarted()) {
             ButtonConfig.ConfigureAllianceColor(this);
             ButtonConfig.ConfigureStartingLocation(this);
@@ -41,35 +38,40 @@ public class AUTO_SCORE_AND_PARK_OTS extends LinearOpMode {
             telemetry.addData("Starting Location ", ButtonConfig.startingLocationString);
             telemetry.update();
             //Use Webcam to find out Signal and store in Signal variable
-            Signal = 3;
+
         }
 
         //Autonomous Routine Example
+        //backup to make sure that its square to the wall
 
-        //back up to straghten robot
         MecDrive.encoderDrive(.4, -10, -10, this);
-        //drive forward
-        MecDrive.encoderDrive(.4, whole_tile_dis * 2 + eighth_tile_dis, whole_tile_dis * 2 + eighth_tile_dis, this);
-        //drive left to score on the high pole
-        MecDrive.strafeDrive(.4, -(half_tile_dis * ButtonConfig.allianceLocationFactor), -(half_tile_dis * ButtonConfig.allianceColor), this);
+        //we go forward until we are at the ground junction
+        MecDrive.encoderDrive(.4, 110, 110, this);
 
-        if (Signal == 3) {
-            //Go right
+        if (Signal == 1) {
+            //strafe until in parking zone 1
+            MecDrive.strafeDrive(.3, -25, -25, this);
+            MecDrive.strafeDrive(.3, -25, -25, this);
+            MecDrive.encoderDrive(.4, -5, -5, this);
+
+        } else if (Signal == 2) {
+            MecDrive.strafeDrive(.3, -25, -25, this);
+            MecDrive.strafeDrive(.3, 25, 25, this);
+            MecDrive.encoderDrive(.4, -5, -5, this);
+
+
+        } else if (Signal == 3) {
+            //strafe until in parking zone 3
+            MecDrive.strafeDrive(.3, -25, -25, this);
             MecDrive.strafeDrive(.3, 75, 75, this);
-        } else if (Signal == 1) {
-            //Go left
-            MecDrive.strafeDrive(.3, -20, -20, this);
-        }
-        //stays there
-        else if (Signal == 2) {
-            MecDrive.strafeDrive(.3, 30, 30, this);
+            MecDrive.encoderDrive(.4, -5, -5, this);
 
 
         }
-
 
     }
 }
+
 
 
 

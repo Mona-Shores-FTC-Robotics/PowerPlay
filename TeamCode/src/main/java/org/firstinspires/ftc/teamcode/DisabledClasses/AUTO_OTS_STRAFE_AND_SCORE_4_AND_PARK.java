@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.DisabledClasses;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.HIGH_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
@@ -9,6 +9,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TI
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 
 // Intake on the front and outtake on the back
 @Autonomous(name = "AUTO_OTS STRAFE AND SCORE 4 AND PARK")
+@Disabled
 public class AUTO_OTS_STRAFE_AND_SCORE_4_AND_PARK extends LinearOpMode {
 
     int Signal;

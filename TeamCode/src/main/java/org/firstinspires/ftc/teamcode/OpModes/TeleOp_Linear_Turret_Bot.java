@@ -27,11 +27,6 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
-/**
- * Example OpMode. Demonstrates use of gyro, color sensor, encoders, and telemetry.
- *
- */
-
 @TeleOp(name = "Teleop Mode w/ Turret Bot", group = "Turret Bot")
 public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 

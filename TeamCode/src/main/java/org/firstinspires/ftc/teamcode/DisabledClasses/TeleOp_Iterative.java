@@ -27,8 +27,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.DisabledClasses;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -52,7 +53,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
  */
 
 @TeleOp(name="TeleOp Mode", group="Iterative OpMode")
-//@Disabled
+@Disabled
 public class TeleOp_Iterative extends OpMode
 {
     // Declare OpMode members.
