@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
 
-    public boolean intakeState;
+    public boolean intakeOn;
     public Servo intake1;
     public Servo intake2;
 
@@ -16,20 +16,20 @@ public class Intake {
         //set intake positions
         intake1.setPosition(.5);
         intake2.setPosition(.5);
-        intakeState = false;
+        intakeOn = false;
     }
 
     public void toggleIntake() {
 
-        if (intakeState) {
+        if (intakeOn) {
             intake1.setPosition(.5);
             intake2.setPosition(.5);
-            intakeState= false;
+            intakeOn= false;
         }
         else {
             intake1.setPosition(0);
             intake2.setPosition(1);
-            intakeState= true;
+            intakeOn = true;
         }
     }
 }

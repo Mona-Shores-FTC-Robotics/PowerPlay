@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
@@ -23,11 +24,13 @@ public class AUTO_JUST_PARK extends LinearOpMode {
 
     DriveTrain MecDrive = new DriveTrain();
     AprilTagVision Vision = new AprilTagVision();
-    ButtonConfig ButtonConfig = new ButtonConfig();
+    ButtonConfig ButtonConfig = new ButtonConfig(this);
     Arm ServoArm = new Arm();
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift();
+
+    public final ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -54,15 +57,20 @@ public class AUTO_JUST_PARK extends LinearOpMode {
             Vision.CheckForAprilTags(this);
 
             // Let the user set alliance color and starting location variables for use in code
-            ButtonConfig.ConfigureAllianceColor(this);
-            ButtonConfig.ConfigureStartingLocation( this);
-            telemetry.addData("Alliance Color ", ButtonConfig.allianceColorString);
-            telemetry.addData("Starting Location ", ButtonConfig.startingLocationString);
+            ButtonConfig.ConfigureAllianceColor();
+            ButtonConfig.ConfigureStartingPosition();
+            telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
+            telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
+            telemetry.addData("Current Signal is ", Vision.currentSignal);
             telemetry.update();
+            sleep(20);
         }
 
+        runtime.reset();
         Vision.SetSignal(this);
-        telemetry.addData("Signal is ", Vision.currentSignal);
+        telemetry.addData("Selected Alliance Color ", ButtonConfig.currentAllianceColor);
+        telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
+        telemetry.addData("Final Signal is ", Vision.currentSignal);
         telemetry.update();
 
         //Drive backwards into wall to make sure we are aligned
@@ -88,6 +96,10 @@ public class AUTO_JUST_PARK extends LinearOpMode {
             //Park on right
             MecDrive.strafeDrive(.3, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this);
         }
+
+        telemetry.addData("Status", "Run Time: " + runtime);
+        telemetry.update();
+
     }
 }
 

@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
-
     public static final double CLAW_OPEN_POWER = .2;
     public static final double CLAW_CLOSED_POWER = .5;
     public Servo claw;
@@ -15,7 +14,6 @@ public class Claw {
 
     public void init(HardwareMap ahwMap) {
         claw = ahwMap.servo.get("claw_servo");
-
         //set arm at intake position
         claw.setPosition(CLAW_CLOSED_POWER);
         currentClawState = clawStates.CLAW_CLOSED;

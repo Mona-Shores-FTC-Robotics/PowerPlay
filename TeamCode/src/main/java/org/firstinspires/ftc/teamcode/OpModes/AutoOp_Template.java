@@ -21,7 +21,7 @@ public class AutoOp_Template extends LinearOpMode {
 
     DriveTrain MecDrive = new DriveTrain();
     AprilTagVision Vision = new AprilTagVision();
-    ButtonConfig ButtonConfig = new ButtonConfig();
+    ButtonConfig ButtonConfig = new ButtonConfig(this);
     Arm ServoArm = new Arm();
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
@@ -50,17 +50,19 @@ public class AutoOp_Template extends LinearOpMode {
 
         while (!isStarted()) {
             Vision.CheckForAprilTags(this);
-            ButtonConfig.ConfigureAllianceColor(this);
-            ButtonConfig.ConfigureStartingLocation( this);
-            telemetry.addData("Alliance Color ", ButtonConfig.allianceColorString);
-            telemetry.addData("Starting Location ", ButtonConfig.startingLocationString);
+            ButtonConfig.ConfigureAllianceColor();
+            ButtonConfig.ConfigureStartingPosition();
+            telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
+            telemetry.addData("Starting Location ", ButtonConfig.currentStartPosition);
             telemetry.update();
             sleep(20);
         }
 
         runtime.reset();
         Vision.SetSignal(this);
-        telemetry.addData("Signal is ", Vision.currentSignal);
+        telemetry.addData("Selected Alliance Color ", ButtonConfig.currentAllianceColor);
+        telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
+        telemetry.addData("Final Signal is ", Vision.currentSignal);
         telemetry.update();
 
         //Drive backwards into wall to make sure we are aligned
