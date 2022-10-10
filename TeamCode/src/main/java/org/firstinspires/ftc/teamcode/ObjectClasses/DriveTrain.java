@@ -133,9 +133,6 @@ public class DriveTrain
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-
-
-
     }
 
     //Set power to all motors
@@ -148,7 +145,6 @@ public class DriveTrain
         RBDrive.setPower(rB*multiplier);
     }
     public void MecanumDrive() {
-
         LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -177,7 +173,6 @@ public class DriveTrain
             LBDrive.setPower(0);
             RBDrive.setPower(0);
         }
-
     }
 
 
@@ -241,7 +236,7 @@ public class DriveTrain
                 activeOpMode.telemetry.addData("Status", "Run Time: " + activeOpMode.getRuntime());
                 activeOpMode.telemetry.update();
 
-                if (activeOpMode.gamepad1.b)
+                if (activeOpMode.gamepad1.b && activeOpMode.getRuntime() > 30)
                 {
                     currentRobotState = robotState.HUMAN_CONTROLLED;
                     break;
@@ -313,10 +308,9 @@ public class DriveTrain
                     ramp = ramp -.003;
                 }
 
-                if (activeOpMode.gamepad1.b)
+                if (activeOpMode.gamepad1.b && activeOpMode.getRuntime() > 30)
                 {
                     currentRobotState = robotState.HUMAN_CONTROLLED;
-
                     break;
                 }
 
