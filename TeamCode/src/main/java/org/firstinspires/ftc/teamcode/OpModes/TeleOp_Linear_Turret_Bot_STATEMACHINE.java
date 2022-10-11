@@ -229,7 +229,8 @@ public class TeleOp_Linear_Turret_Bot_STATEMACHINE extends LinearOpMode {
             ServoClaw.toggleClaw();
 
 
-        if (!gamepad1.b && currentRobotState == DriveTrain.robotState.AUTOMATIC_TASK && opModeIsActive()) {
+            if (!gamepad1.b && currentRobotState == DriveTrain.robotState.AUTOMATIC_TASK && opModeIsActive())
+            {
 
                 if (deliveryDestination == W_3_JUNCTION) {
                     //strafe away from the W3 JUNCTION
@@ -240,7 +241,7 @@ public class TeleOp_Linear_Turret_Bot_STATEMACHINE extends LinearOpMode {
                 }
             } else currentRobotState = DriveTrain.robotState.HUMAN_CONTROLLED;
 
-            if (!gamepad1.b && currentRobotState == DriveTrain.robotState.AUTOMATIC_TASK && opModeIsActive()) {
+                if (!gamepad1.b && currentRobotState == DriveTrain.robotState.AUTOMATIC_TASK && opModeIsActive()) {
                 //lower lift for next cone
                 //Lift.moveLift(ONE_CONE_INTAKE_HEIGHT_MM, this);
             } else currentRobotState = DriveTrain.robotState.HUMAN_CONTROLLED;

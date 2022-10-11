@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_INTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.HIGH_SPEED;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
@@ -83,13 +84,13 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         MecDrive.calibrateGyro(this);
 
         //Drive Forward
-        MecDrive.encoderDrive(MED_SPEED, (FULL_TILE_DISTANCE*2)+EIGHTH_TILE_DISTANCE, (FULL_TILE_DISTANCE*2)+EIGHTH_TILE_DISTANCE, this);
+        MecDrive.encoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE*2)+EIGHTH_TILE_DISTANCE, (FULL_TILE_DISTANCE*2)+EIGHTH_TILE_DISTANCE, this);
 
         //Strafe in Front of High Pole
-        MecDrive.strafeDrive(MED_SPEED, -(HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor), -(HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor), this);
+        MecDrive.strafeDrive(LOW_SPEED, -(HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor), -(HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor), this);
 
         //Drive close to High Pole
-        MecDrive.encoderDrive(MED_SPEED, EIGHTH_TILE_DISTANCE, EIGHTH_TILE_DISTANCE, this);
+        MecDrive.encoderDrive(LOW_SPEED, EIGHTH_TILE_DISTANCE, EIGHTH_TILE_DISTANCE, this);
 
         //Open claw to drop cone
         ServoClaw.toggleClaw();
@@ -97,15 +98,15 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         ServoClaw.toggleClaw();
 
         //Back away from High Pole
-        MecDrive.encoderDrive(MED_SPEED, -EIGHTH_TILE_DISTANCE, -EIGHTH_TILE_DISTANCE, this);
+        MecDrive.encoderDrive(LOW_SPEED, -EIGHTH_TILE_DISTANCE, -EIGHTH_TILE_DISTANCE, this);
 
         //Park after placing cone
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-            MecDrive.strafeDrive(.5, (-FULL_TILE_DISTANCE + (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)), (-FULL_TILE_DISTANCE + (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)), this);
+            MecDrive.strafeDrive(MED_SPEED, (-FULL_TILE_DISTANCE + (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)), (-FULL_TILE_DISTANCE + (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)), this);
         } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
-            MecDrive.strafeDrive(.5, (HALF_TILE_DISTANCE* ButtonConfig.allianceColorAndLocationFactor), (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor), this);
+            MecDrive.strafeDrive(MED_SPEED, (HALF_TILE_DISTANCE* ButtonConfig.allianceColorAndLocationFactor), (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor), this);
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-            MecDrive.strafeDrive(.5, (FULL_TILE_DISTANCE + (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)), (FULL_TILE_DISTANCE + (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)), this);
+            MecDrive.strafeDrive(MED_SPEED, (FULL_TILE_DISTANCE + (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)), (FULL_TILE_DISTANCE + (HALF_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)), this);
         }
 
         telemetry.addData("Status", "Run Time: " + runtime);

@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,23 +17,19 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
-//This import lets us reference our constants without having to use the GameConstants class name
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.*;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.*;
 
-
-@Autonomous(name = "AUTO_JUST_PARK")
-public class AUTO_JUST_PARK extends LinearOpMode {
+@Autonomous(name = "AUTO_JUST_PARK_BASIC_BOT")
+public class AUTO_JUST_PARK_BASIC_BOT extends LinearOpMode {
 
     // Variable to store the Signal
 
     DriveTrain MecDrive = new DriveTrain();
     AprilTagVision Vision = new AprilTagVision();
     ButtonConfig ButtonConfig = new ButtonConfig(this);
-    Arm ServoArm = new Arm();
-    Intake ServoIntake = new Intake();
-    Claw ServoClaw = new Claw();
-    Lift Lift = new Lift();
+    //Arm ServoArm = new Arm();
+    //Intake ServoIntake = new Intake();
+    //Claw ServoClaw = new Claw();
+    //Lift Lift = new Lift();
 
     public final ElapsedTime runtime = new ElapsedTime();
 
@@ -41,9 +42,9 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         Vision.init(hardwareMap);
         ButtonConfig.init();
 
-        ServoArm.init(hardwareMap);
-        ServoIntake.init(hardwareMap);
-        ServoClaw.init(hardwareMap);
+        //ServoArm.init(hardwareMap);
+        //ServoIntake.init(hardwareMap);
+        //ServoClaw.init(hardwareMap);
         //Lift.init(hardwareMap);
         //Lift.moveLift(ONE_CONE_INTAKE_HEIGHT_MM, this);
 
@@ -83,7 +84,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         //if current Signal is the LEFT april tag then park on robot's left
         if(Vision.currentSignal == AprilTagVision.Signal.LEFT) {
             //Park on left
-            MecDrive.strafeDrive(.3, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE, this);
+            MecDrive.strafeDrive(MED_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE, this);
         }
 
         //if current Signal is the MIDDLE april tag then park in middle
@@ -94,7 +95,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         //if current Signal is the RIGHT april tag then park on robot's right
         else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT ){
             //Park on right
-            MecDrive.strafeDrive(.3, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this);
+            MecDrive.strafeDrive(MED_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this);
         }
 
         telemetry.addData("Status", "Run Time: " + runtime);

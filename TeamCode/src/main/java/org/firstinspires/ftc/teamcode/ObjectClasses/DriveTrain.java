@@ -108,10 +108,10 @@ public class DriveTrain
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        LFDrive  = ahwMap.get(DcMotor.class, "front_left_motor");
-        RFDrive = ahwMap.get(DcMotor.class, "front_right_motor");
-        LBDrive  = ahwMap.get(DcMotor.class, "back_left_motor");
-        RBDrive = ahwMap.get(DcMotor.class, "back_right_motor");
+        LFDrive  = ahwMap.get(DcMotor.class, "LFDrive");
+        RFDrive = ahwMap.get(DcMotor.class, "RFDrive");
+        LBDrive  = ahwMap.get(DcMotor.class, "LBDrive");
+        RBDrive = ahwMap.get(DcMotor.class, "RBDrive");
 
         LFDrive.setDirection(DcMotor.Direction.REVERSE);
         RFDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -216,6 +216,7 @@ public class DriveTrain
                     (period.seconds() < 5) &&
                     (RFDrive.isBusy() && LFDrive.isBusy() && LBDrive.isBusy() && RBDrive.isBusy())) {
 
+                /*
                 RFDrive.setPower(abs(ramp));
                 LFDrive.setPower(abs(ramp));
                 LBDrive.setPower(abs(ramp));
@@ -225,6 +226,8 @@ public class DriveTrain
                 } else if (ramp > speed) {
                     ramp = ramp - .003;
                 }
+                */
+
 
                 activeOpMode.telemetry.addData("Encoder BL", LFDrive.getCurrentPosition());
                 activeOpMode.telemetry.addData("Encoder FR", RFDrive.getCurrentPosition());

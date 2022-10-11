@@ -14,6 +14,7 @@ public class AprilTagVision {
 
     public OpenCvCamera camera;
     public AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    public PipeDetectionPipeline pipeDetectionPipeline;
 
     public enum Signal {LEFT, MIDDLE, RIGHT}
     public Signal currentSignal = Signal.MIDDLE;
