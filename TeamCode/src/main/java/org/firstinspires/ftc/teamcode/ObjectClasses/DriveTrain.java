@@ -216,7 +216,6 @@ public class DriveTrain
                     (period.seconds() < 5) &&
                     (RFDrive.isBusy() && LFDrive.isBusy() && LBDrive.isBusy() && RBDrive.isBusy())) {
 
-                /*
                 RFDrive.setPower(abs(ramp));
                 LFDrive.setPower(abs(ramp));
                 LBDrive.setPower(abs(ramp));
@@ -226,8 +225,6 @@ public class DriveTrain
                 } else if (ramp > speed) {
                     ramp = ramp - .003;
                 }
-                */
-
 
                 activeOpMode.telemetry.addData("Encoder BL", LFDrive.getCurrentPosition());
                 activeOpMode.telemetry.addData("Encoder FR", RFDrive.getCurrentPosition());
