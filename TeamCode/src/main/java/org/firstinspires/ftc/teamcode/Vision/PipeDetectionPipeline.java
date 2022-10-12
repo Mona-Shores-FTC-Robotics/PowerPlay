@@ -52,10 +52,10 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
             // Step Filter_Contours0:
             ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
             double filterContoursMinArea = 0;
-            double filterContoursMinPerimeter = 75.0;
+            double filterContoursMinPerimeter = 0.0;
             double filterContoursMinWidth = 0;
             double filterContoursMaxWidth = 1000;
-            double filterContoursMinHeight = 300;
+            double filterContoursMinHeight = 250;
             double filterContoursMaxHeight = 1000;
             double[] filterContoursSolidity = {0, 100};
             double filterContoursMaxVertices = 1000000;
@@ -70,8 +70,6 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
             for (int i = 0; i < filterContoursOutput.size(); i++) {
                 Imgproc.drawContours(output, filterContoursOutput, i, new Scalar(255, 255, 255), -1);
             }
-
-
 
             Rect leftRect = new Rect(0,0, 375, 448);
             Rect rectOfInterest = new Rect(375,0, 50, 448);
