@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ObjectClasses;
+package org.firstinspires.ftc.teamcode.Vision;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
@@ -28,26 +28,26 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
         this.telemetry = telemetry;
     }
     //Outputs
-    private Mat hsvThresholdOutput = new Mat();
-    private Mat hsvThresholdInput = new Mat();
-    private Mat workingMatrix = new Mat();
-    private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
-    private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
+    private final Mat hsvThresholdOutput = new Mat();
+    private final Mat hsvThresholdInput = new Mat();
+
+    private final ArrayList<MatOfPoint> findContoursOutput = new ArrayList<>();
+    private final ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<>();
 
     @Override
     public Mat processFrame(Mat input) {
 
         Imgproc.cvtColor(input, hsvThresholdInput, Imgproc.COLOR_RGB2HSV);
 
-        double[] hsvThresholdHue = {18, 24.0};
-        double[] hsvThresholdSaturation = {50.0, 255.0};
-        double[] hsvThresholdValue = {70.0, 255.0};
+        double[] hsvThresholdHue = {25, 255};
+        double[] hsvThresholdSaturation = {0, 255.0};
+        double[] hsvThresholdValue = {0, 255.0};
         hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
            // Step Find_Contours0:
             Mat findContoursInput = hsvThresholdOutput;
             boolean findContoursExternalOnly = false;
-            findContours(findContoursInput, findContoursExternalOnly, findContoursOutput);
+            findContours(hsvThresholdOutput, findContoursExternalOnly, findContoursOutput);
 
             // Step Filter_Contours0:
             ArrayList<MatOfPoint> filterContoursContours = findContoursOutput;
@@ -71,9 +71,11 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
                 Imgproc.drawContours(output, filterContoursOutput, i, new Scalar(255, 255, 255), -1);
             }
 
-            Rect leftRect = new Rect(0,175, 389, 260);
-            Rect rectOfInterest = new Rect(390,175, 20, 260);
-            Rect rightRect = new Rect(411,175, 389, 260);
+
+
+            Rect leftRect = new Rect(0,0, 375, 448);
+            Rect rectOfInterest = new Rect(375,0, 50, 448);
+            Rect rightRect = new Rect(425,0, 375, 448);
             Imgproc.rectangle(output, rectOfInterest, new Scalar (255,255,255));
             Imgproc.rectangle(output, leftRect, new Scalar (255,0,0));
             Imgproc.rectangle(output, rightRect, new Scalar (0, 0,255));
