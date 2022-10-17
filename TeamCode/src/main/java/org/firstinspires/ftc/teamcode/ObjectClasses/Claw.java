@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode.ObjectClasses;
 
-import static java.lang.Thread.sleep;
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Claw {
 
-    public static final double CLAW_OPEN_POWER = .2;
+    public static final double CLAW_OPEN_POWER = .4;
     public static final double CLAW_CLOSED_POWER = .5;
     public Servo claw;
     public enum clawStates {CLAW_OPEN, CLAW_CLOSED}
@@ -25,7 +23,6 @@ public class Claw {
         if (currentClawState == clawStates.CLAW_OPEN) {
             claw.setPosition(CLAW_CLOSED_POWER);
             currentClawState = clawStates.CLAW_CLOSED;
-
         }
         else if (currentClawState == clawStates.CLAW_CLOSED) {
             claw.setPosition(CLAW_OPEN_POWER);
