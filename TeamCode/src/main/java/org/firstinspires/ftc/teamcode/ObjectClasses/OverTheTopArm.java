@@ -18,9 +18,10 @@ public class OverTheTopArm {
     final double OverArm_GEAR_REDUCTION = 1;
     final double ArmDiameter = 22.75;
     double COUNTS_PER_INCH = (TICKS_PER_REV * OverArm_GEAR_REDUCTION) / (ArmDiameter * 3.1415);
+    int encoderTicks;
 
-    public static final double HighTorgue = 0;
-    public static final double LowTorgue = 0;
+    public static final double HighTorque = 0;
+    public static final double LowTorque = 0;
 
     HardwareMap hwMap           =  null;
     private ElapsedTime period  = new ElapsedTime();
@@ -33,19 +34,25 @@ public class OverTheTopArm {
         OverArm = ahwMap.get(DcMotor.class, "OverArm");
         OverArm.setDirection(DcMotor.Direction.FORWARD);
         OverArm.setPower(0);
+        OverArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        encoderTicks = OverArm.getCurrentPosition();
 
     }
 
-    public void encoderOverArm(double speed, int leftInches, int rightInches, LinearOpMode activeOpMode) {
-        activeOpMode.telemetry.addData("Encoder OverArm", OverArm.getCurrentPosition());
+    public void encoderOverArm (LinearOpMode activeOpMode) {
+        encoderTicks = OverArm.getCurrentPosition();
+        activeOpMode.telemetry.addData("Encoder OverArm", encoderTicks);
         activeOpMode.telemetry.update();
-        if (TICKS_PER_REV < 120 || TICKS_PER_REV == 120) {
+
+        OverArm.setTargetPosition(216);
+
+        if (encoderTicks <= 120) {
 
         }
-        else if (TICKS_PER_REV > 120 & TICKS_PER_REV < 168) {
+        else if (encoderTicks < 168) {
 
         }
-        else if (TICKS_PER_REV == 168 || TICKS_PER_REV > 216) {
+        else if (encoderTicks == 168 || encoderTicks > 216) {
 
         }
 
