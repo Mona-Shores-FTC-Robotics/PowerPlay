@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -13,8 +15,6 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.*;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.*;
 
 @Autonomous(name = "AutoOp Template")
 public class AutoOp_Template extends LinearOpMode {

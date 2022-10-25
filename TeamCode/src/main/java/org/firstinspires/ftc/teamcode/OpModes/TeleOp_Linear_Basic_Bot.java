@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 
-import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_INTAKE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_RIGHT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.HIGH_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_INTAKE_HEIGHT_CHANGE_MM;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
@@ -20,11 +17,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
-import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
-import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 import org.firstinspires.ftc.teamcode.ObjectClasses.PipeVision;
 
@@ -32,7 +26,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.PipeVision;
 public class TeleOp_Linear_Basic_Bot extends LinearOpMode {
 
     DriveTrain MecDrive = new DriveTrain();
-    ButtonConfig ButtonConfig = new ButtonConfig();
+    ButtonConfig ButtonConfig = new ButtonConfig(this);
     PipeVision PipeVision = new PipeVision(this, MecDrive);
     //Arm ServoArm = new Arm();
     //Intake ServoIntake = new Intake();

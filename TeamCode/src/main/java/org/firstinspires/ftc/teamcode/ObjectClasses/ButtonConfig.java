@@ -20,10 +20,27 @@ public class ButtonConfig {
     // alliance color times starting location
     public int allianceColorAndLocationFactor;
 
+
+    //Button States
+
+    public boolean G1aToggleReady = false;
+    public boolean G1xToggleReady = false;
+    public boolean G1yToggleReady = false;
+    public boolean G1bToggleReady = false;
+    public boolean G1dpad_downToggleReady = false;
+    public boolean G1dpad_upToggleReady = false;
+    public boolean G1dpad_leftToggleReady = false;
+    public boolean G1dpad_rightToggleReady = false;
+    public boolean G1right_bumperToggleReady = false;
+    public boolean G1left_bumperToggleReady = false;
+
+
+
+
+
     public ButtonConfig(LinearOpMode activeOpMode) {
         this.activeOpMode = activeOpMode;
     }
-    public ButtonConfig() {}
 
     public void init() {
 
@@ -73,7 +90,6 @@ public class ButtonConfig {
     public void ConfigureStartingPosition() {
 
         while (!confirmStartingPositionSelection) {
-
             activeOpMode.telemetry.addLine("Select Starting Position with D-pad");
             activeOpMode.telemetry.addData("Current Starting Position ", currentStartPosition);
             activeOpMode.telemetry.addData("Press B", "Press B to confirm selection");
@@ -102,7 +118,6 @@ public class ButtonConfig {
                 activeOpMode.telemetry.addData(" Starting Position Selected: ", currentStartPosition);
                 activeOpMode.telemetry.update();
             }
-
         }
     }
 
@@ -112,7 +127,7 @@ public class ButtonConfig {
             MecDrive.multiplier = (MecDrive.multiplier * 10 - 1) / 10;
 
             try {
-                sleep(400);
+                sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -123,14 +138,40 @@ public class ButtonConfig {
             }
 
             try {
-                sleep(400);
+                sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         activeOpMode.telemetry.addData("Drive Multiplier", MecDrive.multiplier);
-        activeOpMode.telemetry.update();
     }
+
+    public void ConfigureLiftMultiplier(LinearOpMode activeOpMode, Lift m_Lift) {
+
+        if (activeOpMode.gamepad2.left_stick_y > .25 && m_Lift.liftPowerMultiplier > m_Lift.LIFT_POWER_MULTIPLIER_MIN) {
+            m_Lift.liftPowerMultiplier = (m_Lift.liftPowerMultiplier * 10 - 1) / 10;
+
+            try {
+                sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            if (activeOpMode.gamepad2.left_stick_y < -.25 && m_Lift.liftPowerMultiplier < m_Lift.LIFT_POWER_MULTIPLIER_MAX) {
+                m_Lift.liftPowerMultiplier = (m_Lift.liftPowerMultiplier * 10 + 1) / 10;
+            }
+
+            try {
+                sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        activeOpMode.telemetry.addData("Lift Multiplier", m_Lift.liftPowerMultiplier);
+    }
+
+
 
     public enum StartPosition {
         ROW_2,
