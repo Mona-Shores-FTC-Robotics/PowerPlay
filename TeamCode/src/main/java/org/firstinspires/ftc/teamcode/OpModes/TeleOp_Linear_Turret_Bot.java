@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Gamepad1Controls;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Gamepad2Controls;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
+import org.firstinspires.ftc.teamcode.ObjectClasses.PipeVision;
 
 @TeleOp(name = "Teleop Mode w/ Turret Bot", group = "Turret Bot")
 public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
@@ -24,6 +25,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
     Arm ServoArm = new Arm();
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
+
+    PipeVision SeekVision = new PipeVision(this, MecDrive);
     Gamepad1Controls G1PadControls = new Gamepad1Controls(this);
     Gamepad2Controls G2PadControls = new Gamepad2Controls(this);
     org.firstinspires.ftc.teamcode.ObjectClasses.Lift Lift = new Lift();
@@ -41,6 +44,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
         ServoArm.init(hardwareMap);
         ServoIntake.init(hardwareMap);
         ServoClaw.init(hardwareMap);
+        SeekVision.init(hardwareMap);
         Lift.init(hardwareMap);
         Lift.moveLift(ONE_CONE_INTAKE_HEIGHT_MM,this);
 
@@ -68,11 +72,10 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             currentGamepad1 = gamepad1;
             currentGamepad2 = gamepad2;
 
-
             if (opModeIsActive() && MecDrive.currentRobotState == DriveTrain.robotState.HUMAN_CONTROLLED)
             {
                 //Driver Controls for Gamepad1
-                G1PadControls.CheckControls(currentGamepad1, MecDrive);
+                G1PadControls.CheckControls(currentGamepad1, MecDrive, SeekVision);
 
                 //Operator Controls for Gamepad2
                 G2PadControls.CheckControls(currentGamepad2, Lift, ServoArm, ServoClaw, ServoIntake);
@@ -90,7 +93,6 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                     Lift.keepLifting(this);
                 }
             }
-
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime);

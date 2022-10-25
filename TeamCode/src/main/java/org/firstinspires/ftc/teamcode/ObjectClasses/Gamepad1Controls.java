@@ -44,7 +44,7 @@ public class Gamepad1Controls {
         this.activeOpMode = activeOpMode;
     }
 
-    public void CheckControls(Gamepad currentGamepad1, DriveTrain MecDrive) {
+    public void CheckControls(Gamepad currentGamepad1, DriveTrain MecDrive, PipeVision SeekVision) {
 
         MecDrive.drive = -currentGamepad1.left_stick_y; //-1.0 to 1.0
         MecDrive.strafe = currentGamepad1.left_stick_x; //-1.0 to 1.0
@@ -113,8 +113,7 @@ public class Gamepad1Controls {
 
         if (currentGamepad1.x == true && g1X_ToggleReady == true) {
             g1X_ToggleReady = false;
-            //what should robot do when we press x on gamepad 1?
-            //automated deliver?
+            SeekVision.SeekPole();
         }
 
         if (currentGamepad1.b == true && g1B_ToggleReady == true) {
