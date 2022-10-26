@@ -46,7 +46,6 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
         ServoClaw.init(hardwareMap);
         SeekVision.init(hardwareMap);
         Lift.init(hardwareMap);
-        Lift.moveLift(ONE_CONE_INTAKE_HEIGHT_MM,this);
 
         Gamepad currentGamepad1 = new Gamepad();
         Gamepad currentGamepad2 = new Gamepad();

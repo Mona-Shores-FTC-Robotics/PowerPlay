@@ -32,6 +32,7 @@ public class Lift {
         liftMotor.setPower(0);
     }
 
+    //Bad move lift code that relies on a while loop - leaving it here so it doesn't break basic bot
     public void moveLift(double targetHeightInMM, LinearOpMode activeOpMode) {
         int newLiftTarget = (int) (1000);
         liftMotor.setTargetPosition(newLiftTarget);
@@ -50,7 +51,7 @@ public class Lift {
     public void startLifting(double targetHeightInMM, LinearOpMode activeOpMode) {
         if (activeOpMode.opModeIsActive() && alreadyLifting == false) {
             //begin lifting
-            newLiftTarget = (int) (1000);
+            newLiftTarget = (int) (targetHeightInMM*COUNTS_PER_MM);
             liftMotor.setTargetPosition(newLiftTarget);
             liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             liftMotor.setPower(STEP_LIFT_POWER);
@@ -71,10 +72,9 @@ public class Lift {
         }
     }
 
-
     public void ManualLift(double power) {
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        if ((power > 0 && liftMotor.getCurrentPosition() < 1500) || (power < 0 && liftMotor.getCurrentPosition() > 250)) {
+        if ((power > 0 && liftMotor.getCurrentPosition() < 950) || (power < 0 && liftMotor.getCurrentPosition() > 50)) {
             liftMotor.setPower(power*liftPowerMultiplier);
         }
 
