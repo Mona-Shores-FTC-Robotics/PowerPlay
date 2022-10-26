@@ -36,7 +36,7 @@ public class Gamepad2Controls {
             Lift.keepLifting(activeOpMode);
         }
         else if (Lift.alreadyLifting ==false) {
-            Lift.ManualLift(-currentGamepad2.left_stick_y);
+            Lift.ManualLift(currentGamepad2.left_stick_y);
         }
 
         SetGamepad2ButtonToggles(currentGamepad2);
@@ -45,8 +45,6 @@ public class Gamepad2Controls {
         if (currentGamepad2.a == true && g2A_ToggleReady == true) {
             g2A_ToggleReady = false;
             //open and close the claw
-            ServoClaw.toggleClaw();
-            activeOpMode.sleep(250);
             ServoClaw.toggleClaw();
         }
 

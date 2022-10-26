@@ -113,10 +113,10 @@ public class DriveTrain {
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        LFDrive = ahwMap.get(DcMotor.class, "front_left_motor");
-        RFDrive = ahwMap.get(DcMotor.class, "front_right_motor");
-        LBDrive = ahwMap.get(DcMotor.class, "back_left_motor");
-        RBDrive = ahwMap.get(DcMotor.class, "back_right_motor");
+        LFDrive = ahwMap.get(DcMotor.class, "LFDrive");
+        RFDrive = ahwMap.get(DcMotor.class, "RFDrive");
+        LBDrive = ahwMap.get(DcMotor.class, "LBDrive");
+        RBDrive = ahwMap.get(DcMotor.class, "RBDrive");
 
         LFDrive.setDirection(DcMotor.Direction.FORWARD);
         RFDrive.setDirection(DcMotor.Direction.REVERSE);

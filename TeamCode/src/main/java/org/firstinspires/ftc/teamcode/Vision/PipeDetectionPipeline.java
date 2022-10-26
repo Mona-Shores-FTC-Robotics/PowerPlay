@@ -90,13 +90,11 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
             telemetry.addData("Percent of white pixels in Left Zone", (int) percentLeftZone);
             telemetry.addData("Percent of white pixels in Right Zone", (int) percentRightZone);
 
-            if (percentZoneOfInterest > 85)
+            if (percentZoneOfInterest > 50)
             {
-                poleCenterCounter++;
-                if (poleCenterCounter > 10) {
                     poleCenter = true;
                     telemetry.addLine("Junction Pole Centered for 10 frames");
-                }
+
             }
             else {
                 poleCenter = false;

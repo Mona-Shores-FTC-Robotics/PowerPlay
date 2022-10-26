@@ -15,8 +15,8 @@ public class Intake {
         intake2 = ahwMap.servo.get("intake2_servo");
 
         //set intake positions
-        intake1.setPosition(0);
-        intake2.setPosition(0);
+        intake1.setPosition(.5);
+        intake2.setPosition(.5);
         intakeState = false;
 
     }
@@ -24,14 +24,14 @@ public class Intake {
     public void toggleIntake() {
 
         if (intakeState) {
-            intake1.setPosition(0);
-            intake2.setPosition(0);
+            intake1.setPosition(.5);
+            intake2.setPosition(.5);
             intakeState= false;
         }
         else if(!intakeState)
         {
             intake1.setPosition(1);
-            intake2.setPosition(1);
+            intake2.setPosition(0);
             intakeState= true;
         }
     }

@@ -12,10 +12,10 @@ public class Lift {
     //motor parameters
     final double TICKS_PER_REV = 537.7;
     final double DRIVE_GEAR_REDUCTION = 1;
-    final double WHEEL_DIAMETER_MM = 130;
+    final double WHEEL_DIAMETER_MM = 180;
     double COUNTS_PER_MM = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_MM * 3.1415);
 
-    final double STEP_LIFT_POWER = .8;
+    final double STEP_LIFT_POWER = .6;
 
     double liftPowerMultiplier = 1.0;
     double LIFT_POWER_MULTIPLIER_MAX = 1.0;
@@ -26,14 +26,14 @@ public class Lift {
     public void init(HardwareMap ahwMap) {
         // Define and Initialize Motor
         liftMotor  = ahwMap.get(DcMotor.class, "lift_motor");
-        liftMotor.setDirection(DcMotor.Direction.FORWARD);
+        liftMotor.setDirection(DcMotor.Direction.REVERSE);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setPower(0);
     }
 
     public void moveLift(double targetHeightInMM, LinearOpMode activeOpMode) {
-        int newLiftTarget = (int) (targetHeightInMM * COUNTS_PER_MM);
+        int newLiftTarget = (int) (1000);
         liftMotor.setTargetPosition(newLiftTarget);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(STEP_LIFT_POWER);
@@ -50,7 +50,7 @@ public class Lift {
     public void startLifting(double targetHeightInMM, LinearOpMode activeOpMode) {
         if (activeOpMode.opModeIsActive() && alreadyLifting == false) {
             //begin lifting
-            newLiftTarget = (int) (targetHeightInMM * COUNTS_PER_MM);
+            newLiftTarget = (int) (1000);
             liftMotor.setTargetPosition(newLiftTarget);
             liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             liftMotor.setPower(STEP_LIFT_POWER);
@@ -67,21 +67,17 @@ public class Lift {
         else if (activeOpMode.opModeIsActive() && alreadyLifting == true && liftMotor.isBusy() == false) {
             //lift has reached target
             alreadyLifting = false;
-            liftMotor.setPower(0);
+
         }
     }
 
 
     public void ManualLift(double power) {
-        power = power * .7;
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if ((power > 0 && liftMotor.getCurrentPosition() < 1500) || (power < 0 && liftMotor.getCurrentPosition() > 250)) {
             liftMotor.setPower(power*liftPowerMultiplier);
         }
-        else
-        {
-            liftMotor.setPower(0);
-        }
+
     }
 
 }
