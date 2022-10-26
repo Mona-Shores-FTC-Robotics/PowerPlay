@@ -139,13 +139,13 @@ public class Gamepad1Controls {
             }
 
             if ((currentAngle >= 0 && currentAngle < 88) || (currentAngle <= 360 && currentAngle > 355)) {
-                MecDrive.turnTo(90, activeOpMode);
+                MecDrive.turnTo(88, activeOpMode);
             } else if (currentAngle >= 87 && currentAngle < 179) {
-                MecDrive.turnTo(180, activeOpMode);
+                MecDrive.turnTo(178, activeOpMode);
             } else if (currentAngle >= 179 && currentAngle < 269) {
-                MecDrive.turnTo(270, activeOpMode);
+                MecDrive.turnTo(268, activeOpMode);
             } else if (currentAngle >= 269 && currentAngle < 359) {
-                MecDrive.turnTo(0, activeOpMode);
+                MecDrive.turnTo(358, activeOpMode);
             }
         }
 

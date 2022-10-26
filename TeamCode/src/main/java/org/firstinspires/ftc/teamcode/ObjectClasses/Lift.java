@@ -16,8 +16,9 @@ public class Lift {
     double COUNTS_PER_MM = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_MM * 3.1415);
 
     final double STEP_LIFT_POWER = .6;
-
+    double LIFT_TARGET_MULTIPLIER = 10;
     double liftPowerMultiplier = 1.0;
+
     double LIFT_POWER_MULTIPLIER_MAX = 1.0;
     double LIFT_POWER_MULTIPLIER_MIN = .4;
 
@@ -30,31 +31,28 @@ public class Lift {
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setPower(0);
+        newLiftTarget = 0;
     }
 
-    //Bad move lift code that relies on a while loop - leaving it here so it doesn't break basic bot
+    //This legacy lift movement code - it should not be used because it relies on a while loop
     public void moveLift(double targetHeightInMM, LinearOpMode activeOpMode) {
         int newLiftTarget = (int) (1000);
         liftMotor.setTargetPosition(newLiftTarget);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(STEP_LIFT_POWER);
         while (activeOpMode.opModeIsActive() && liftMotor.isBusy()) {
-           //keep moving
-            activeOpMode.telemetry.addData("Lift Position", liftMotor.getCurrentPosition());
-            activeOpMode.telemetry.addData("Encoder Target", newLiftTarget);
-            activeOpMode.telemetry.addData("Status", "Run Time: " + activeOpMode.getRuntime());
-            activeOpMode.telemetry.update();
         }
         liftMotor.setPower(0);
     }
 
+
     public void startLifting(double targetHeightInMM, LinearOpMode activeOpMode) {
         if (activeOpMode.opModeIsActive() && alreadyLifting == false) {
             //begin lifting
-            newLiftTarget = (int) (targetHeightInMM*COUNTS_PER_MM);
+            newLiftTarget = (int) (targetHeightInMM * COUNTS_PER_MM);
             liftMotor.setTargetPosition(newLiftTarget);
             liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            liftMotor.setPower(STEP_LIFT_POWER);
+            liftMotor.setPower(STEP_LIFT_POWER*liftPowerMultiplier);
             alreadyLifting = true;
         }
     }
@@ -68,16 +66,16 @@ public class Lift {
         else if (activeOpMode.opModeIsActive() && alreadyLifting == true && liftMotor.isBusy() == false) {
             //lift has reached target
             alreadyLifting = false;
-
         }
     }
 
-    public void ManualLift(double power) {
-        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        if ((power > 0 && liftMotor.getCurrentPosition() < 950) || (power < 0 && liftMotor.getCurrentPosition() > 50)) {
-            liftMotor.setPower(power*liftPowerMultiplier);
-        }
+    public void ManualLift(double liftTarget) {
+        newLiftTarget = (int) ((liftTarget*LIFT_TARGET_MULTIPLIER) + newLiftTarget);
+        if (liftTarget >0 && newLiftTarget > 700) {newLiftTarget =700;}
+        if (liftTarget <0 && newLiftTarget < 50) {newLiftTarget =50;}
 
+        liftMotor.setTargetPosition(newLiftTarget);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(STEP_LIFT_POWER*liftPowerMultiplier);
     }
-
 }

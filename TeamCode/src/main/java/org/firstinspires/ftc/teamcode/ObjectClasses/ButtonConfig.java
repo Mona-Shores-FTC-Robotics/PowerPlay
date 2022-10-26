@@ -34,10 +34,6 @@ public class ButtonConfig {
     public boolean G1right_bumperToggleReady = false;
     public boolean G1left_bumperToggleReady = false;
 
-
-
-
-
     public ButtonConfig(LinearOpMode activeOpMode) {
         this.activeOpMode = activeOpMode;
     }
@@ -170,8 +166,6 @@ public class ButtonConfig {
         }
         activeOpMode.telemetry.addData("Lift Multiplier", m_Lift.liftPowerMultiplier);
     }
-
-
 
     public enum StartPosition {
         ROW_2,
