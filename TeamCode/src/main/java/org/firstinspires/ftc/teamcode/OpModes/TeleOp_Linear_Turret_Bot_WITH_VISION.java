@@ -14,9 +14,10 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
+import org.firstinspires.ftc.teamcode.ObjectClasses.PipeVision;
 
-@TeleOp(name = "TeleOp Mode", group = "Turret Bot")
-public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
+@TeleOp(name = "TeleOp Mode WITH VISION", group = "Turret Bot")
+public class TeleOp_Linear_Turret_Bot_WITH_VISION extends LinearOpMode {
 
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig ButtonConfig = new ButtonConfig(this);
@@ -25,6 +26,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
     Gyro Gyro = new Gyro(this);
+    PipeVision AutoVision = new PipeVision(this, MecDrive);
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -41,6 +43,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
         ServoClaw.init(hardwareMap);
         Lift.init(hardwareMap);
         Gyro.init(hardwareMap);
+        AutoVision.init(hardwareMap);
 
         Gamepad currentGamepad1 = new Gamepad();
         Gamepad currentGamepad2 = new Gamepad();
@@ -83,7 +86,6 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                 gamepad2.rumble(100);
             }
 
-
             ServoClaw.CheckClaw(currentGamepad2.a, previousGamepad2.a, ServoArm, Lift);
 
             ServoIntake.CheckIntake(currentGamepad2.x, previousGamepad2.x);
@@ -96,7 +98,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                                 currentGamepad2.dpad_down, previousGamepad2.dpad_down,
                                 currentGamepad2.dpad_right, previousGamepad2.dpad_right);
 
-            MecDrive.CheckDriveControls( currentGamepad1, previousGamepad1, Lift, ServoArm, ServoClaw, ServoIntake, Gyro);
+
+            MecDrive.CheckDriveControls( currentGamepad1, previousGamepad1, Lift, ServoArm, ServoClaw, ServoIntake, Gyro, AutoVision);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Run Time:","%s", runtime);

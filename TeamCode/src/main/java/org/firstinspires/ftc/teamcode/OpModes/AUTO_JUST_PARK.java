@@ -1,37 +1,26 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.Signal;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.currentSignal;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
-import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
-import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
-import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
-import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 
 @Autonomous(name = "AUTO_JUST_PARK")
 public class AUTO_JUST_PARK extends LinearOpMode {
 
-    // Variable to store the Signal
-
-    DriveTrain MecDrive = new DriveTrain();
+    DriveTrain MecDrive = new DriveTrain(this);
     AprilTagVision Vision = new AprilTagVision();
     ButtonConfig ButtonConfig = new ButtonConfig(this);
-    Arm ServoArm = new Arm();
-    Intake ServoIntake = new Intake();
-    Claw ServoClaw = new Claw();
-    Lift Lift = new Lift();
-
-    public final ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -41,12 +30,6 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         MecDrive.init(hardwareMap);
         Vision.init(hardwareMap);
         ButtonConfig.init();
-
-        ServoArm.init(hardwareMap);
-        ServoIntake.init(hardwareMap);
-        ServoClaw.init(hardwareMap);
-        //Lift.init(hardwareMap);
-        //Lift.moveLift(ONE_CONE_INTAKE_HEIGHT_MM, this);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -60,49 +43,61 @@ public class AUTO_JUST_PARK extends LinearOpMode {
             // Let the user set alliance color and starting location variables for use in code
             ButtonConfig.ConfigureAllianceColor();
             ButtonConfig.ConfigureStartingPosition();
-            //telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
-            //telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
-            //telemetry.addData("Current Signal is ", Vision.currentSignal);
-            //telemetry.update();
+            telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
+            telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
+            telemetry.addData("Status", "Run Time: " + getRuntime());
+            telemetry.update();
             sleep(20);
         }
 
-        runtime.reset();
         Vision.SetSignal(this);
+        telemetry.addData("Signal is ", currentSignal);
         telemetry.addData("Selected Alliance Color ", ButtonConfig.currentAllianceColor);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
-        telemetry.addData("Final Signal is ", Vision.currentSignal);
+        telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
 
         //Drive backwards into wall to make sure we are aligned
-        MecDrive.encoderDrive(MED_SPEED, -QUARTER_TILE_DISTANCE, -QUARTER_TILE_DISTANCE, this);
+        MecDrive.startEncoderDrive(MED_SPEED, -QUARTER_TILE_DISTANCE, -QUARTER_TILE_DISTANCE);
+        while (opModeIsActive() && MecDrive.alreadyDriving == true) {
+            MecDrive.ContinueDriving();
+        }
 
         //Drive forward 2 tiles plus a little bit more to get into position for deciding where to park
-        MecDrive.encoderDrive(MED_SPEED, FULL_TILE_DISTANCE*2+EIGHTH_TILE_DISTANCE, FULL_TILE_DISTANCE*2+EIGHTH_TILE_DISTANCE, this);
+        MecDrive.startEncoderDrive(MED_SPEED, FULL_TILE_DISTANCE * 2 + SIXTEENTH_TILE_DISTANCE, FULL_TILE_DISTANCE * 2 + SIXTEENTH_TILE_DISTANCE);
+        while (opModeIsActive() && MecDrive.alreadyDriving == true) {
+            MecDrive.ContinueDriving();
+        }
 
         //Decide where to park
         //if current Signal is the LEFT april tag then park on robot's left
-        if(Vision.currentSignal == AprilTagVision.Signal.LEFT) {
+        if (currentSignal == Signal.LEFT) {
             //Park on left
-            MecDrive.strafeDrive(.3, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE, this);
+            MecDrive.startStrafeDrive(MED_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE);
+            while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
+                MecDrive.ContinueStrafing();
+            }
         }
 
         //if current Signal is the MIDDLE april tag then park in middle
-        else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE ) {
+        else if (currentSignal == Signal.MIDDLE) {
             //Park in middle
-        }
+            }
 
         //if current Signal is the RIGHT april tag then park on robot's right
-        else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT ){
+        else if (currentSignal == Signal.RIGHT) {
             //Park on right
-            MecDrive.strafeDrive(.3, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE, this);
+            MecDrive.startStrafeDrive(MED_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE);
+            while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
+                    MecDrive.ContinueStrafing();
+            }
+
+            telemetry.addData("Status", "Run Time: " + getRuntime());
+            telemetry.update();
+            }
         }
-
-        telemetry.addData("Status", "Run Time: " + runtime);
-        telemetry.update();
-
     }
-}
+
 
 
 

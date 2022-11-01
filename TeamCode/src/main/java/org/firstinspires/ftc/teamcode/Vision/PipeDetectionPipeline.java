@@ -74,9 +74,9 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
             Rect leftRect = new Rect(0,0, 375, 448);
             Rect rectOfInterest = new Rect(375,0, 50, 448);
             Rect rightRect = new Rect(425,0, 375, 448);
-            Imgproc.rectangle(output, rectOfInterest, new Scalar (255,255,255));
-            Imgproc.rectangle(output, leftRect, new Scalar (255,0,0));
-            Imgproc.rectangle(output, rightRect, new Scalar (0, 0,255));
+        Imgproc.rectangle(output, rectOfInterest, new Scalar (255,255,255));
+        Imgproc.rectangle(output, leftRect, new Scalar (255,0,0));
+        Imgproc.rectangle(output, rightRect, new Scalar (0, 0,255));
 
             Mat zoneOfInterest = output.submat(rectOfInterest);
             Mat leftZone  = output.submat(leftRect);

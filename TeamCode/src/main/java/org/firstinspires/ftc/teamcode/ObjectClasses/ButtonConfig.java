@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.ObjectClasses;
 import static java.lang.Thread.sleep;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class ButtonConfig {
 
@@ -33,6 +34,10 @@ public class ButtonConfig {
     public boolean G1dpad_rightToggleReady = false;
     public boolean G1right_bumperToggleReady = false;
     public boolean G1left_bumperToggleReady = false;
+
+
+
+
 
     public ButtonConfig(LinearOpMode activeOpMode) {
         this.activeOpMode = activeOpMode;
@@ -167,6 +172,8 @@ public class ButtonConfig {
         activeOpMode.telemetry.addData("Lift Multiplier", m_Lift.liftPowerMultiplier);
     }
 
+
+
     public enum StartPosition {
         ROW_2,
         ROW_5,
@@ -177,6 +184,39 @@ public class ButtonConfig {
         BLUE,
         RED,
         NOT_SET_YET
+    }
+
+    public Gamepad copy(Gamepad gamepad) {
+        Gamepad pad = new Gamepad();
+        pad.a = gamepad.a;
+        pad.b = gamepad.b;
+        pad.x = gamepad.x;
+        pad.y = gamepad.y;
+
+        pad.right_bumper = gamepad.right_bumper;
+        pad.left_bumper = gamepad.left_bumper;
+
+
+        pad.right_trigger = gamepad.right_trigger;
+        pad.left_trigger = gamepad.left_trigger;
+
+        pad.left_stick_x = gamepad.left_stick_x;
+        pad.left_stick_y = gamepad.left_stick_y;
+        pad.left_stick_button = gamepad.left_stick_button;
+
+        pad.right_stick_x = gamepad.right_stick_x;
+        pad.right_stick_y = gamepad.right_stick_y;
+        pad.right_stick_button = gamepad.right_stick_button;
+
+        pad.start = gamepad.start;
+        pad.back = gamepad.back;
+
+        pad.dpad_up = gamepad.dpad_up;
+        pad.dpad_left = gamepad.dpad_left;
+        pad.dpad_right = gamepad.dpad_right;
+        pad.dpad_down = gamepad.dpad_down;
+
+        return pad;
     }
 
 }
