@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
+import org.firstinspires.ftc.teamcode.ObjectClasses.PipeVision;
 
 @TeleOp(name = "TeleOp Mode", group = "Turret Bot")
 public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
@@ -25,6 +26,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
     Gyro Gyro = new Gyro(this);
+    PipeVision AutoVision = new PipeVision(this, MecDrive);
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -41,6 +43,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
         ServoClaw.init(hardwareMap);
         Lift.init(hardwareMap);
         Gyro.init(hardwareMap);
+        AutoVision.init(hardwareMap);
 
         Gamepad currentGamepad1 = new Gamepad();
         Gamepad currentGamepad2 = new Gamepad();
@@ -83,6 +86,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                 gamepad2.rumble(100);
             }
 
+            //-----CHECK OPERATOR CONTROLS ------//
 
             ServoClaw.CheckClaw(currentGamepad2.a, previousGamepad2.a, ServoArm, Lift);
 
@@ -96,7 +100,32 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                                 currentGamepad2.dpad_down, previousGamepad2.dpad_down,
                                 currentGamepad2.dpad_right, previousGamepad2.dpad_right);
 
-            MecDrive.CheckDriveControls( currentGamepad1, previousGamepad1, Lift, ServoArm, ServoClaw, ServoIntake, Gyro);
+            //-----CHECK DRIVER CONTROLS ------//
+
+            //Driver manual controls - if any of these are non-zero, all automatic tasks are halted
+            MecDrive.CheckManualDriveControls(  currentGamepad1.left_stick_y, currentGamepad1.left_stick_x, currentGamepad1.right_stick_x,
+                                                currentGamepad1.left_trigger, currentGamepad1.right_trigger);
+
+            //Driver D-PAD controls
+            MecDrive.CheckDpadDriveControls(    currentGamepad1.dpad_up, currentGamepad1.dpad_right, currentGamepad1.dpad_down, currentGamepad1.dpad_left,
+                                                previousGamepad1.dpad_up, previousGamepad1.dpad_right, previousGamepad1.dpad_down, previousGamepad1.dpad_left,
+                                                currentGamepad1.b);
+
+            //Driver bumper controls for rotating
+            MecDrive.CheckSquareTurning(currentGamepad1.left_bumper, previousGamepad1.left_bumper,
+                    currentGamepad1.right_bumper, previousGamepad1.right_bumper,
+                    Gyro);
+
+            //Driver control to move set distance away from alliance substation
+            MecDrive.CheckAutoAwayFromAllianceSubstation(currentGamepad1.b, previousGamepad1.b);
+
+            //Driver control to use vision to center on pipe by strafing
+            MecDrive.CheckVisionStrafing(currentGamepad1.y, previousGamepad1.y);
+
+            MecDrive.CheckAutoDeliver(currentGamepad1.x, previousGamepad1.x);
+
+            //Automated tasks (driving, turning, strafing, vision strafing, auto deliver)
+            MecDrive.ContinueAutomaticTasks(Gyro, AutoVision, ServoArm, Lift, ServoClaw, ServoIntake);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Run Time:","%s", runtime);
@@ -114,6 +143,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             telemetry.addData("Target PID Angle", (int) MecDrive.pid.targetPIDAngle);
             telemetry.addData("PID Angle Left to Turn", (int) MecDrive.pid.pidAngleLeftToTurn);
             telemetry.addData("Degrees Left to Turn:", "(%.2f)", abs(MecDrive.degreesLeftToTurn));
+            telemetry.addData("Automatic Deliver STate", "(%)", MecDrive.currentAutomaticTask);
 
             telemetry.addData("# of Cones Delivered", teleopConeDeliveryTracker);
             telemetry.update();
