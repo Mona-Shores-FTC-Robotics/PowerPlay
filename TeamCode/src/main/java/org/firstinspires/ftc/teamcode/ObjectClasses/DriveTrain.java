@@ -241,7 +241,11 @@ public class DriveTrain {
             ContinueTurning(Gyro);
         } else if (autoDeliver) {
             auto_deliver(ServoArm, Lift, ServoClaw, ServoIntake);
-        } else {
+        }
+    }
+
+    public void CheckNoManualDriveControls(float driveStick, float strafeStick, float turnStick, float fineTuneLeftTurn, float fineTuneRightTurn) {
+        if (driveStick == 0 && strafeStick == 0 && turnStick == 0 && fineTuneLeftTurn < .1 && fineTuneRightTurn < .1) {
             drive = 0;
             strafe = 0;
             turn = 0;
@@ -581,7 +585,7 @@ public class DriveTrain {
     public void turnPID(double degrees, Gyro Gyro){
         alreadyPIDTurning = true;
         Gyro.resetAngle();
-        pid = new TurnPIDController(degrees, .7, .1, 0);
+        pid = new TurnPIDController(degrees, .05, .1, 0);
     }
 
     public void ContinuePIDTurning(Gyro Gyro) {

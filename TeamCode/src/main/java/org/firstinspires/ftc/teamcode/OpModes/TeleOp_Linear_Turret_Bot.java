@@ -127,6 +127,9 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             //Automated tasks (driving, turning, strafing, vision strafing, auto deliver)
             MecDrive.ContinueAutomaticTasks(Gyro, AutoVision, ServoArm, Lift, ServoClaw, ServoIntake);
 
+            MecDrive.CheckNoManualDriveControls(currentGamepad1.left_stick_y, currentGamepad1.left_stick_x, currentGamepad1.right_stick_x,
+                    currentGamepad1.left_trigger, currentGamepad1.right_trigger);
+
             // Show the elapsed game time and wheel power.
             telemetry.addData("Run Time:","%s", runtime);
             telemetry.addData("Motors", "leftfront(%.2f), rightfront (%.2f)", MecDrive.leftFrontPower*MecDrive.multiplier, MecDrive.rightFrontPower*MecDrive.multiplier);
@@ -143,7 +146,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             telemetry.addData("Target PID Angle", (int) MecDrive.pid.targetPIDAngle);
             telemetry.addData("PID Angle Left to Turn", (int) MecDrive.pid.pidAngleLeftToTurn);
             telemetry.addData("Degrees Left to Turn:", "(%.2f)", abs(MecDrive.degreesLeftToTurn));
-            telemetry.addData("Automatic Deliver STate", "(%)", MecDrive.currentAutomaticTask);
+            telemetry.addData("Automatic Deliver STate", "(%s)", MecDrive.currentAutomaticTask);
 
             telemetry.addData("# of Cones Delivered", teleopConeDeliveryTracker);
             telemetry.update();

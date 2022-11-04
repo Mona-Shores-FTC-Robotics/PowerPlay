@@ -45,7 +45,7 @@ public class TurnPIDController {
         lastAngleLeftToTurn = pidAngleLeftToTurn;
 
         //motor power calculation
-        double motorPower = -Math.tanh((kP * pidAngleLeftToTurn +kI *accumulatedError + kD*slope));
+        double motorPower = -Math.tanh((kP * pidAngleLeftToTurn));
         return motorPower;
     }
 }

@@ -39,8 +39,8 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
 
         Imgproc.cvtColor(input, hsvThresholdInput, Imgproc.COLOR_RGB2HSV);
 
-        double[] hsvThresholdHue = {25, 255};
-        double[] hsvThresholdSaturation = {0, 255.0};
+        double[] hsvThresholdHue = {16.7, 23};
+        double[] hsvThresholdSaturation = {30, 255.0};
         double[] hsvThresholdValue = {0, 255.0};
         hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue, hsvThresholdOutput);
 
@@ -55,7 +55,7 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
             double filterContoursMinPerimeter = 0.0;
             double filterContoursMinWidth = 0;
             double filterContoursMaxWidth = 1000;
-            double filterContoursMinHeight = 250;
+            double filterContoursMinHeight = 160;
             double filterContoursMaxHeight = 1000;
             double[] filterContoursSolidity = {0, 100};
             double filterContoursMaxVertices = 1000000;
@@ -86,14 +86,14 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
             double percentLeftZone = (Core.sumElems(leftZone).val[1] / leftRect.area() / 255) * 100 ;
             double percentRightZone= (Core.sumElems(rightZone).val[1] / rightRect.area() / 255) * 100 ;
 
-            telemetry.addData("Percent of white pixels in Zone of Interest (center)", (int) percentZoneOfInterest );
-            telemetry.addData("Percent of white pixels in Left Zone", (int) percentLeftZone);
-            telemetry.addData("Percent of white pixels in Right Zone", (int) percentRightZone);
+            //telemetry.addData("Percent of white pixels in Zone of Interest (center)", (int) percentZoneOfInterest );
+            //telemetry.addData("Percent of white pixels in Left Zone", (int) percentLeftZone);
+            //telemetry.addData("Percent of white pixels in Right Zone", (int) percentRightZone);
 
             if (percentZoneOfInterest > 50)
             {
                     poleCenter = true;
-                    telemetry.addLine("Junction Pole Centered for 10 frames");
+                    //telemetry.addLine("Junction Pole Centered for 10 frames");
 
             }
             else {
@@ -105,15 +105,15 @@ public class PipeDetectionPipeline extends OpenCvPipeline {
             {
                 poleLeft = true;
                 poleRight = false;
-                telemetry.addLine("Pole on Robot's left, turn right to center pole");
+                //telemetry.addLine("Pole on Robot's left, turn right to center pole");
             }
 
             else if (percentRightZone >= percentLeftZone) {
                 poleRight = true;
                 poleLeft = false;
-                telemetry.addLine("Pole on Robot's right, turn left to center pole");
+                //telemetry.addLine("Pole on Robot's right, turn left to center pole");
             }
-        telemetry.update();
+        //telemetry.update();
         return output;
         }
 
