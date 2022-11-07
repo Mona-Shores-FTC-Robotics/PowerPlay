@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.AllianceColor;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.StartPosition;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
@@ -147,11 +148,11 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         //Park after placing cone
         if (currentSignal == GameConstants.Signal.LEFT) {
-            MecDrive.startEncoderDrive(.5, ((FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)-HALF_TILE_DISTANCE), ((FULL_TILE_DISTANCE* ButtonConfig.allianceColorAndLocationFactor) - HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(LOW_SPEED, ((FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)-HALF_TILE_DISTANCE), ((FULL_TILE_DISTANCE* ButtonConfig.allianceColorAndLocationFactor) - HALF_TILE_DISTANCE));
         } else if (currentSignal == GameConstants.Signal.MIDDLE) {
-            MecDrive.startEncoderDrive(.5, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
+            MecDrive.startEncoderDrive(LOW_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
         } else if (currentSignal == GameConstants.Signal.RIGHT) {
-            MecDrive.startEncoderDrive(.5, ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) -HALF_TILE_DISTANCE), ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) -HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(LOW_SPEED, ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) -HALF_TILE_DISTANCE), ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) -HALF_TILE_DISTANCE));
         }
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
