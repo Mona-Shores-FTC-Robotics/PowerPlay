@@ -9,23 +9,23 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Lift {
 
-    public DcMotor liftMotor = null;
-    public boolean alreadyLifting = false;
-    public int newLiftTarget;
-    //motor parameters
+    //lift motor parameters
     final double TICKS_PER_REV = 537.7;
     final double DRIVE_GEAR_REDUCTION = 1;
     final double WHEEL_DIAMETER_MM = 250;
     double COUNTS_PER_MM = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_MM * 3.1415);
 
+    //lift power parameters
     final double STEP_LIFT_POWER = .8;
-
     double LIFT_TARGET_MULTIPLIER = 10;
-    double liftPowerMultiplier = 1.0;
     double LIFT_POWER_MULTIPLIER_MAX = 1.0;
     double LIFT_POWER_MULTIPLIER_MIN = .4;
 
+    double liftPowerMultiplier = 1.0;
     LinearOpMode activeOpMode;
+    public DcMotor liftMotor = null;
+    public boolean alreadyLifting = false;
+    public int newLiftTarget;
 
     public Lift(LinearOpMode mode){
         activeOpMode = mode;

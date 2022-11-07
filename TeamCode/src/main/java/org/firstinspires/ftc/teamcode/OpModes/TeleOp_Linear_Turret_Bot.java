@@ -21,10 +21,11 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig ButtonConfig = new ButtonConfig(this);
-    Arm ServoArm = new Arm();
+
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
+    Arm ServoArm = new Arm(Lift);
     Gyro Gyro = new Gyro(this);
     PipeVision AutoVision = new PipeVision(this, MecDrive);
 
@@ -92,13 +93,13 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             ServoIntake.CheckIntake(currentGamepad2.x, previousGamepad2.x);
 
-            Lift.CheckLift(     currentGamepad2.left_bumper, previousGamepad2.left_bumper,
-                                currentGamepad2.right_bumper, previousGamepad2.right_bumper,
-                                currentGamepad2.left_stick_y);
-
             ServoArm.CheckArm(  currentGamepad2.dpad_left, previousGamepad2.dpad_left,
                                 currentGamepad2.dpad_down, previousGamepad2.dpad_down,
                                 currentGamepad2.dpad_right, previousGamepad2.dpad_right);
+
+            Lift.CheckLift(     currentGamepad2.left_bumper, previousGamepad2.left_bumper,
+                                currentGamepad2.right_bumper, previousGamepad2.right_bumper,
+                                currentGamepad2.left_stick_y);
 
             //-----CHECK DRIVER CONTROLS ------//
 

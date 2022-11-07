@@ -31,11 +31,12 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
     int Signal;
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig ButtonConfig = new ButtonConfig(this);
-    Arm ServoArm = new Arm();
+
     Intake ServoIntake = new Intake();
     AprilTagVision Vision = new AprilTagVision();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
+    Arm ServoArm = new Arm(Lift);
     Gyro Gyro = new Gyro(this);
 
     private final ElapsedTime runtime = new ElapsedTime();
