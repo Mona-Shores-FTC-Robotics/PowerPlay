@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.ObjectClasses;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,13 +12,13 @@ public class Arm {
     public static final double ARM_FRONT_OUTTAKE = 0;
 
     public static final double HEIGHT_FOR_PREVENTING_ARM_ROTATION = 400;
-    public static final double SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION = 500;
-    public static final double SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER = 1;
+    public static final double SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION = 700;
+    public static final double SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER = 2;
 
     public Servo arm;
 
     public armState currentArmState;
-    public enum armState {ARM_LEFT, ARM_CENTER, ARM_RIGHT, ARM_CENTERED_MOVE_LIFT_TO_INTAKE, ARM_LEFT_WAITING_FOR_LIFT, ARM_RIGHT_WAITING_FOR_LIFT}
+    public enum armState {ARM_LEFT, ARM_CENTER, ARM_RIGHT, ARM_FRONT, ARM_CENTERED_MOVE_LIFT_TO_INTAKE, ARM_LEFT_WAITING_FOR_LIFT, ARM_RIGHT_WAITING_FOR_LIFT, ARM_FRONT_WAITING_FOR_LIFT}
     public Lift Lift;
     public ElapsedTime liftTimer = new ElapsedTime();
 
@@ -30,29 +31,6 @@ public class Arm {
         //set arm at intake position
         arm.setPosition(ARM_CENTER_INTAKE);
         currentArmState = armState.ARM_CENTER;
-    }
-
-    public void setArmState(armState state) {
-        if (state == armState.ARM_CENTER) {
-            arm.setPosition(ARM_CENTER_INTAKE);
-            currentArmState = armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE;
-            liftTimer.reset();
-        } else if (Lift.liftMotor.getCurrentPosition() < HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
-            Lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION);
-            Lift.alreadyLifting = true;
-            if (state == armState.ARM_LEFT) {
-                currentArmState = armState.ARM_LEFT_WAITING_FOR_LIFT;
-            } else if (state == armState.ARM_RIGHT) {
-                currentArmState = armState.ARM_RIGHT_WAITING_FOR_LIFT;
-            }
-        } else if (state == armState.ARM_LEFT_WAITING_FOR_LIFT && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
-            arm.setPosition(ARM_LEFT_OUTTAKE);
-        } else if (state == armState.ARM_RIGHT_WAITING_FOR_LIFT && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
-            arm.setPosition(ARM_RIGHT_OUTTAKE);
-        } else if (state == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE && liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
-            Lift.StartLifting(GameConstants.ONE_CONE_INTAKE_HEIGHT_MM);
-            Lift.alreadyLifting = true;
-        }
     }
 
     public void CheckArm(Boolean armLeftCurrentButton, Boolean armLeftPreviousButton,
@@ -68,12 +46,64 @@ public class Arm {
         } else if (armFrontCurrentButton && !armFrontPreviousButton) {
             setPosition(ARM_FRONT_OUTTAKE);
         }
+    }
+
+    public void AdvancedCheckArm(Boolean armLeftCurrentButton, Boolean armLeftPreviousButton,
+                                 Boolean armCenterCurrentButton, Boolean armCenterPreviousButton,
+                                 Boolean armRightCurrentButton, Boolean armRightPreviousButton,
+                                 Boolean armFrontCurrentButton, Boolean armFrontPreviousButton){
+        if (armLeftCurrentButton && !armLeftPreviousButton) {
+            currentArmState = armState.ARM_LEFT;
+            setArmState(currentArmState);
+        } else if (armCenterCurrentButton && !armCenterPreviousButton) {
+            currentArmState = armState.ARM_CENTER;
+            setArmState(currentArmState);
+        } else if (armRightCurrentButton && !armRightPreviousButton) {
+            currentArmState = armState.ARM_RIGHT;
+            setArmState(currentArmState);
+        } else if (armFrontCurrentButton && !armFrontPreviousButton) {
+            currentArmState = armState.ARM_FRONT;
+            setArmState(currentArmState);
+        } else if ( currentArmState == armState.ARM_LEFT_WAITING_FOR_LIFT ||
+                currentArmState == armState.ARM_RIGHT_WAITING_FOR_LIFT ||
+                currentArmState == armState.ARM_FRONT_WAITING_FOR_LIFT ||
+                currentArmState == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE){
+            setArmState(currentArmState);
         }
+    }
 
 
-        public void setPosition(double position) {
-            arm.setPosition(position);
+    public void setPosition(double position) {
+        arm.setPosition(position);
+    }
+
+    public void setArmState(armState state) {
+        if (state == armState.ARM_CENTER) {
+            arm.setPosition(ARM_CENTER_INTAKE);
+            currentArmState = armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE;
+            liftTimer.reset();
+        } else if (Lift.liftMotor.getCurrentPosition() < HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+            Lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION);
+            Lift.alreadyLifting = true;
+            if (state == armState.ARM_LEFT) {
+                currentArmState = armState.ARM_LEFT_WAITING_FOR_LIFT;
+            } else if (state == armState.ARM_RIGHT) {
+                currentArmState = armState.ARM_RIGHT_WAITING_FOR_LIFT;
+            } else if (state == armState.ARM_FRONT) {
+                currentArmState = armState.ARM_FRONT_WAITING_FOR_LIFT;
+            }
+        } else if (state == armState.ARM_LEFT_WAITING_FOR_LIFT && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+            arm.setPosition(ARM_LEFT_OUTTAKE);
+        } else if (state == armState.ARM_RIGHT_WAITING_FOR_LIFT && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+            arm.setPosition(ARM_RIGHT_OUTTAKE);
+        } else if (state == armState.ARM_FRONT_WAITING_FOR_LIFT && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+            arm.setPosition(ARM_FRONT_OUTTAKE);
+        } else if (state == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE && liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
+            Lift.StartLifting(GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
+            Lift.alreadyLifting = true;
         }
+    }
+
 
     }
 

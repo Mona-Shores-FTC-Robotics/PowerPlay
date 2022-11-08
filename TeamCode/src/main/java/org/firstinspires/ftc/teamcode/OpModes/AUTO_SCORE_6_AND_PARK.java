@@ -2,18 +2,18 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.HIGH_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_MM;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_MM;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_MM;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_MM;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_CONE_STACK_INTAKE_HEIGHT_MM;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_MM;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.currentSignal;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -113,7 +113,7 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
         ServoArm.setArmState(armState.ARM_LEFT);}
 
         //strafe to the high pole while lift to height to deliver to High Junction
-        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM);
+        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
         MecDrive.startStrafeDrive(HIGH_SPEED, (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier * ButtonConfig.allianceColorMultiplier),
                 (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier * ButtonConfig.allianceColorMultiplier));
         while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyStrafing )) {
@@ -150,23 +150,23 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
             //lower lift to correct cone stack intake height
             switch (coneStackTracker) {
                 case 5: {
-                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_MM);
+                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
                     break;
                 }
                 case 4: {
-                    Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_MM);
+                    Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
                     break;
                 }
                 case 3: {
-                    Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_MM);
+                    Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
                     break;
                 }
                 case 2: {
-                    Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_MM);
+                    Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
                     break;
                 }
                 case 1: {
-                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_MM);
+                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
                     break;
                 }
             }
@@ -199,7 +199,7 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
             ServoIntake.toggleIntake();
 
             //raise lift by set amount based on current lift position
-            Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_MM+(2*CONE_HEIGHT_MM));
+            Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL +(2* CONE_HEIGHT_ENC_VAL));
             while (opModeIsActive() && Lift.alreadyLifting == true) {
                 Lift.ContinueLifting();
                 telemetry.addData("Cones:", "Stack(%s)/Delivered(%s)", coneStackTracker, coneDeliveryTracker);
@@ -223,7 +223,7 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
             //Strafe to the high pole while raising lift to height to deliver to High Junction
             MecDrive.startStrafeDrive(HIGH_SPEED,   (QUARTER_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor),
                     (QUARTER_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor));
-            Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM);
+            Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
             while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyStrafing)) {
                 Lift.ContinueLifting();
                 MecDrive.ContinueStrafing();
@@ -260,7 +260,7 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
 
         ServoArm.setArmState(armState.ARM_CENTER);
         ServoClaw.toggleClaw();
-        Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_MM);
+        Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
 
         //Park code
         if (currentSignal == GameConstants.Signal.LEFT) {

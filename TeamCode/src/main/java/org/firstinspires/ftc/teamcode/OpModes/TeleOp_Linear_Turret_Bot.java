@@ -58,7 +58,6 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
         while (!isStarted()) {
             telemetry.addData("Status", "Configuring Buttons");
             ButtonConfig.ConfigureMultiplier(this, MecDrive);
-            ButtonConfig.ConfigureLiftMultiplier(this, Lift);
             telemetry.addData("Status", "Press START once multipliers are set");
             telemetry.update();
         }
@@ -89,18 +88,18 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             //-----CHECK OPERATOR CONTROLS ------//
 
-            ServoClaw.CheckClaw(currentGamepad2.a, previousGamepad2.a, ServoArm, Lift);
+            ServoClaw.AdvancedCheckClaw(    currentGamepad2.a, previousGamepad2.a, ServoArm);
 
-            ServoIntake.CheckIntake(currentGamepad2.x, previousGamepad2.x);
+            ServoIntake.AdvancedCheckIntake(currentGamepad2.x, previousGamepad2.x);
 
-            ServoArm.CheckArm(  currentGamepad2.dpad_left, previousGamepad2.dpad_left,
-                                currentGamepad2.dpad_down, previousGamepad2.dpad_down,
-                                currentGamepad2.dpad_right, previousGamepad2.dpad_right,
-                                currentGamepad2.dpad_up, previousGamepad2.dpad_up);
+            ServoArm.AdvancedCheckArm(      currentGamepad2.dpad_left, previousGamepad2.dpad_left,
+                                            currentGamepad2.dpad_down, previousGamepad2.dpad_down,
+                                            currentGamepad2.dpad_right, previousGamepad2.dpad_right,
+                                            currentGamepad2.dpad_up, previousGamepad2.dpad_up);
 
-            Lift.CheckLift(     currentGamepad2.left_bumper, previousGamepad2.left_bumper,
-                                currentGamepad2.right_bumper, previousGamepad2.right_bumper,
-                                currentGamepad2.left_stick_y);
+            Lift.AdvancedCheckLift(         currentGamepad2.left_bumper, previousGamepad2.left_bumper,
+                                            currentGamepad2.right_bumper, previousGamepad2.right_bumper,
+                                            currentGamepad2.left_stick_y);
 
             //-----CHECK DRIVER CONTROLS ------//
 

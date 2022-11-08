@@ -7,8 +7,8 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_MM;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.currentSignal;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -58,7 +58,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         //start with a cone for scoring at intake position with lift low
         ServoArm.setArmState(Arm.armState.ARM_CENTER);
-        Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_MM);
+        Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
         while (opModeIsActive() && Lift.alreadyLifting == true) {
             Lift.ContinueLifting();
         }
@@ -121,7 +121,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         //Strafe close to High Pole
         MecDrive.startStrafeDrive(MED_SPEED, EIGHTH_TILE_DISTANCE* ButtonConfig.allianceColorAndLocationFactor, EIGHTH_TILE_DISTANCE*ButtonConfig.allianceColorAndLocationFactor);
-        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM);
+        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
         if ((ButtonConfig.currentAllianceColor == AllianceColor.BLUE && ButtonConfig.currentStartPosition == StartPosition.ROW_2) ||
                 (ButtonConfig.currentAllianceColor == AllianceColor.RED && ButtonConfig.currentStartPosition == StartPosition.ROW_5)) {
             ServoArm.setArmState(Arm.armState.ARM_RIGHT);
