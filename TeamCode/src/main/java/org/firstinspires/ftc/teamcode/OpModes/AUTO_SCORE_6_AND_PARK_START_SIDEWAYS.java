@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_RIGHT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.AllianceColor;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.StartPosition.ROW_2;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.StartPosition.ROW_5;
@@ -88,8 +90,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         telemetry.addData("Status", "Run Time: " + runtime);
         telemetry.update();
 
-        //start with a cone for scoring at intake position with lift low
-        ServoArm.setArmState(armState.ARM_CENTER);
+
 
         //drive to line up with the cone stack
         MecDrive.startStrafeDrive(HIGH_SPEED,   (FULL_TILE_DISTANCE*2 + SIXTEENTH_TILE_DISTANCE)* ButtonConfig.allianceColorAndLocationFactor,
@@ -104,29 +105,30 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         }
 
         //drive toward middle of field
+        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
         MecDrive.startEncoderDrive(HIGH_SPEED, (HALF_TILE_DISTANCE), (HALF_TILE_DISTANCE));
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
+            Lift.ContinueLifting();
         }
 
         //rotate turret to deliver to High Junction
-        //this code won't work if high junction is on the left.
         if(ButtonConfig.allianceColorAndLocationFactor == 1){
-        ServoArm.setArmState(armState.ARM_RIGHT);}
+            ServoArm.setPosition(ARM_RIGHT_OUTTAKE);}
         else if (ButtonConfig.allianceColorAndLocationFactor == -1){
-        ServoArm.setArmState(armState.ARM_LEFT);}
+            ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
-        //strafe to the high pole while lift to height to deliver to High Junction
-        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        //strafe to the high pole to deliver to High Junction
         MecDrive.startStrafeDrive(HIGH_SPEED, (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier * ButtonConfig.allianceColorMultiplier),
                 (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier * ButtonConfig.allianceColorMultiplier));
-        while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyStrafing )) {
-            Lift.ContinueLifting();
+        while (opModeIsActive() && (MecDrive.alreadyStrafing )) {
             MecDrive.ContinueStrafing();
         }
 
         // Open claw to release cone
         ServoClaw.toggleClaw();
+
+        sleep(250);
 
         coneDeliveryTracker = 1;
         coneStackTracker = 5;
@@ -149,7 +151,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
             ServoClaw.toggleClaw();
 
             //move turret to pickup position
-            ServoArm.setArmState(armState.ARM_CENTER);
+            ServoArm.setPosition(ARM_CENTER_INTAKE);
 
             //lower lift to correct cone stack intake height
             switch (coneStackTracker) {
@@ -219,9 +221,9 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
 
             //move turret to deliver position
             if(ButtonConfig.allianceColorAndLocationFactor == 1){
-                ServoArm.setArmState(armState.ARM_RIGHT);}
+                ServoArm.setPosition(ARM_RIGHT_OUTTAKE);}
             else if (ButtonConfig.allianceColorAndLocationFactor == -1){
-                ServoArm.setArmState(armState.ARM_LEFT);}
+                ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
             //Strafe to the high pole while raising lift to height to deliver to High Junction
             MecDrive.startStrafeDrive(HIGH_SPEED,   (QUARTER_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor),
@@ -258,7 +260,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
             telemetry.update();
         }
 
-        ServoArm.setArmState(armState.ARM_CENTER);
+        ServoArm.setPosition(ARM_CENTER_INTAKE);
         ServoClaw.toggleClaw();
         Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
 
