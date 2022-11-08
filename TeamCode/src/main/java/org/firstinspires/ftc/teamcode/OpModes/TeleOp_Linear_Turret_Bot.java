@@ -95,7 +95,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             ServoArm.CheckArm(  currentGamepad2.dpad_left, previousGamepad2.dpad_left,
                                 currentGamepad2.dpad_down, previousGamepad2.dpad_down,
-                                currentGamepad2.dpad_right, previousGamepad2.dpad_right);
+                                currentGamepad2.dpad_right, previousGamepad2.dpad_right,
+                                currentGamepad2.dpad_up, previousGamepad2.dpad_up);
 
             Lift.CheckLift(     currentGamepad2.left_bumper, previousGamepad2.left_bumper,
                                 currentGamepad2.right_bumper, previousGamepad2.right_bumper,
@@ -118,12 +119,12 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                     Gyro);
 
             //Driver control to move set distance away from alliance substation
-            MecDrive.CheckAutoAwayFromAllianceSubstation(currentGamepad1.b, previousGamepad1.b);
+            //MecDrive.CheckAutoAwayFromAllianceSubstation(currentGamepad1.b, previousGamepad1.b);
 
             //Driver control to use vision to center on pipe by strafing
-            MecDrive.CheckVisionStrafing(currentGamepad1.y, previousGamepad1.y);
+            //MecDrive.CheckVisionStrafing(currentGamepad1.y, previousGamepad1.y);
 
-            MecDrive.CheckAutoDeliver(currentGamepad1.x, previousGamepad1.x);
+            //MecDrive.CheckAutoDeliver(currentGamepad1.x, previousGamepad1.x);
 
             //Automated tasks (driving, turning, strafing, vision strafing, auto deliver)
             MecDrive.ContinueAutomaticTasks(Gyro, AutoVision, ServoArm, Lift, ServoClaw, ServoIntake);

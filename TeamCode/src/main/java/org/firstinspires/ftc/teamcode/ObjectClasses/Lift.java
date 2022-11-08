@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CON
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Lift {
@@ -34,7 +35,7 @@ public class Lift {
     public void init(HardwareMap ahwMap) {
         // Define and Initialize Motor
         liftMotor  = ahwMap.get(DcMotor.class, "lift_motor");
-        liftMotor.setDirection(DcMotor.Direction.FORWARD);
+        liftMotor.setDirection(DcMotor.Direction.REVERSE);
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         liftMotor.setPower(0);
@@ -43,10 +44,16 @@ public class Lift {
     public void StartLifting(double targetHeightInMM) {
         if (activeOpMode.opModeIsActive() && alreadyLifting == false) {
             //begin lifting
-            newLiftTarget = (int) (targetHeightInMM * COUNTS_PER_MM);
+            newLiftTarget = (int) (targetHeightInMM);
+
             liftMotor.setTargetPosition(newLiftTarget);
             liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            liftMotor.setPower(STEP_LIFT_POWER*liftPowerMultiplier);
+            if (newLiftTarget <500) {
+                liftMotor.setPower(.3);
+
+            } else {
+                liftMotor.setPower(STEP_LIFT_POWER * liftPowerMultiplier);
+            }
             alreadyLifting = true;
         }
     }
@@ -63,8 +70,8 @@ public class Lift {
     public void ManualLift(double liftTarget) {
         alreadyLifting = false;
         newLiftTarget = (int) ((liftTarget*LIFT_TARGET_MULTIPLIER) + newLiftTarget);
-        if (liftTarget >0 && newLiftTarget > 700) {newLiftTarget =700;}
-        if (liftTarget <0 && newLiftTarget < 50) {newLiftTarget =50;}
+        if (liftTarget >0 && newLiftTarget > 1450) {newLiftTarget = 1450;}
+        if (liftTarget <0 && newLiftTarget < 10) {newLiftTarget =10;}
         liftMotor.setTargetPosition(newLiftTarget);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(STEP_LIFT_POWER*liftPowerMultiplier);

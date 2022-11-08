@@ -36,6 +36,7 @@ import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -129,10 +130,10 @@ public class DriveTrain {
         LBDrive = ahwMap.get(DcMotor.class, "LBDrive");
         RBDrive = ahwMap.get(DcMotor.class, "RBDrive");
 
-        LFDrive.setDirection(DcMotor.Direction.FORWARD);
-        RFDrive.setDirection(DcMotor.Direction.REVERSE);
-        LBDrive.setDirection(DcMotor.Direction.FORWARD);
-        RBDrive.setDirection(DcMotor.Direction.REVERSE);
+        LFDrive.setDirection(DcMotor.Direction.REVERSE);
+        RFDrive.setDirection(DcMotor.Direction.FORWARD);
+        LBDrive.setDirection(DcMotor.Direction.REVERSE);
+        RBDrive.setDirection(DcMotor.Direction.FORWARD);
 
         // Set all motors to zero power
         LFDrive.setPower(0);
@@ -158,9 +159,9 @@ public class DriveTrain {
 
             //Use fine tune values from triggers instead of right stick if Driver is pressing one of them
             if (fineTuneLeftTurn > .1) {
-                turn = -fineTuneLeftTurn * .3; //-1.0 to 1.0
+                turn = fineTuneLeftTurn * .3; //-1.0 to 1.0
             } else if (fineTuneRightTurn > .1) {
-                turn = fineTuneRightTurn * .3;
+                turn = -fineTuneRightTurn * .3;
             }
             MecanumDrive();
         }
@@ -521,7 +522,7 @@ public class DriveTrain {
         } else if (currentAutomaticTask==autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION){
             currentAutomaticTask = autoDeliverStates.STRAFE_TO_POLE;
             startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE, -QUARTER_TILE_DISTANCE);
-            ServoArm.setArmState(Arm.armState.ARM_LEFT);
+            //ServoArm.setArmState(Arm.armState.ARM_LEFT);
             Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM);
         } else if (currentAutomaticTask==autoDeliverStates.STRAFE_TO_POLE){
             currentAutomaticTask = autoDeliverStates.DELIVER_CONE;

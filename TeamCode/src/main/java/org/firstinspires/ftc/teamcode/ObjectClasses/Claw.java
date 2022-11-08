@@ -4,10 +4,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.nio.file.ClosedDirectoryStreamException;
+
 public class Claw {
 
-    public static final double CLAW_OPEN_POWER = .4;
-    public static final double CLAW_CLOSED_POWER = .5;
+    public static final double CLAW_OPEN_POWER = 0;
+    public static final double CLAW_CLOSED_POWER = .25;
     public Servo claw;
     public enum clawStates {CLAW_OPEN, CLAW_CLOSED}
     public clawStates currentClawState;
@@ -36,10 +38,11 @@ public class Claw {
     public void CheckClaw(boolean currentButton , boolean lastButton, Arm servoarm, Lift lift) {
         if (currentButton && !lastButton) {
             //open and close the claw
-           smartToggleClaw(servoarm, lift);
-        } else if (currentClawState == clawStates.CLAW_OPEN && afterClawOpensDelayPeriod.seconds() > 1)
+           toggleClaw();
+        }
+        //else if (currentClawState == clawStates.CLAW_OPEN && afterClawOpensDelayPeriod.seconds() > 1)
         {
-            smartToggleClaw(servoarm, lift);
+          //  toggleClaw();
         }
     }
 
@@ -47,7 +50,7 @@ public class Claw {
         if (currentClawState == clawStates.CLAW_OPEN) {
             claw.setPosition(CLAW_CLOSED_POWER);
             currentClawState = clawStates.CLAW_CLOSED;
-            servoarm.setArmState(Arm.armState.ARM_CENTER);
+            //servoarm.setArmState(Arm.armState.ARM_CENTER);
             lift.StartLifting(GameConstants.ONE_CONE_INTAKE_HEIGHT_MM);
         }
         else if (currentClawState == clawStates.CLAW_CLOSED) {

@@ -5,9 +5,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Arm {
 
-    public static final double ARM_CENTER_INTAKE = 0.5;
+    public static final double ARM_CENTER_INTAKE = 0.66;
     public static final double ARM_LEFT_OUTTAKE = 1;
-    public static final double ARM_RIGHT_OUTTAKE = 0;
+    public static final double ARM_RIGHT_OUTTAKE = .33;
+    public static final double ARM_FRONT_OUTTAKE = 0;
 
     public static final double HEIGHT_FOR_PREVENTING_ARM_ROTATION = 400;
     public static final double SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION = 500;
@@ -56,17 +57,23 @@ public class Arm {
 
     public void CheckArm(Boolean armLeftCurrentButton, Boolean armLeftPreviousButton,
                          Boolean armCenterCurrentButton, Boolean armCenterPreviousButton,
-                         Boolean armRightCurrentButton, Boolean armRightPreviousButton){
+                         Boolean armRightCurrentButton, Boolean armRightPreviousButton,
+                         Boolean armFrontCurrentButton, Boolean armFrontPreviousButton){
         if (armLeftCurrentButton && !armLeftPreviousButton) {
-            setArmState(armState.ARM_LEFT);
+            setPosition(ARM_LEFT_OUTTAKE);
         } else if (armCenterCurrentButton && !armCenterPreviousButton) {
-            setArmState(armState.ARM_CENTER);
+            setPosition(ARM_CENTER_INTAKE);
         } else if (armRightCurrentButton && !armRightPreviousButton) {
-            setArmState(armState.ARM_RIGHT);
-        } else if ( currentArmState == armState.ARM_LEFT_WAITING_FOR_LIFT ||
-                    currentArmState == armState.ARM_RIGHT_WAITING_FOR_LIFT ||
-                    currentArmState == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE){
-            setArmState(currentArmState);
+            setPosition(ARM_RIGHT_OUTTAKE);
+        } else if (armFrontCurrentButton && !armFrontPreviousButton) {
+            setPosition(ARM_FRONT_OUTTAKE);
         }
+        }
+
+
+        public void setPosition(double position) {
+            arm.setPosition(position);
+        }
+
     }
-}
+

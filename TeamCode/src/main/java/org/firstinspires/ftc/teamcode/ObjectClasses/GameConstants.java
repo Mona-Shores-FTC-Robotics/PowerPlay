@@ -6,7 +6,7 @@ public final class GameConstants {
         // No need to instantiate the class, we can hide its constructor
     }
 
-    public static final int FULL_TILE_DISTANCE = 50;
+    public static final int FULL_TILE_DISTANCE = 25;
     public static final int HALF_TILE_DISTANCE = FULL_TILE_DISTANCE /2;
     public static final int QUARTER_TILE_DISTANCE = HALF_TILE_DISTANCE /2;
     public static final int EIGHTH_TILE_DISTANCE = QUARTER_TILE_DISTANCE /2;
@@ -15,17 +15,17 @@ public final class GameConstants {
     public static final double CONE_HEIGHT_MM = 152;
     public static final double CONE_CLEARANCE_HEIGHT_MM = CONE_HEIGHT_MM/2;
 
-    public static final double CONE_GRIP_HEIGHT_MM = CONE_HEIGHT_MM - CONE_HEIGHT_MM/3;
+    public static final double CONE_GRIP_HEIGHT_MM = 150;
 
 
 
-    public static final double HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM = 851 + CONE_HEIGHT_MM + CONE_CLEARANCE_HEIGHT_MM;
+    public static final double HIGH_CONE_JUNCTION_SCORE_HEIGHT_MM = 1450;
     public static final double MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_MM = 597 + CONE_HEIGHT_MM + CONE_CLEARANCE_HEIGHT_MM;
     public static final double LOW_CONE_JUNCTION_SCORE_HEIGHT_MM = 343 + CONE_HEIGHT_MM + CONE_CLEARANCE_HEIGHT_MM;
     public static final double GROUND_CONE_JUNCTION_SCORE_HEIGHT_MM = 127 + CONE_HEIGHT_MM + CONE_CLEARANCE_HEIGHT_MM;
     public static final double TERMINAL_SCORE_HEIGHT_MM = 0 + CONE_HEIGHT_MM + CONE_CLEARANCE_HEIGHT_MM;
 
-    public static final double ONE_CONE_INTAKE_HEIGHT_MM = CONE_GRIP_HEIGHT_MM;
+    public static final double ONE_CONE_INTAKE_HEIGHT_MM = 0;
     public static final double TWO_CONE_STACK_INTAKE_HEIGHT_MM = ONE_CONE_INTAKE_HEIGHT_MM + CONE_GRIP_HEIGHT_MM;
     public static final double THREE_CONE_STACK_INTAKE_HEIGHT_MM = TWO_CONE_STACK_INTAKE_HEIGHT_MM + CONE_GRIP_HEIGHT_MM;
     public static final double FOUR_CONE_STACK_INTAKE_HEIGHT_MM = THREE_CONE_STACK_INTAKE_HEIGHT_MM + CONE_GRIP_HEIGHT_MM;

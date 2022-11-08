@@ -40,9 +40,10 @@ public class Intake {
     public void CheckIntake(Boolean currentButtonPress, Boolean previousButtonPress) {
         if (currentButtonPress && !previousButtonPress) {
             toggleIntake();
-        } else if (currentIntakeState == intakeState.INTAKE_ON && afterIntakeOnDelayPeriod.seconds() > .800)
+        }
+        else if (currentIntakeState == intakeState.INTAKE_ON && afterIntakeOnDelayPeriod.seconds() > 1)
         {
-            toggleIntake();
+           toggleIntake();
         }
     }
 }
