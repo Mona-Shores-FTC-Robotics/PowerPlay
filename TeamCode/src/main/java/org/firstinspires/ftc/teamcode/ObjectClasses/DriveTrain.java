@@ -31,6 +31,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 import static java.lang.Math.abs;
 
@@ -81,6 +82,7 @@ public class DriveTrain {
     public boolean alreadyStrafing = false;
     public boolean visionStrafing = false;
     public boolean autoDeliver = false;
+    public Arm.armState autoArmState = Arm.armState.ARM_LEFT;
 
     public LinearOpMode activeOpMode;
     HardwareMap hwMap = null;
@@ -98,6 +100,7 @@ public class DriveTrain {
     private ElapsedTime period = new ElapsedTime();
 
     public enum autoDeliverStates {
+        FIRST_STEP,
         START_AUTOMATIC_DELIVER,
         DRIVE_FROM_ALLIANCE_SUBSTATION,
         STRAFE_TO_POLE,
@@ -212,13 +215,11 @@ public class DriveTrain {
     public void CheckSquareTurning(boolean button1, boolean lastButton1, boolean button2, boolean lastButton2, Gyro Gyro) {
             if (button1 && !lastButton1) {
                 //ROTATE TO THE LEFT TO THE CLOSEST RIGHT ANGLE 0, 90, 180, 270
-                //RotateClosestRightAngleToLeft(Gyro);
-                turnToPID(90, Gyro);
+                RotateClosestRightAngleToLeft(Gyro);
 
             } else if (button2 && !lastButton2) {
                 //ROTATE TO THE LEFT TO THE CLOSEST RIGHT ANGLE 0, 90, 180, 270
-                //RotateClosestRightAngleToRight(Gyro);
-                turnToPID(-90, Gyro);
+                RotateClosestRightAngleToRight(Gyro);
             }
     }
     public void CheckAutoDeliver(boolean button, boolean lastButton) {
@@ -257,38 +258,39 @@ public class DriveTrain {
 
     private void RotateClosestRightAngleToLeft(Gyro Gyro) {
         double currentAngle = Gyro.getAbsoluteAngle();
-        if (currentAngle >= 0 && currentAngle < 85 || currentAngle <=0 && currentAngle > -5) {
-            turnToPID(90, Gyro);
-        }
 
-        if (currentAngle <=-5 && currentAngle > -95){
+        if (currentAngle < 0 && currentAngle > -85){
             turnToPID(0, Gyro);
         }
 
-        if (currentAngle <=-95 && currentAngle >= -180 || currentAngle >= 175 && currentAngle <= 180){
+        if (currentAngle >= 5 && currentAngle < 90) {
+            turnToPID(90, Gyro);
+        }
+
+        if (currentAngle < -90 && currentAngle >= -175){
             turnToPID(-90, Gyro);
         }
 
-        if (currentAngle >= 85 && currentAngle < 175){
-            turnToPID(-180, Gyro);
+        if (currentAngle >= 95 && currentAngle < 180){
+            turnToPID(180, Gyro);
         }
     }
 
     private void RotateClosestRightAngleToRight(Gyro Gyro) {
         double currentAngle = Gyro.getAbsoluteAngle();
-        if (currentAngle <= 0 && currentAngle > -85 || currentAngle >=0 && currentAngle < 5) {
+        if (currentAngle < -5 && currentAngle >= -90) {
             turnToPID(-90, Gyro);
         }
 
-        if (currentAngle <=-85 && currentAngle > -175){
-            turnToPID(180, Gyro);
+        if (currentAngle < -95 && currentAngle >= -180){
+            turnToPID(-180, Gyro);
         }
 
-        if (currentAngle <=-175 && currentAngle >= -180 || currentAngle > 95 && currentAngle <= 180){
+        if (currentAngle < 175 && currentAngle >= 90){
             turnToPID(90, Gyro);
         }
 
-        if (currentAngle <= 95 && currentAngle > 0){
+        if (currentAngle < 85 && currentAngle >= 0){
             turnToPID(0, Gyro);
         }
     }
@@ -509,30 +511,46 @@ public class DriveTrain {
 
     public void auto_deliver(Arm ServoArm, Lift Lift, Claw ServoClaw, Intake ServoIntake) {
         if (currentAutomaticTask == autoDeliverStates.START_AUTOMATIC_DELIVER) {
+            // I don't know why it does this one twice, i had to add a dummy step in to get around it.
+            currentAutomaticTask = autoDeliverStates.FIRST_STEP;
+        } else if (currentAutomaticTask == autoDeliverStates.FIRST_STEP) {
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION;
             startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE+HALF_TILE_DISTANCE+QUARTER_TILE_DISTANCE),-(FULL_TILE_DISTANCE+HALF_TILE_DISTANCE+QUARTER_TILE_DISTANCE));
-        } else if (currentAutomaticTask==autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION){
+        } else if (currentAutomaticTask== autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION){
             currentAutomaticTask = autoDeliverStates.INTAKE_CONE;
             ServoIntake.toggleIntake();
-        } else if (currentAutomaticTask==autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF){
+        } else if (currentAutomaticTask== autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF){
             currentAutomaticTask = autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION;
-            startEncoderDrive(HIGH_SPEED, (FULL_TILE_DISTANCE+HALF_TILE_DISTANCE+EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE+HALF_TILE_DISTANCE+EIGHTH_TILE_DISTANCE));
-            Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL /2);
-        } else if (currentAutomaticTask==autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION){
+            startEncoderDrive(HIGH_SPEED, (FULL_TILE_DISTANCE*HALF_TILE_DISTANCE+EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE*HALF_TILE_DISTANCE+EIGHTH_TILE_DISTANCE));
+            Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL/2);
+        } else if (currentAutomaticTask== autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION) {
+
             currentAutomaticTask = autoDeliverStates.STRAFE_TO_POLE;
-            startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE, -QUARTER_TILE_DISTANCE);
-            //ServoArm.setArmState(Arm.armState.ARM_LEFT);
+            if (autoArmState == Arm.armState.ARM_LEFT) {
+                startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE, -QUARTER_TILE_DISTANCE);
+                ServoArm.setArmState(Arm.armState.ARM_LEFT);
+            } else if (autoArmState == Arm.armState.ARM_RIGHT) {
+                startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE, QUARTER_TILE_DISTANCE);
+                ServoArm.setArmState(Arm.armState.ARM_RIGHT);
+            }
             Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
-        } else if (currentAutomaticTask==autoDeliverStates.STRAFE_TO_POLE){
+        } else if (currentAutomaticTask== autoDeliverStates.STRAFE_TO_POLE){
             currentAutomaticTask = autoDeliverStates.DELIVER_CONE;
             ServoClaw.smartToggleClaw(ServoArm);
-        } else if (currentAutomaticTask==autoDeliverStates.DELIVER_CONE){
+        } else if (currentAutomaticTask== autoDeliverStates.DELIVER_CONE){
             currentAutomaticTask = autoDeliverStates.STRAFE_AWAY_FROM_POLE;
-            startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE, QUARTER_TILE_DISTANCE);
-        } else if (currentAutomaticTask==autoDeliverStates.STRAFE_AWAY_FROM_POLE){
+            if (autoArmState == Arm.armState.ARM_LEFT) {
+                startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE, QUARTER_TILE_DISTANCE);
+            } else if (autoArmState == Arm.armState.ARM_RIGHT) {
+                startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE, -QUARTER_TILE_DISTANCE);
+            }
+
+
+        } else if (currentAutomaticTask== autoDeliverStates.STRAFE_AWAY_FROM_POLE){
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION;
-            startEncoderDrive(MED_SPEED, -(HALF_TILE_DISTANCE),-(HALF_TILE_DISTANCE));
-        } else if (currentAutomaticTask==autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION){
+            startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE),-(FULL_TILE_DISTANCE));
+
+        } else if (currentAutomaticTask== autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION){
             currentAutomaticTask = autoDeliverStates.END_AUTOMATIC_DELIVER;
             autoDeliver = false;
         }

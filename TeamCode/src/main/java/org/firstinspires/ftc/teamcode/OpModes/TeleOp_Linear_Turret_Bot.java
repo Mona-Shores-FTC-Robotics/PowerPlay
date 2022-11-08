@@ -99,6 +99,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             Lift.AdvancedCheckLift(         currentGamepad2.left_bumper, previousGamepad2.left_bumper,
                                             currentGamepad2.right_bumper, previousGamepad2.right_bumper,
+                                            currentGamepad2.b,
                                             currentGamepad2.left_stick_y);
 
             //-----CHECK DRIVER CONTROLS ------//
@@ -123,7 +124,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             //Driver control to use vision to center on pipe by strafing
             //MecDrive.CheckVisionStrafing(currentGamepad1.y, previousGamepad1.y);
 
-            //MecDrive.CheckAutoDeliver(currentGamepad1.x, previousGamepad1.x);
+            //Driver control to automatically pickup and deliver a cone
+            //MecDrive.CheckAutoDeliver(currentGamepad1.back, previousGamepad1.back);
 
             //Automated tasks (driving, turning, strafing, vision strafing, auto deliver)
             MecDrive.ContinueAutomaticTasks(Gyro, AutoVision, ServoArm, Lift, ServoClaw, ServoIntake);
