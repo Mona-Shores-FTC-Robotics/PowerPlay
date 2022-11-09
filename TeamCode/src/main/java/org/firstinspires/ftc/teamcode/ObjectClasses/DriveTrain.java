@@ -146,7 +146,7 @@ public class DriveTrain {
 
     public void CheckManualDriveControls(float driveStick, float strafeStick, float turnStick, float fineTuneLeftTurn, float fineTuneRightTurn) {
         //Driver controls have first priority
-        if (driveStick != 0 || strafeStick != 0 || turnStick != 0 || fineTuneLeftTurn > 0 || fineTuneRightTurn > 0) {
+        if (driveStick != 0 || Math.abs(strafeStick) > .2 || turnStick != 0 || fineTuneLeftTurn > 0 || fineTuneRightTurn > 0) {
             alreadyStrafing = false;
             alreadyDriving = false;
             alreadyTurning = false;
@@ -155,9 +155,12 @@ public class DriveTrain {
             manualDriving = true;
             autoDeliver = false;
 
+            if (Math.abs(strafeStick) <= .2) {
+                strafeStick =0;
+            }
             drive = -driveStick; //-1.0 to 1.0
             strafe = strafeStick; //-1.0 to 1.0
-            turn = turnStick; //-1.0 to 1.0
+            turn = -turnStick; //-1.0 to 1.0
 
             //Use fine tune values from triggers instead of right stick if Driver is pressing one of them
             if (fineTuneLeftTurn > .1) {

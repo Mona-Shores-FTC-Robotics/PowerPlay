@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
@@ -43,35 +44,31 @@ public class AUTO_JUST_PARK extends LinearOpMode {
             // Let the user set alliance color and starting location variables for use in code
             ButtonConfig.ConfigureAllianceColor();
             ButtonConfig.ConfigureStartingPosition();
-            telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
-            telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
-            telemetry.addData("Status", "Run Time: " + getRuntime());
-            telemetry.update();
+            //telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
+            //telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
+            //telemetry.addData("Status", "Run Time: " + getRuntime());
+            //telemetry.update();
             sleep(20);
         }
 
         Vision.SetSignal(this);
-        telemetry.addData("Signal is ", currentSignal);
+
+        telemetry.addData("Signal is ", Vision.currentSignal);
+        telemetry.addData("Signal is ", Vision.tagOfInterest.id);
         telemetry.addData("Selected Alliance Color ", ButtonConfig.currentAllianceColor);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
         telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
 
-        //Drive backwards into wall to make sure we are aligned
-        MecDrive.startEncoderDrive(MED_SPEED, -QUARTER_TILE_DISTANCE, -QUARTER_TILE_DISTANCE);
-        while (opModeIsActive() && MecDrive.alreadyDriving == true) {
-            MecDrive.ContinueDriving();
-        }
-
         //Drive forward 2 tiles plus a little bit more to get into position for deciding where to park
-        MecDrive.startEncoderDrive(MED_SPEED, FULL_TILE_DISTANCE * 2 + SIXTEENTH_TILE_DISTANCE, FULL_TILE_DISTANCE * 2 + SIXTEENTH_TILE_DISTANCE);
+        MecDrive.startEncoderDrive(LOW_SPEED, FULL_TILE_DISTANCE * 2 + SIXTEENTH_TILE_DISTANCE, FULL_TILE_DISTANCE * 2 + SIXTEENTH_TILE_DISTANCE);
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
         }
 
         //Decide where to park
         //if current Signal is the LEFT april tag then park on robot's left
-        if (currentSignal == Signal.LEFT) {
+        if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
             //Park on left
             MecDrive.startStrafeDrive(MED_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
@@ -80,12 +77,12 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         }
 
         //if current Signal is the MIDDLE april tag then park in middle
-        else if (currentSignal == Signal.MIDDLE) {
+        else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
             //Park in middle
             }
 
         //if current Signal is the RIGHT april tag then park on robot's right
-        else if (currentSignal == Signal.RIGHT) {
+        else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
             //Park on right
             MecDrive.startStrafeDrive(MED_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {

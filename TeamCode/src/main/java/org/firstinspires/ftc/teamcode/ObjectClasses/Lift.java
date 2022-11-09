@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.ObjectClasses;
 
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.GROUND_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
@@ -18,8 +19,8 @@ public class Lift {
 
     //lift power parameters
     final double ABOVE_THRESHOLD_POWER = .8;
-    final double ENCODER_THRESHOLD = 500;
-    final double BELOW_THRESHOLD_POWER = .3;
+    final double ENCODER_THRESHOLD = 100;
+    final double BELOW_THRESHOLD_POWER = 0;
     final int MAX_LIFT_HEIGHT = 1480;
     final int MIN_LIFT_HEIGHT = 0;
     final double LIFT_TARGET_MULTIPLIER = 10;
@@ -62,7 +63,10 @@ public class Lift {
             liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             //lower the motor slowly if the target is below 500
             if (newLiftTarget < ENCODER_THRESHOLD) {
-                liftMotor.setPower(BELOW_THRESHOLD_POWER);
+                liftMotor.setPower(0);
+                currentLiftJunctionState = liftJunctionStates.CONE_INTAKE_HEIGHT;
+                currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
+
             } else {
                 liftMotor.setPower(ABOVE_THRESHOLD_POWER);
             }
@@ -86,14 +90,14 @@ public class Lift {
         if (liftTarget <0 && newLiftTarget < MIN_LIFT_HEIGHT) {newLiftTarget = MIN_LIFT_HEIGHT;}
         liftMotor.setTargetPosition(newLiftTarget);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if (liftTarget < 0) {
+        if (liftTarget < 0 && newLiftTarget < 100) {
             liftMotor.setPower(BELOW_THRESHOLD_POWER);
         } else if (liftTarget >0) {
             liftMotor.setPower(ABOVE_THRESHOLD_POWER);
         }
     }
 
-    public void RaiseLiftOneJunctionStage() {
+    public void LowerLiftOneJunctionStage() {
         if (currentLiftJunctionState == liftJunctionStates.HIGH_CONE_JUNCTION_SCORE_HEIGHT) {
             currentLiftJunctionState = liftJunctionStates.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT;
             StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
@@ -112,7 +116,7 @@ public class Lift {
         }
     }
 
-    public void LowerLiftOneJunctionStage() {
+    public void RaiseLiftOneJunctionStage() {
         if (currentLiftJunctionState == liftJunctionStates.HIGH_CONE_JUNCTION_SCORE_HEIGHT) {
             currentLiftJunctionState = liftJunctionStates.HIGH_CONE_JUNCTION_SCORE_HEIGHT;
             StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);

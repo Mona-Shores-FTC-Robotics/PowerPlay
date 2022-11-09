@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Arm {
 
-    public static final double ARM_CENTER_INTAKE = 0.66;
+    public static final double ARM_CENTER_INTAKE = 0.7;
     public static final double ARM_LEFT_OUTTAKE = 1;
     public static final double ARM_RIGHT_OUTTAKE = .33;
     public static final double ARM_FRONT_OUTTAKE = 0;
@@ -79,10 +79,14 @@ public class Arm {
 
     public void setArmState(armState state) {
         if (state == armState.ARM_CENTER) {
+            if (arm.getPosition() >.6 && arm.getPosition() < .8){
+
+            } else {liftTimer.reset();}
             arm.setPosition(ARM_CENTER_INTAKE);
             currentArmState = armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE;
-            liftTimer.reset();
-        } else if (Lift.liftMotor.getCurrentPosition() < HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+
+
+        } else if (Lift.liftMotor.getCurrentPosition() < HEIGHT_FOR_PREVENTING_ARM_ROTATION && currentArmState !=armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE) {
             Lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION);
             Lift.alreadyLifting = true;
             if (state == armState.ARM_LEFT) {
@@ -92,15 +96,19 @@ public class Arm {
             } else if (state == armState.ARM_FRONT) {
                 currentArmState = armState.ARM_FRONT_WAITING_FOR_LIFT;
             }
-        } else if (state == armState.ARM_LEFT_WAITING_FOR_LIFT && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+        } else if ((state == armState.ARM_LEFT_WAITING_FOR_LIFT || state==armState.ARM_LEFT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
             arm.setPosition(ARM_LEFT_OUTTAKE);
-        } else if (state == armState.ARM_RIGHT_WAITING_FOR_LIFT && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+            currentArmState = armState.ARM_LEFT;
+        } else if ((state == armState.ARM_RIGHT_WAITING_FOR_LIFT|| state==armState.ARM_RIGHT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
             arm.setPosition(ARM_RIGHT_OUTTAKE);
-        } else if (state == armState.ARM_FRONT_WAITING_FOR_LIFT && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+            currentArmState = armState.ARM_RIGHT;
+        } else if ((state == armState.ARM_FRONT_WAITING_FOR_LIFT  || state==armState.ARM_FRONT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
             arm.setPosition(ARM_FRONT_OUTTAKE);
+            currentArmState = armState.ARM_FRONT;
         } else if (state == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE && liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
             Lift.StartLifting(GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
             Lift.alreadyLifting = true;
+            currentArmState = armState.ARM_CENTER;
         }
     }
 

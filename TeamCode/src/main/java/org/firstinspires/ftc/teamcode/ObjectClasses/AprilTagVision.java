@@ -16,7 +16,7 @@ public class AprilTagVision {
     public AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     public enum Signal {LEFT, MIDDLE, RIGHT}
-    public Signal currentSignal = Signal.MIDDLE;
+    public Signal currentSignal;
 
     static final double FEET_PER_METER = 3.28084;
 
@@ -136,7 +136,7 @@ public class AprilTagVision {
         /* Actually do something useful */
         if(tagOfInterest == null)
         {
-             currentSignal = Signal.MIDDLE;
+             //currentSignal = Signal.MIDDLE;
         }
         else
         {
