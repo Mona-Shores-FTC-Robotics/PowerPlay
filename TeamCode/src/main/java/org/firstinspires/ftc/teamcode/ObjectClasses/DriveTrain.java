@@ -54,11 +54,11 @@ public class DriveTrain {
     double COUNTS_PER_INCH = (TICKS_PER_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     //Speed Constants
-    public static final double LOW_SPEED = .4;
+    public static final double LOW_SPEED = .2;
     public static final double MED_SPEED = .6;
     public static final double HIGH_SPEED = 1;
-    public static final double STARTING_RAMP_VALUE = .1;
-    public static final double RAMP_INCREMENT = .1;
+    public static final double STARTING_RAMP_VALUE = .03;
+    public static final double RAMP_INCREMENT = .02;
 
     /* Public OpMode members. */
     public DcMotor LFDrive = null;
@@ -570,7 +570,7 @@ public class DriveTrain {
 
     public void ContinueTurning(Gyro Gyro) {
         if (abs(degreesLeftToTurn) > 2) {
-            double motorPower = (degreesLeftToTurn < 0 ? .8 : -.8);
+            double motorPower = (degreesLeftToTurn < 0 ? -.5 : .5);
             setMotorPower(-motorPower, motorPower, -motorPower, motorPower);
             degreesLeftToTurn = targetAngleInDegrees - Gyro.getAngle();
         } else {
