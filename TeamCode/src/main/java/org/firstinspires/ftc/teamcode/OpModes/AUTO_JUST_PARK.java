@@ -5,8 +5,6 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.Signal;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.currentSignal;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -44,10 +42,12 @@ public class AUTO_JUST_PARK extends LinearOpMode {
             // Let the user set alliance color and starting location variables for use in code
             ButtonConfig.ConfigureAllianceColor();
             ButtonConfig.ConfigureStartingPosition();
-            //telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
-            //telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
-            //telemetry.addData("Status", "Run Time: " + getRuntime());
-            //telemetry.update();
+            telemetry.addData("Signal is ", Vision.currentSignal);
+            telemetry.addData("Signal is ", Vision.tagOfInterest.id);
+            telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
+            telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
+            telemetry.addData("Status", "Run Time: " + getRuntime());
+            telemetry.update();
             sleep(20);
         }
 

@@ -80,6 +80,7 @@ public class AprilTagVision {
                     }
                 }
 
+
                 if(tagFound)
                 {
                     activeOpMode.telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
@@ -116,15 +117,17 @@ public class AprilTagVision {
                 }
 
             }
-        activeOpMode.telemetry.update();
+        //activeOpMode.telemetry.update();
+
     }
 
     public void SetSignal(LinearOpMode activeOpMode)
     {
+
         if(tagOfInterest != null)
         {
            activeOpMode.telemetry.addLine("Tag snapshot:\n");
-            tagToTelemetry(tagOfInterest, activeOpMode);
+           tagToTelemetry(tagOfInterest, activeOpMode);
            activeOpMode.telemetry.update();
         }
         else
@@ -133,7 +136,6 @@ public class AprilTagVision {
             activeOpMode.telemetry.update();
         }
 
-        /* Actually do something useful */
         if(tagOfInterest == null)
         {
              //currentSignal = Signal.MIDDLE;
@@ -155,11 +157,13 @@ public class AprilTagVision {
     void tagToTelemetry(AprilTagDetection detection, LinearOpMode activeOpMode)
     {
         activeOpMode.telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+        /*
         activeOpMode.telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
         activeOpMode.telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
         activeOpMode.telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
         activeOpMode.telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
         activeOpMode.telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
         activeOpMode.telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
+        */
     }
 }

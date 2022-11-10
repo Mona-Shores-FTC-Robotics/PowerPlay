@@ -43,7 +43,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class DriveTrain {
 
     //DriveTrain Constants
-    public static final double STARTING_DRIVE_MULTIPLIER = .7;
+    public static final double STARTING_DRIVE_MULTIPLIER = .5;
     public double MINMULT = .5;
     public double MAXMULT = 1;
 
@@ -73,7 +73,7 @@ public class DriveTrain {
     public double strafe = 0;
     public double turn = 0;
 
-    public double topSpeed = 0;
+    public double topSpeed;
     public double multiplier = STARTING_DRIVE_MULTIPLIER;
     public double ramp = STARTING_RAMP_VALUE;
 
@@ -155,6 +155,7 @@ public class DriveTrain {
             manualDriving = true;
             autoDeliver = false;
 
+            //Strafe deadzone - don't strafe unless stick is pushed to at least .2 or -.2
             if (Math.abs(strafeStick) <= .2) {
                 strafeStick =0;
             }

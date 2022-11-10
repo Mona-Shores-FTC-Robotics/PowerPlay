@@ -13,7 +13,6 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TI
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.currentSignal;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -79,6 +78,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
             Vision.CheckForAprilTags(this);
             ButtonConfig.ConfigureAllianceColor();
             ButtonConfig.ConfigureStartingPosition();
+
             telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
             telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
             telemetry.update();
@@ -152,11 +152,11 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
 
         //Park after placing cone
-        if (currentSignal == GameConstants.Signal.LEFT) {
+        if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
             MecDrive.startEncoderDrive(LOW_SPEED, ((FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)-HALF_TILE_DISTANCE), ((FULL_TILE_DISTANCE* ButtonConfig.allianceColorAndLocationFactor) - HALF_TILE_DISTANCE));
-        } else if (currentSignal == GameConstants.Signal.MIDDLE) {
+        } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
             MecDrive.startEncoderDrive(LOW_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
-        } else if (currentSignal == GameConstants.Signal.RIGHT) {
+        } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
             MecDrive.startEncoderDrive(LOW_SPEED, ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) -HALF_TILE_DISTANCE), ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) -HALF_TILE_DISTANCE));
         }
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {

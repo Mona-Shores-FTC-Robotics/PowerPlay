@@ -79,16 +79,25 @@ public class Arm {
 
     public void setArmState(armState state) {
         if (state == armState.ARM_CENTER) {
-            if (arm.getPosition() >.6 && arm.getPosition() < .8){
-
-            } else {liftTimer.reset();}
+            //if the arm position isn't in the intake position already, then we need to set the lifttimer so that we wait for a moment to center the arm before lowering the lift
+            if (arm.getPosition() <.6 || arm.getPosition() > .8) {
+                liftTimer.reset();
+            }
+            //Center the Arm
             arm.setPosition(ARM_CENTER_INTAKE);
+
+            //Set the state so the lift will be lowered to the intake position on the next loop
             currentArmState = armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE;
+        }
 
+        //Check if the lift is too low
+        else if (Lift.liftMotor.getCurrentPosition() < HEIGHT_FOR_PREVENTING_ARM_ROTATION && currentArmState !=armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE) {
 
-        } else if (Lift.liftMotor.getCurrentPosition() < HEIGHT_FOR_PREVENTING_ARM_ROTATION && currentArmState !=armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE) {
+            //Raise the lift to a safe height that is well above the height for preventing arm rotation
             Lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION);
             Lift.alreadyLifting = true;
+
+            //change the state for left/front/right arm positions so we can check if the lift has raised to a safe height before rotating the arm
             if (state == armState.ARM_LEFT) {
                 currentArmState = armState.ARM_LEFT_WAITING_FOR_LIFT;
             } else if (state == armState.ARM_RIGHT) {
@@ -96,7 +105,10 @@ public class Arm {
             } else if (state == armState.ARM_FRONT) {
                 currentArmState = armState.ARM_FRONT_WAITING_FOR_LIFT;
             }
-        } else if ((state == armState.ARM_LEFT_WAITING_FOR_LIFT || state==armState.ARM_LEFT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
+        }
+
+        //next three else statements check whether we are at a safe lift height and then rotates the arm
+        else if ((state == armState.ARM_LEFT_WAITING_FOR_LIFT || state==armState.ARM_LEFT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
             arm.setPosition(ARM_LEFT_OUTTAKE);
             currentArmState = armState.ARM_LEFT;
         } else if ((state == armState.ARM_RIGHT_WAITING_FOR_LIFT|| state==armState.ARM_RIGHT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
@@ -105,13 +117,14 @@ public class Arm {
         } else if ((state == armState.ARM_FRONT_WAITING_FOR_LIFT  || state==armState.ARM_FRONT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
             arm.setPosition(ARM_FRONT_OUTTAKE);
             currentArmState = armState.ARM_FRONT;
-        } else if (state == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE && liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
+        }
+
+        //Lower the lift if the arm is centered and enough time has passed
+        else if (state == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE && liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
             Lift.StartLifting(GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
             Lift.alreadyLifting = true;
             currentArmState = armState.ARM_CENTER;
         }
     }
-
-
-    }
+}
 

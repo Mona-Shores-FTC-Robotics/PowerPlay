@@ -21,9 +21,7 @@ public class ButtonConfig {
     // alliance color times starting location
     public int allianceColorAndLocationFactor;
 
-
     //Button States
-
     public boolean G1aToggleReady = false;
     public boolean G1xToggleReady = false;
     public boolean G1yToggleReady = false;

@@ -10,12 +10,8 @@ public class Intake {
     public intakeState currentIntakeState;
     public Servo intake1;
     public Servo intake2;
-
     public enum intakeState {INTAKE_ON, INTAKE_OFF}
-    public ElapsedTime afterIntakeOnDelayPeriod = new ElapsedTime();
-
-
-
+    public Boolean coneSensor;
 
     public void init(HardwareMap ahwMap) {
         intake1 = ahwMap.servo.get("intake1_servo");
@@ -39,7 +35,6 @@ public class Intake {
         }
     }
 
-
     public void CheckIntake(Boolean currentButtonPress, Boolean previousButtonPress) {
         //When you press and release the button, toggle the intake
         if (currentButtonPress && !previousButtonPress) {
@@ -48,8 +43,6 @@ public class Intake {
     }
 
     public void AdvancedCheckIntake(Boolean currentButtonPress, Boolean previousButtonPress) {
-
-
         //When you press and release the button, toggle the intake
         if (currentButtonPress && !previousButtonPress) {
             toggleIntake();
@@ -59,4 +52,17 @@ public class Intake {
             toggleIntake();
         }
     }
+
+    public void SuperAdvancedCheckIntake(Boolean currentButtonPress, Boolean previousButtonPress) {
+        //When you press and release the button, toggle the intake
+        if (currentButtonPress && !previousButtonPress) {
+            toggleIntake();
+        }
+        //When you release the button, reset the delay period one final time after which the intake will automatically toggle
+        else if ((!currentButtonPress && previousButtonPress) || coneSensor){
+            toggleIntake();
+        }
+    }
+
+
 }

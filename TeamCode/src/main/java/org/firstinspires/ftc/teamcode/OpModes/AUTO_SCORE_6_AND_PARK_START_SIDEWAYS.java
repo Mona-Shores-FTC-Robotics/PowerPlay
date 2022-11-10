@@ -20,7 +20,6 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.currentSignal;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -31,11 +30,9 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
-import org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
-
 
 @Autonomous(name = "AUTO_SCORE_6_AND_PARK_START_SIDEWAYS")
 public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
@@ -265,21 +262,21 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
 
         //Park code
-        if (currentSignal == GameConstants.Signal.LEFT) {
+        if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
             MecDrive.startEncoderDrive(HIGH_SPEED, ((FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)-HALF_TILE_DISTANCE), ((FULL_TILE_DISTANCE* ButtonConfig.allianceColorAndLocationFactor) - HALF_TILE_DISTANCE));
 
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
             }
-        } else if (currentSignal == GameConstants.Signal.MIDDLE) {
+        } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
             MecDrive.startEncoderDrive(HIGH_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
 
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
             }
-        } else if (currentSignal == GameConstants.Signal.RIGHT) {
+        } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
             MecDrive.startEncoderDrive(HIGH_SPEED, ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) - HALF_TILE_DISTANCE), ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) - HALF_TILE_DISTANCE));
 
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
