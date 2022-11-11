@@ -3,9 +3,6 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_RIGHT_OUTTAKE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.AllianceColor;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.StartPosition.ROW_2;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.StartPosition.ROW_5;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.HIGH_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_CLEARANCE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_ENC_VAL;
@@ -72,7 +69,6 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         while (!isStarted()) {
             //Use Webcam to find out Signal and store in Signal variable
             Vision.CheckForAprilTags(this);
-            ButtonConfig.ConfigureAllianceColor();
             ButtonConfig.ConfigureStartingPosition();
         }
 
@@ -90,8 +86,8 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
 
 
         //drive to line up with the cone stack
-        MecDrive.startStrafeDrive(HIGH_SPEED,   (FULL_TILE_DISTANCE*2 + SIXTEENTH_TILE_DISTANCE)* ButtonConfig.allianceColorAndLocationFactor,
-                                                (FULL_TILE_DISTANCE*2 + SIXTEENTH_TILE_DISTANCE) * ButtonConfig.allianceColorAndLocationFactor);
+        MecDrive.startStrafeDrive(HIGH_SPEED,   (FULL_TILE_DISTANCE*2 + SIXTEENTH_TILE_DISTANCE)* ButtonConfig.startPositionMultiplier,
+                                                (FULL_TILE_DISTANCE*2 + SIXTEENTH_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
         while (opModeIsActive() && MecDrive.alreadyStrafing) {
             MecDrive.ContinueStrafing();
         }
@@ -110,14 +106,14 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         }
 
         //rotate turret to deliver to High Junction
-        if(ButtonConfig.allianceColorAndLocationFactor == 1){
+        if(ButtonConfig.startPositionMultiplier == 1){
             ServoArm.setPosition(ARM_RIGHT_OUTTAKE);}
-        else if (ButtonConfig.allianceColorAndLocationFactor == -1){
+        else if (ButtonConfig.startPositionMultiplier == -1){
             ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
         //strafe to the high pole to deliver to High Junction
-        MecDrive.startStrafeDrive(HIGH_SPEED, (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier * ButtonConfig.allianceColorMultiplier),
-                (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier * ButtonConfig.allianceColorMultiplier));
+        MecDrive.startStrafeDrive(HIGH_SPEED, (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier),
+                (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
         while (opModeIsActive() && (MecDrive.alreadyStrafing )) {
             MecDrive.ContinueStrafing();
         }
@@ -136,8 +132,8 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         telemetry.update();
 
         //strafe away from the high pole
-        MecDrive.startStrafeDrive(HIGH_SPEED,   -(QUARTER_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor),
-                                                -(QUARTER_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor));
+        MecDrive.startStrafeDrive(HIGH_SPEED,   -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier),
+                                                -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
             MecDrive.ContinueStrafing();
         }
@@ -217,14 +213,14 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
             }
 
             //move turret to deliver position
-            if(ButtonConfig.allianceColorAndLocationFactor == 1){
+            if(ButtonConfig.startPositionMultiplier == 1){
                 ServoArm.setPosition(ARM_RIGHT_OUTTAKE);}
-            else if (ButtonConfig.allianceColorAndLocationFactor == -1){
+            else if (ButtonConfig.startPositionMultiplier == -1){
                 ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
             //Strafe to the high pole while raising lift to height to deliver to High Junction
-            MecDrive.startStrafeDrive(HIGH_SPEED,   (QUARTER_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor),
-                    (QUARTER_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor));
+            MecDrive.startStrafeDrive(HIGH_SPEED,   (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier),
+                    (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
             Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
             while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyStrafing)) {
                 Lift.ContinueLifting();
@@ -245,8 +241,8 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
             telemetry.update();
 
             //strafe away from the high pole
-            MecDrive.startStrafeDrive(HIGH_SPEED,   -(QUARTER_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor),
-                                                    -(QUARTER_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor));
+            MecDrive.startStrafeDrive(HIGH_SPEED,   -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier),
+                                                    -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                 MecDrive.ContinueStrafing();
             }
@@ -263,7 +259,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
 
         //Park code
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-            MecDrive.startEncoderDrive(HIGH_SPEED, ((FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor)-HALF_TILE_DISTANCE), ((FULL_TILE_DISTANCE* ButtonConfig.allianceColorAndLocationFactor) - HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(HIGH_SPEED, ((FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)-HALF_TILE_DISTANCE), ((FULL_TILE_DISTANCE* ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE));
 
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                 MecDrive.ContinueDriving();
@@ -277,18 +273,16 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
                 Lift.ContinueLifting();
             }
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-            MecDrive.startEncoderDrive(HIGH_SPEED, ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) - HALF_TILE_DISTANCE), ((-FULL_TILE_DISTANCE * ButtonConfig.allianceColorAndLocationFactor) - HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(HIGH_SPEED, ((-FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE), ((-FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE));
 
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
             }
 
-            if ((ButtonConfig.currentAllianceColor == AllianceColor.BLUE && ButtonConfig.currentStartPosition == ROW_5) ||
-                    ButtonConfig.currentAllianceColor == AllianceColor.RED && ButtonConfig.currentStartPosition == ROW_2) {
+            if (ButtonConfig.currentStartPosition == org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.StartingPosition.LEFT_SIDE) {
                 MecDrive.turnToPID(90, Gyro);
-            } else if ((ButtonConfig.currentAllianceColor == AllianceColor.BLUE && ButtonConfig.currentStartPosition == ROW_2) ||
-                    ButtonConfig.currentAllianceColor == AllianceColor.RED && ButtonConfig.currentStartPosition == ROW_5) {
+            } else if (ButtonConfig.currentStartPosition == org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.StartingPosition.RIGHT_SIDE) {
                 MecDrive.turnToPID(-90, Gyro);
             }
 

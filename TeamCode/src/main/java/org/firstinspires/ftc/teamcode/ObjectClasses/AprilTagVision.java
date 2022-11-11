@@ -16,7 +16,7 @@ public class AprilTagVision {
     public AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     public enum Signal {LEFT, MIDDLE, RIGHT}
-    public Signal currentSignal;
+    public Signal currentSignal = Signal.MIDDLE;
 
     static final double FEET_PER_METER = 3.28084;
 
@@ -128,17 +128,17 @@ public class AprilTagVision {
         {
            activeOpMode.telemetry.addLine("Tag snapshot:\n");
            tagToTelemetry(tagOfInterest, activeOpMode);
-           activeOpMode.telemetry.update();
+           //activeOpMode.telemetry.update();
         }
         else
         {
             activeOpMode.telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
-            activeOpMode.telemetry.update();
+            //activeOpMode.telemetry.update();
         }
 
         if(tagOfInterest == null)
         {
-             //currentSignal = Signal.MIDDLE;
+             currentSignal = Signal.MIDDLE;
         }
         else
         {
@@ -156,7 +156,8 @@ public class AprilTagVision {
 
     void tagToTelemetry(AprilTagDetection detection, LinearOpMode activeOpMode)
     {
-        activeOpMode.telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+        //activeOpMode.telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+
         /*
         activeOpMode.telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
         activeOpMode.telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));

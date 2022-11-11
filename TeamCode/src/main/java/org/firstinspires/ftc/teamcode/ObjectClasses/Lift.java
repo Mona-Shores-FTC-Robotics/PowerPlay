@@ -18,12 +18,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Lift {
 
     //lift power parameters
-    final double ABOVE_THRESHOLD_POWER = .8;
+    final double ABOVE_THRESHOLD_POWER = 1;
     final double ENCODER_THRESHOLD = 100;
     final double BELOW_THRESHOLD_POWER = 0;
     final int MAX_LIFT_HEIGHT = 1480;
     final int MIN_LIFT_HEIGHT = 0;
-    final double LIFT_TARGET_MULTIPLIER = 10;
+    final double LIFT_TARGET_MULTIPLIER = 20;
 
     public enum liftJunctionStates { HIGH_CONE_JUNCTION_SCORE_HEIGHT, MEDIUM_CONE_JUNCTION_SCORE_HEIGHT,
         LOW_CONE_JUNCTION_SCORE_HEIGHT, GROUND_CONE_JUNCTION_SCORE_HEIGHT,
@@ -69,6 +69,8 @@ public class Lift {
             //only do this if the lift is being moved down from a higher position, don't do this if its being lifted up
             if (deltaLift < 0 && newLiftTarget < ENCODER_THRESHOLD) {
                 liftMotor.setPower(0);
+                liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 currentLiftJunctionState = liftJunctionStates.CONE_INTAKE_HEIGHT;
                 currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
             } else {
@@ -101,11 +103,15 @@ public class Lift {
         //if the lift is being lowered and the new target is below 100, set power to 0
         if (liftTarget < 0 && newLiftTarget < 100) {
             liftMotor.setPower(BELOW_THRESHOLD_POWER);
+            liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            currentLiftJunctionState = liftJunctionStates.CONE_INTAKE_HEIGHT;
+            currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
         }
 
         //if the lift is being lowered and the new target is above 100, set power to .5???
         else if (liftTarget < 0 && newLiftTarget >= 100) {
-            liftMotor.setPower(.5);
+            liftMotor.setPower(.3);
         }
 
         //if the lift is being raised, set the power to .8
@@ -222,7 +228,8 @@ public class Lift {
             } else if (modifierButton) {
                 RaiseLiftOneConeStackStage();
             }
-        } else if (alreadyLifting) {
+        }
+            else if (alreadyLifting) {
             ContinueLifting();
         }
     }

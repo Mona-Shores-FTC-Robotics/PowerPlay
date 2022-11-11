@@ -249,6 +249,20 @@ public class DriveTrain {
         }
     }
 
+    public void ContinueAutomaticTasksWithoutVision(Gyro Gyro, Arm ServoArm, Lift Lift, Claw ServoClaw, Intake ServoIntake) {
+         if (alreadyDriving) {
+            ContinueDriving();
+        } else if (alreadyStrafing) {
+            ContinueStrafing();
+        } else if (alreadyPIDTurning) {
+            ContinuePIDTurning(Gyro);
+        } else if (alreadyTurning) {
+            ContinueTurning(Gyro);
+        } else if (autoDeliver) {
+            auto_deliver(ServoArm, Lift, ServoClaw, ServoIntake);
+        }
+    }
+
     public void CheckNoManualDriveControls(float driveStick, float strafeStick, float turnStick, float fineTuneLeftTurn, float fineTuneRightTurn) {
         if (driveStick == 0 && strafeStick == 0 && turnStick == 0 && fineTuneLeftTurn < .1 && fineTuneRightTurn < .1 &&
             !visionStrafing && !alreadyDriving && !alreadyStrafing && !alreadyPIDTurning && !alreadyTurning && !autoDeliver) {
@@ -264,38 +278,38 @@ public class DriveTrain {
         double currentAngle = Gyro.getAbsoluteAngle();
 
         if (currentAngle < 0 && currentAngle > -85){
-            turnToPID(0, Gyro);
+            turnTo(0, Gyro);
         }
 
         if (currentAngle >= 5 && currentAngle < 90) {
-            turnToPID(90, Gyro);
+            turnTo(90, Gyro);
         }
 
         if (currentAngle < -90 && currentAngle >= -175){
-            turnToPID(-90, Gyro);
+            turnTo(-90, Gyro);
         }
 
         if (currentAngle >= 95 && currentAngle < 180){
-            turnToPID(180, Gyro);
+            turnTo(180, Gyro);
         }
     }
 
     private void RotateClosestRightAngleToRight(Gyro Gyro) {
         double currentAngle = Gyro.getAbsoluteAngle();
         if (currentAngle < -5 && currentAngle >= -90) {
-            turnToPID(-90, Gyro);
+            turnTo(-90, Gyro);
         }
 
         if (currentAngle < -95 && currentAngle >= -180){
-            turnToPID(-180, Gyro);
+            turnTo(-180, Gyro);
         }
 
         if (currentAngle < 175 && currentAngle >= 90){
-            turnToPID(90, Gyro);
+            turnTo(90, Gyro);
         }
 
         if (currentAngle < 85 && currentAngle >= 0){
-            turnToPID(0, Gyro);
+            turnTo(0, Gyro);
         }
     }
 

@@ -53,10 +53,9 @@ public class AUTO_JUST_PARK extends LinearOpMode {
             Vision.CheckForAprilTags(this);
 
             // Let the user set alliance color and starting location variables for use in code
-            ButtonConfig.ConfigureAllianceColor();
+
             ButtonConfig.ConfigureStartingPosition();
             telemetry.addData("Signal is ", Vision.currentSignal);
-            telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
             telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
             telemetry.addData("Status", "Run Time: " + getRuntime());
             telemetry.update();
@@ -73,7 +72,6 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         Vision.SetSignal(this);
 
         telemetry.addData("Signal is ", Vision.currentSignal);
-        telemetry.addData("Selected Alliance Color ", ButtonConfig.currentAllianceColor);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
         telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();

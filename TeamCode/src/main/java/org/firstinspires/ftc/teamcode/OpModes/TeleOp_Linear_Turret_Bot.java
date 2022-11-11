@@ -87,7 +87,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             //-----CHECK OPERATOR CONTROLS ------//
 
-            ServoClaw.AdvancedCheckClaw(    currentGamepad2.a, previousGamepad2.a, ServoArm);
+            ServoClaw.AdvancedCheckClaw(    currentGamepad2.y, previousGamepad2.y, ServoArm);
 
             ServoIntake.AdvancedCheckIntake(currentGamepad2.x, previousGamepad2.x);
 
