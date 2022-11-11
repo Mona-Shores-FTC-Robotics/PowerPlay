@@ -11,6 +11,7 @@ public class Intake {
     public Servo intake1;
     public Servo intake2;
     public enum intakeState {INTAKE_ON, INTAKE_OFF}
+    public ElapsedTime afterIntakeOnDelayPeriod = new ElapsedTime();
     public Boolean coneSensor;
 
     public void init(HardwareMap ahwMap) {
@@ -64,5 +65,18 @@ public class Intake {
         }
     }
 
+
+    public void AutoDeliverIntakeToggle() {
+        if (currentIntakeState == intakeState.INTAKE_OFF) {
+            intake1.setPosition(1);
+            intake2.setPosition(0);
+            currentIntakeState = intakeState.INTAKE_ON;
+            afterIntakeOnDelayPeriod.reset();
+        } else if (currentIntakeState == intakeState.INTAKE_ON && (afterIntakeOnDelayPeriod.seconds() > 1)) {
+            intake1.setPosition(.5);
+            intake2.setPosition(.5);
+            currentIntakeState = intakeState.INTAKE_OFF;
+        }
+    }
 
 }

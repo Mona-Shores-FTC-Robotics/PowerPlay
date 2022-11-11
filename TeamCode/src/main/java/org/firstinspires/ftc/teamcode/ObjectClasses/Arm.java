@@ -13,12 +13,14 @@ public class Arm {
 
     public static final double HEIGHT_FOR_PREVENTING_ARM_ROTATION = 400;
     public static final double SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION = 700;
-    public static final double SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER = 2;
+    public static final double SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER = 1.2;
 
     public Servo arm;
 
     public armState currentArmState;
-    public enum armState {ARM_LEFT, ARM_CENTER, ARM_RIGHT, ARM_FRONT, ARM_CENTERED_MOVE_LIFT_TO_INTAKE, ARM_LEFT_WAITING_FOR_LIFT, ARM_RIGHT_WAITING_FOR_LIFT, ARM_FRONT_WAITING_FOR_LIFT}
+    public enum armState {  ARM_LEFT, ARM_CENTER, ARM_RIGHT, ARM_FRONT,
+                            ARM_CENTERED_MOVE_LIFT_TO_INTAKE, ARM_LEFT_WAITING_FOR_LIFT,
+                            ARM_RIGHT_WAITING_FOR_LIFT, ARM_FRONT_WAITING_FOR_LIFT}
     public Lift Lift;
     public ElapsedTime liftTimer = new ElapsedTime();
 
@@ -79,18 +81,18 @@ public class Arm {
 
     public void setArmState(armState state) {
         if (state == armState.ARM_CENTER) {
-            //if the arm position isn't in the intake position already, then we need to set the lifttimer so that we wait for a moment to center the arm before lowering the lift
-            if (arm.getPosition() <.6 || arm.getPosition() > .8) {
+            //if the arm position isn't in the intake position already, then we need to set the lift timer so that we wait for a moment to center the arm before lowering the lift
+            if (arm.getPosition() <.5 || arm.getPosition() > .9) {
                 liftTimer.reset();
             }
             //Center the Arm
             arm.setPosition(ARM_CENTER_INTAKE);
 
-            //Set the state so the lift will be lowered to the intake position on the next loop
+            //Set the state so the lift will be lowered to the intake position on a future loop
             currentArmState = armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE;
         }
 
-        //Check if the lift is too low
+        //Check if the lift is too low and trying to rotate to a non-center position, then move the lift to a safe height before we rotate the arm
         else if (Lift.liftMotor.getCurrentPosition() < HEIGHT_FOR_PREVENTING_ARM_ROTATION && currentArmState !=armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE) {
 
             //Raise the lift to a safe height that is well above the height for preventing arm rotation
@@ -108,13 +110,13 @@ public class Arm {
         }
 
         //next three else statements check whether we are at a safe lift height and then rotates the arm
-        else if ((state == armState.ARM_LEFT_WAITING_FOR_LIFT || state==armState.ARM_LEFT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
+        else if ((state == armState.ARM_LEFT_WAITING_FOR_LIFT || state==armState.ARM_LEFT) && Lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
             arm.setPosition(ARM_LEFT_OUTTAKE);
             currentArmState = armState.ARM_LEFT;
-        } else if ((state == armState.ARM_RIGHT_WAITING_FOR_LIFT|| state==armState.ARM_RIGHT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
+        } else if ((state == armState.ARM_RIGHT_WAITING_FOR_LIFT || state==armState.ARM_RIGHT) && Lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
             arm.setPosition(ARM_RIGHT_OUTTAKE);
             currentArmState = armState.ARM_RIGHT;
-        } else if ((state == armState.ARM_FRONT_WAITING_FOR_LIFT  || state==armState.ARM_FRONT) && Lift.liftMotor.getCurrentPosition() > HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+        } else if ((state == armState.ARM_FRONT_WAITING_FOR_LIFT || state==armState.ARM_FRONT) && Lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
             arm.setPosition(ARM_FRONT_OUTTAKE);
             currentArmState = armState.ARM_FRONT;
         }

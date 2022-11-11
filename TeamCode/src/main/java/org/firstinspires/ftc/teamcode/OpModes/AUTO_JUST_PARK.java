@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -28,6 +26,12 @@ public class AUTO_JUST_PARK extends LinearOpMode {
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
 
+
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initializing");
@@ -40,42 +44,47 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         ServoClaw.init(hardwareMap);
         ButtonConfig.init();
 
-        Gamepad currentGamepad2 = new Gamepad();
-        Gamepad previousGamepad2 = new Gamepad();
-
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         sleep(500);
 
         while (!isStarted()) {
-            //Use Webcam to find out Signal using April Tags
-            Vision.CheckForAprilTags(this);
 
-            // Let the user set alliance color and starting location variables for use in code
-
-            ButtonConfig.ConfigureStartingPosition();
-            telemetry.addData("Signal is ", Vision.currentSignal);
-            telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
-            telemetry.addData("Status", "Run Time: " + getRuntime());
-            telemetry.update();
+            //save current and previous gamepad values for one loop
+            previousGamepad1 = ButtonConfig.copy(currentGamepad1);
+            currentGamepad1 = ButtonConfig.copy(gamepad1);
 
             previousGamepad2 = ButtonConfig.copy(currentGamepad2);
             currentGamepad2 = ButtonConfig.copy(gamepad2);
 
-            ServoClaw.CheckClaw(currentGamepad2.a, previousGamepad2.a);
-            ServoIntake.CheckIntake(currentGamepad2.x, previousGamepad2.x);
+            //Use Webcam to find out Signal using April Tags and save in currentSignal
+            Vision.CheckForAprilTags(this);
+
+            // User sets starting location left or right, and confirms selection with a button press
+            // LEFT is a multiplier of 1, RIGHT is a multiplier of -1
+            ButtonConfig.ConfigureStartingPosition( currentGamepad1.dpad_left, previousGamepad1.dpad_left,
+                    currentGamepad1.dpad_right, previousGamepad1.dpad_right,
+                    currentGamepad1.b,          previousGamepad1.b);
+
+            telemetry.addData("Signal is ", Vision.currentSignal);
+            telemetry.addLine(" ");
+            telemetry.addLine("Select Starting Position with D-pad");
+            telemetry.addData("Current Starting Position ", ButtonConfig.currentStartPosition);
+            if (ButtonConfig.confirmStartingPositionSelection == false) {
+                telemetry.addData("Unlocked", "Press CIRCLE to lock selection");
+            } else {
+                telemetry.addData("Locked", "Press CIRCLE to unlock selection");
+            }
+            telemetry.update();
 
             sleep(20);
         }
-
-        Vision.SetSignal(this);
 
         telemetry.addData("Signal is ", Vision.currentSignal);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
         telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
-
 
         //Drive forward 2 tiles plus a little bit more to get into position for deciding where to park
         Lift.StartLifting(400);

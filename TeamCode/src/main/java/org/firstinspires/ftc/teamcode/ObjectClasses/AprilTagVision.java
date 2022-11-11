@@ -16,14 +16,11 @@ public class AprilTagVision {
     public AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     public enum Signal {LEFT, MIDDLE, RIGHT}
+
+    //Set default to MIDDLE in case something goes wrong with vision
     public Signal currentSignal = Signal.MIDDLE;
 
-    static final double FEET_PER_METER = 3.28084;
-
-    // Lens intrinsics
-    // UNITS ARE PIXELS
     // NOTE: this calibration is for the C920 webcam at 800x448.
-    // You will need to do your own calibration for other configurations!
     double fx = 578.272;
     double fy = 578.272;
     double cx = 402.145;
@@ -35,6 +32,8 @@ public class AprilTagVision {
     int ID_TAG_FOR_LEFT = 0;
     int ID_TAG_FOR_MIDDLE = 1;
     int ID_TAG_FOR_RIGHT = 2;
+
+    int cameraMonitorViewId;
 
     public AprilTagDetection tagOfInterest = null;
 
@@ -59,112 +58,39 @@ public class AprilTagVision {
 
             }
         });
-
     }
 
     public void CheckForAprilTags(LinearOpMode activeOpMode)
     {
-        activeOpMode.telemetry.setMsTransmissionInterval(50);
         ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
         if(currentDetections.size() != 0)
             {
-                boolean tagFound = false;
                 for(AprilTagDetection tag : currentDetections)
                 {
                     if(tag.id == ID_TAG_FOR_LEFT || tag.id == ID_TAG_FOR_MIDDLE || tag.id == ID_TAG_FOR_RIGHT )
                     {
                         tagOfInterest = tag;
-                        tagFound = true;
+
+                        if(tagOfInterest == null)
+                        {
+                            currentSignal = Signal.MIDDLE;
+                        }
+                        else
+                        {
+                            if (tagOfInterest.id == ID_TAG_FOR_LEFT) {
+                                currentSignal = Signal.LEFT;
+                            }
+                            else if (tagOfInterest.id == ID_TAG_FOR_MIDDLE) {
+                                currentSignal = Signal.MIDDLE;
+                            }
+                            else if (tagOfInterest.id == ID_TAG_FOR_RIGHT) {
+                                currentSignal = Signal.RIGHT;
+                            }
+                        }
                         break;
                     }
                 }
-
-
-                if(tagFound)
-                {
-                    activeOpMode.telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
-                    tagToTelemetry(tagOfInterest, activeOpMode);
-                }
-                else
-                {
-                   activeOpMode.telemetry.addLine("Don't see tag of interest :(");
-
-                    if(tagOfInterest == null)
-                    {
-                       activeOpMode.telemetry.addLine("(The tag has never been seen)");
-                    }
-                    else
-                    {
-                      activeOpMode.telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
-                        tagToTelemetry(tagOfInterest, activeOpMode);
-                    }
-                }
-
             }
-            else
-            {
-              activeOpMode.telemetry.addLine("Don't see tag of interest :(");
-
-                if(tagOfInterest == null)
-                {
-                   activeOpMode.telemetry.addLine("(The tag has never been seen)");
-                }
-                else
-                {
-                   activeOpMode.telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
-                    tagToTelemetry(tagOfInterest, activeOpMode);
-                }
-
-            }
-        //activeOpMode.telemetry.update();
-
-    }
-
-    public void SetSignal(LinearOpMode activeOpMode)
-    {
-
-        if(tagOfInterest != null)
-        {
-           activeOpMode.telemetry.addLine("Tag snapshot:\n");
-           tagToTelemetry(tagOfInterest, activeOpMode);
-           //activeOpMode.telemetry.update();
-        }
-        else
-        {
-            activeOpMode.telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
-            //activeOpMode.telemetry.update();
-        }
-
-        if(tagOfInterest == null)
-        {
-             currentSignal = Signal.MIDDLE;
-        }
-        else
-        {
-            if (tagOfInterest.id == ID_TAG_FOR_LEFT) {
-                currentSignal = Signal.LEFT;
-            }
-            else if (tagOfInterest.id == ID_TAG_FOR_MIDDLE) {
-                currentSignal = Signal.MIDDLE;
-            }
-            else if (tagOfInterest.id == ID_TAG_FOR_RIGHT) {
-                currentSignal = Signal.RIGHT;
-            }
-        }
-    }
-
-    void tagToTelemetry(AprilTagDetection detection, LinearOpMode activeOpMode)
-    {
-        //activeOpMode.telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-
-        /*
-        activeOpMode.telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
-        activeOpMode.telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
-        activeOpMode.telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
-        activeOpMode.telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-        activeOpMode.telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-        activeOpMode.telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
-        */
     }
 }

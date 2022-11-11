@@ -20,6 +20,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CON
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
@@ -44,6 +45,11 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
     Arm ServoArm = new Arm(Lift);
     Gyro Gyro = new Gyro(this);
 
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
+
     public final ElapsedTime runtime = new ElapsedTime();
 
     @Override
@@ -58,7 +64,6 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         ServoClaw.init(hardwareMap);
         Lift.init(hardwareMap);
         Gyro.init(hardwareMap);
-
         ButtonConfig.init();
 
         // Tell the driver that initialization is complete.
@@ -67,13 +72,37 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         sleep(1000);
 
         while (!isStarted()) {
-            //Use Webcam to find out Signal and store in Signal variable
+            //save current and previous gamepad values for one loop
+            previousGamepad1 = ButtonConfig.copy(currentGamepad1);
+            currentGamepad1 = ButtonConfig.copy(gamepad1);
+
+            previousGamepad2 = ButtonConfig.copy(currentGamepad2);
+            currentGamepad2 = ButtonConfig.copy(gamepad2);
+
+            //Use Webcam to find out Signal using April Tags
             Vision.CheckForAprilTags(this);
-            ButtonConfig.ConfigureStartingPosition();
+
+            // User sets starting location left or right, and confirms selection with a button press
+            // LEFT is a multiplier of 1, RIGHT is a multiplier of -1
+            ButtonConfig.ConfigureStartingPosition( currentGamepad1.dpad_left, previousGamepad1.dpad_left,
+                    currentGamepad1.dpad_right, previousGamepad1.dpad_right,
+                    currentGamepad1.b,          previousGamepad1.b);
+
+            telemetry.addData("Signal is ", Vision.currentSignal);
+            telemetry.addLine(" ");
+            telemetry.addLine("Select Starting Position with D-pad");
+            telemetry.addData("Current Starting Position ", ButtonConfig.currentStartPosition);
+            if (ButtonConfig.confirmStartingPositionSelection == false) {
+                telemetry.addData("Unlocked", "Press CIRCLE to lock selection");
+            } else {
+                telemetry.addData("Locked", "Press CIRCLE to unlock selection");
+            }
+            telemetry.update();
+
+            sleep(20);
         }
 
         runtime.reset();
-        Vision.SetSignal(this);
 
         int coneDeliveryTracker = 0;
         int coneStackTracker = 5;

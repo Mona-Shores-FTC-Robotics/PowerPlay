@@ -22,7 +22,7 @@ public class Gyro {
     //gyro members
     public Orientation lastAngles = new Orientation();
     public double currAngle = 0.0;
-    public double gyroOffset = 0;
+
     public Orientation originalOrientation;
     LinearOpMode activeOpMode;
 
@@ -69,6 +69,5 @@ public class Gyro {
         double absoluteAngle = originalOrientation.firstAngle;
         return absoluteAngle;
     }
-
 
 }

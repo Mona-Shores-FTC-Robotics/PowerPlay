@@ -7,68 +7,50 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class ButtonConfig {
 
-    private boolean confirmStartingPositionSelection = false;
-    boolean toggleReadyB = false;
+    public static boolean confirmStartingPositionSelection = false;
 
     LinearOpMode activeOpMode;
 
-    public StartingPosition currentStartPosition;
-    public int startPositionMultiplier; //1 is row 2 and -1 is row 5
+    public static StartingPosition currentStartPosition;
 
-    // alliance color times starting location
+    public enum StartingPosition {
+        LEFT_SIDE,
+        RIGHT_SIDE,
+        NOT_SET_YET
+    }
 
-    //Button States
-    public boolean G1aToggleReady = false;
-    public boolean G1xToggleReady = false;
-    public boolean G1yToggleReady = false;
-    public boolean G1bToggleReady = false;
-    public boolean G1dpad_downToggleReady = false;
-    public boolean G1dpad_upToggleReady = false;
-    public boolean G1dpad_leftToggleReady = false;
-    public boolean G1dpad_rightToggleReady = false;
-    public boolean G1right_bumperToggleReady = false;
-    public boolean G1left_bumperToggleReady = false;
+    public static int startPositionMultiplier; //1 is LEFT and -1 RIGHT
 
     public ButtonConfig(LinearOpMode activeOpMode) {
         this.activeOpMode = activeOpMode;
     }
 
     public void init() {
-
         currentStartPosition = StartingPosition.NOT_SET_YET;
-        startPositionMultiplier = 1; //1 = close to audience A2/F2 // -1 =opposite side as audience A5/F5
-
+        startPositionMultiplier = 1;
     }
 
+    public void ConfigureStartingPosition(  Boolean leftButton, Boolean previousLeftButton,
+                                            Boolean rightButton, Boolean previousRightButton,
+                                            Boolean confirmButton, Boolean previousConfirmButton) {
 
-    public void ConfigureStartingPosition() {
-
-        while (!confirmStartingPositionSelection) {
+        if (!confirmStartingPositionSelection && activeOpMode.opModeInInit()) {
             activeOpMode.telemetry.addLine("Select Starting Position with D-pad");
             activeOpMode.telemetry.addData("Current Starting Position ", currentStartPosition);
             activeOpMode.telemetry.addData("Press B", "Press B to confirm selection");
             activeOpMode.telemetry.update();
 
-            if (activeOpMode.gamepad1.dpad_left) {
+            if (leftButton && !previousLeftButton) {
                currentStartPosition = StartingPosition.LEFT_SIDE;
                startPositionMultiplier = 1;
             }
-            if (activeOpMode.gamepad1.dpad_right) {
-                    currentStartPosition = StartingPosition.RIGHT_SIDE;
-                    startPositionMultiplier = -1;
+            if (rightButton && !previousRightButton) {
+                currentStartPosition = StartingPosition.RIGHT_SIDE;
+                startPositionMultiplier = -1;
             }
 
-            boolean G1b = activeOpMode.gamepad1.b;
-
-            if (G1b == false) {
-                toggleReadyB = true;
-            }
-
-            if (G1b && toggleReadyB && currentStartPosition != StartingPosition.NOT_SET_YET) {
-                toggleReadyB = false;
+            if (confirmButton && !previousConfirmButton && currentStartPosition != StartingPosition.NOT_SET_YET) {
                 confirmStartingPositionSelection = true;
-                activeOpMode.telemetry.addData(" Starting Position Selected: ", currentStartPosition);
-                activeOpMode.telemetry.update();
             }
         }
     }
@@ -98,11 +80,7 @@ public class ButtonConfig {
         activeOpMode.telemetry.addData("Drive Multiplier", MecDrive.multiplier);
     }
 
-    public enum StartingPosition {
-        LEFT_SIDE,
-        RIGHT_SIDE,
-        NOT_SET_YET
-    }
+
 
     public Gamepad copy(Gamepad gamepad) {
         Gamepad pad = new Gamepad();

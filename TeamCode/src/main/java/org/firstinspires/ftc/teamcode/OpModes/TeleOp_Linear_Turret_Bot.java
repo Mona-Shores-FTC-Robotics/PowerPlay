@@ -124,7 +124,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             //MecDrive.CheckVisionStrafing(currentGamepad1.y, previousGamepad1.y);
 
             //Driver control to automatically pickup and deliver a cone
-            //MecDrive.CheckAutoDeliver(currentGamepad1.back, previousGamepad1.back);
+            MecDrive.CheckAutoDeliver(  currentGamepad1.back, previousGamepad1.back,
+                                        currentGamepad1.start, previousGamepad1.start);
 
             //Automated tasks (driving, turning, strafing, vision strafing, auto deliver)
             MecDrive.ContinueAutomaticTasks(Gyro, AutoVision, ServoArm, Lift, ServoClaw, ServoIntake);

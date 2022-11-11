@@ -12,12 +12,10 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TI
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THIRTYSECOND_TILE_DISTANCE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
@@ -61,7 +59,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         Lift.init(hardwareMap);
         ServoArm.init(hardwareMap);
 
-        //Vision.init(hardwareMap);
+        Vision.init(hardwareMap);
         ButtonConfig.init();
 
         // Tell the driver that initialization is complete.
@@ -70,29 +68,29 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         sleep(1000);
 
         while (!isStarted()) {
-            //Use Webcam to find out Signal and store in Signal variable
-            //Vision.CheckForAprilTags(this);
-            //Vision.SetSignal(this);
-
-            ButtonConfig.ConfigureStartingPosition();
-
-            //telemetry.addData("Signal is ", Vision.currentSignal);
-            telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
-            telemetry.addData("Status", "Run Time: " + getRuntime());
-            telemetry.update();
-
+            //save current and previous gamepad values for one loop
             previousGamepad2 = ButtonConfig.copy(currentGamepad2);
             currentGamepad2 = ButtonConfig.copy(gamepad2);
 
-            ServoClaw.CheckClaw(currentGamepad2.a, previousGamepad2.a);
-            ServoIntake.CheckIntake(currentGamepad2.x, previousGamepad2.x);
+            //Use Webcam to find out Signal using April Tags
+            Vision.CheckForAprilTags(this);
+
+            // User sets starting location left or right, and confirms selection with a button press
+            // LEFT is a multiplier of 1, RIGHT is a multiplier of -1
+            ButtonConfig.ConfigureStartingPosition( currentGamepad2.dpad_left, previousGamepad2.dpad_left,
+                                                    currentGamepad2.dpad_right, previousGamepad2.dpad_right,
+                                                    currentGamepad2.b,          previousGamepad2.b);
+
+            telemetry.addData("Signal is ", Vision.currentSignal);
+            telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
+            telemetry.addData("Status", "Run Time: " + getRuntime());
+            telemetry.update();
 
             sleep(20);
         }
 
         runtime.reset();
         Gyro.init(hardwareMap);
-        //Vision.SetSignal(this);
 
         telemetry.addData("Signal is ", Signal);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
