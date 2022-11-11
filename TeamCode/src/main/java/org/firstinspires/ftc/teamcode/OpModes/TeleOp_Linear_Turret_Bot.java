@@ -58,6 +58,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
         while (!isStarted()) {
             telemetry.addData("Status", "Configuring Buttons");
             ButtonConfig.ConfigureMultiplier(this, MecDrive);
+
             telemetry.addData("Status", "Press START once multipliers are set");
             telemetry.update();
         }

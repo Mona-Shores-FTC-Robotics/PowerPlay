@@ -24,6 +24,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.current
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
@@ -51,6 +52,8 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
     Gyro Gyro = new Gyro(this);
 
     public final ElapsedTime runtime = new ElapsedTime();
+    Gamepad currentGamepad2 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
 
     @Override
     public void runOpMode() {
@@ -73,10 +76,27 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         sleep(1000);
 
         while (!isStarted()) {
-            //Use Webcam to find out Signal and store in Signal variable
+            //Use Webcam to find out Signal and store in Vision.currentSignal variable
             Vision.CheckForAprilTags(this);
+            Vision.SetSignal(this);
+
             ButtonConfig.ConfigureAllianceColor();
             ButtonConfig.ConfigureStartingPosition();
+
+            telemetry.addData("Vision Signal ", Vision.currentSignal);
+            telemetry.addData("Alliance Color ", ButtonConfig.currentAllianceColor);
+            telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
+            telemetry.update();
+
+            //Store the previous loop's gamepad values.
+            previousGamepad2 = ButtonConfig.copy(currentGamepad2);
+
+            //Store the gamepad values to be used for this iteration of the loop.
+            currentGamepad2 = ButtonConfig.copy(gamepad2);
+
+            //Let the second gamepad control the claw and intake during init so the starting cone can be easily loaded
+            ServoIntake.CheckIntake(currentGamepad2.x, previousGamepad2.x);
+            ServoClaw.CheckClaw(currentGamepad2.a, previousGamepad2.a);
         }
 
         runtime.reset();
@@ -309,7 +329,6 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         telemetry.addData("Current Lift Height", Lift.liftMotor.getCurrentPosition());
         telemetry.addData("Status", "Run Time: " + runtime);
         telemetry.update();
-        sleep(2000);
 
     }
 }

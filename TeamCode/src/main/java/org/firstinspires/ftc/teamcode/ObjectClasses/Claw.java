@@ -33,7 +33,7 @@ public class Claw {
         }
     }
 
-    public void CheckClaw(boolean currentButton , boolean lastButton, Arm servoarm) {
+    public void CheckClaw(boolean currentButton , boolean lastButton) {
         if (currentButton && !lastButton) {
             //open and close the claw
            toggleClaw();

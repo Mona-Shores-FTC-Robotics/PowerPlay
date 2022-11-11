@@ -49,7 +49,6 @@ public class Intake {
 
     public void AdvancedCheckIntake(Boolean currentButtonPress, Boolean previousButtonPress) {
 
-
         //When you press and release the button, toggle the intake
         if (currentButtonPress && !previousButtonPress) {
             toggleIntake();
