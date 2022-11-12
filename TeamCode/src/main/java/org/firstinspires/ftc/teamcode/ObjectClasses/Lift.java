@@ -20,7 +20,7 @@ public class Lift {
     final double ABOVE_LIFT_FALL_THRESHOLD_POWER = .3;
     final double LIFT_FALL_THRESHOLD_ENC_VAL = 100;
     final double BELOW_LIFT_FALL_THRESHOLD_POWER = 0;
-    final double LIFT_RAISE_POWER = 1;
+    public double LIFT_RAISE_POWER = 1;
     final int MAX_LIFT_HEIGHT = 1480;
     final int MIN_LIFT_HEIGHT = 0;
     final int SAFE_FALL_HEIGHT = 400;
