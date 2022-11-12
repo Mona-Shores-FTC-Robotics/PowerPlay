@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.ObjectClasses;
 
 import static java.lang.Thread.sleep;
 
+import android.widget.Button;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -26,8 +28,9 @@ public class ButtonConfig {
     }
 
     public void init() {
-        currentStartPosition = StartingPosition.NOT_SET_YET;
-        startPositionMultiplier = 1;
+        ButtonConfig.currentStartPosition = StartingPosition.NOT_SET_YET;
+        ButtonConfig.startPositionMultiplier = 1;
+        ButtonConfig.confirmStartingPositionSelection = false;
     }
 
     public void ConfigureStartingPosition(  Boolean leftButton, Boolean previousLeftButton,
@@ -35,10 +38,6 @@ public class ButtonConfig {
                                             Boolean confirmButton, Boolean previousConfirmButton) {
 
         if (!confirmStartingPositionSelection && activeOpMode.opModeInInit()) {
-            activeOpMode.telemetry.addLine("Select Starting Position with D-pad");
-            activeOpMode.telemetry.addData("Current Starting Position ", currentStartPosition);
-            activeOpMode.telemetry.addData("Press B", "Press B to confirm selection");
-            activeOpMode.telemetry.update();
 
             if (leftButton && !previousLeftButton) {
                currentStartPosition = StartingPosition.LEFT_SIDE;
@@ -48,10 +47,13 @@ public class ButtonConfig {
                 currentStartPosition = StartingPosition.RIGHT_SIDE;
                 startPositionMultiplier = -1;
             }
-
-            if (confirmButton && !previousConfirmButton && currentStartPosition != StartingPosition.NOT_SET_YET) {
+            if (confirmButton && !previousConfirmButton && currentStartPosition!= StartingPosition.NOT_SET_YET) {
                 confirmStartingPositionSelection = true;
             }
+        } else
+
+        if (confirmButton && !previousConfirmButton) {
+            confirmStartingPositionSelection = false;
         }
     }
 

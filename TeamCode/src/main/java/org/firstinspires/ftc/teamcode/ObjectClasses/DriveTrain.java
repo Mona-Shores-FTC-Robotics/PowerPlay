@@ -247,6 +247,8 @@ public class DriveTrain {
             ContinueDriving();
         } else if (alreadyStrafing) {
             ContinueStrafing();
+        } else if (alreadyTurning) {
+            ContinueTurning(Gyro);
         } else if (alreadyPIDTurning) {
             ContinuePIDTurning(Gyro);
         } else if (autoDeliver1) {
@@ -255,6 +257,7 @@ public class DriveTrain {
             auto_deliver2(ServoArm, Lift, ServoClaw, ServoIntake);
         }
     }
+
 
     //have this here just in case we have to take vision out of the code so we can still call this method
     public void ContinueAutomaticTasksWithoutVision(Gyro Gyro, Arm ServoArm, Lift Lift, Claw ServoClaw, Intake ServoIntake) {
@@ -284,7 +287,8 @@ public class DriveTrain {
 
     private void RotateClosestRightAngleToLeft(Gyro Gyro) {
         double currentAngle = Gyro.getAbsoluteAngle();
-
+        turnToPID(45,Gyro);
+        /*
         if (currentAngle < 0 && currentAngle > -85){
             turnTo(0, Gyro);
         }
@@ -300,10 +304,13 @@ public class DriveTrain {
         if (currentAngle >= 95 && currentAngle < 180){
             turnTo(180, Gyro);
         }
+        */
     }
 
     private void RotateClosestRightAngleToRight(Gyro Gyro) {
         double currentAngle = Gyro.getAbsoluteAngle();
+        turnToPID(-45, Gyro);
+       /*
         if (currentAngle < -5 && currentAngle >= -90) {
             turnTo(-90, Gyro);
         }
@@ -319,6 +326,8 @@ public class DriveTrain {
         if (currentAngle < 85 && currentAngle >= 0){
             turnTo(0, Gyro);
         }
+
+        */
     }
 
     public void VisionStrafing(PipeVision AutoVision) {
@@ -392,7 +401,7 @@ public class DriveTrain {
 
     }
 
-    public void startEncoderDrive(double speed, int leftInches, int rightInches) {
+    public void startEncoderDrive(double speed, double leftInches, double rightInches) {
         topSpeed = speed;
         if (activeOpMode.opModeIsActive() && alreadyDriving == false) {
 
@@ -465,7 +474,7 @@ public class DriveTrain {
         }
     }
 
-    public void startStrafeDrive(double speed, int leftInches, int rightInches) {
+    public void startStrafeDrive(double speed, double leftInches, double rightInches) {
         topSpeed = speed;
         if (activeOpMode.opModeIsActive() && alreadyStrafing == false) {
             LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -722,11 +731,11 @@ public class DriveTrain {
     public void turnPID(double degrees, Gyro Gyro){
         alreadyPIDTurning = true;
         Gyro.resetAngle();
-        pid = new TurnPIDController(degrees, .05, .1, 0);
+        pid = new TurnPIDController(degrees, .005, .1, 0);
     }
 
     public void ContinuePIDTurning(Gyro Gyro) {
-        if (Math.abs(pid.pidAngleLeftToTurn) > 1) {
+        if (Math.abs(pid.pidAngleLeftToTurn) > 1.8) {
             double motorPower = pid.update(Gyro.getAngle());
             setMotorPower(-motorPower, motorPower, -motorPower, motorPower);
         } else {

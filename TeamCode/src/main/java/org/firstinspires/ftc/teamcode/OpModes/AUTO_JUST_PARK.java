@@ -21,7 +21,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
 
     DriveTrain MecDrive = new DriveTrain(this);
     AprilTagVision Vision = new AprilTagVision();
-    ButtonConfig ButtonConfig = new ButtonConfig(this);
+    ButtonConfig BConfig = new ButtonConfig(this);
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
@@ -42,7 +42,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         Lift.init(hardwareMap);
         ServoIntake.init(hardwareMap);
         ServoClaw.init(hardwareMap);
-        ButtonConfig.init();
+        BConfig.init();
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -52,18 +52,18 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         while (!isStarted()) {
 
             //save current and previous gamepad values for one loop
-            previousGamepad1 = ButtonConfig.copy(currentGamepad1);
-            currentGamepad1 = ButtonConfig.copy(gamepad1);
+            previousGamepad1 = BConfig.copy(currentGamepad1);
+            currentGamepad1 = BConfig.copy(gamepad1);
 
-            previousGamepad2 = ButtonConfig.copy(currentGamepad2);
-            currentGamepad2 = ButtonConfig.copy(gamepad2);
+            previousGamepad2 = BConfig.copy(currentGamepad2);
+            currentGamepad2 = BConfig.copy(gamepad2);
 
             //Use Webcam to find out Signal using April Tags and save in currentSignal
             Vision.CheckForAprilTags(this);
 
             // User sets starting location left or right, and confirms selection with a button press
             // LEFT is a multiplier of 1, RIGHT is a multiplier of -1
-            ButtonConfig.ConfigureStartingPosition( currentGamepad1.dpad_left, previousGamepad1.dpad_left,
+            BConfig.ConfigureStartingPosition( currentGamepad1.dpad_left, previousGamepad1.dpad_left,
                     currentGamepad1.dpad_right, previousGamepad1.dpad_right,
                     currentGamepad1.b,          previousGamepad1.b);
 
@@ -72,9 +72,9 @@ public class AUTO_JUST_PARK extends LinearOpMode {
             telemetry.addLine("Select Starting Position with D-pad");
             telemetry.addData("Current Starting Position ", ButtonConfig.currentStartPosition);
             if (ButtonConfig.confirmStartingPositionSelection == false) {
-                telemetry.addData("Unlocked", "Press CIRCLE to lock selection");
+                telemetry.addData("Unlocked", "Press B to lock selection");
             } else {
-                telemetry.addData("Locked", "Press CIRCLE to unlock selection");
+                telemetry.addData("Locked", "Press B to unlock selection");
             }
             telemetry.update();
 

@@ -104,6 +104,12 @@ public class Lift {
 
         //how do we get rid of bumpy lowering of lift? could we make step size larger when lowering the lift? would this even work? How could we quickly test?
 
+        if (liftTarget <0) {
+            liftTarget=-1;
+        } else
+        {
+            liftTarget =1;
+        }
         newLiftTarget = (int) ((liftTarget*LIFT_TARGET_MULTIPLIER) + newLiftTarget);
         if (liftTarget >0 && newLiftTarget > MAX_LIFT_HEIGHT) {newLiftTarget = MAX_LIFT_HEIGHT;}
         if (liftTarget <0 && newLiftTarget < MIN_LIFT_HEIGHT) {newLiftTarget = MIN_LIFT_HEIGHT;}

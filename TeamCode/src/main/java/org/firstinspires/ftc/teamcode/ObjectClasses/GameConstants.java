@@ -6,12 +6,12 @@ public final class GameConstants {
         // No need to instantiate the class, we can hide its constructor
     }
 
-    public static final int FULL_TILE_DISTANCE = 25;
-    public static final int HALF_TILE_DISTANCE = FULL_TILE_DISTANCE /2;
-    public static final int QUARTER_TILE_DISTANCE = HALF_TILE_DISTANCE /2;
-    public static final int EIGHTH_TILE_DISTANCE = QUARTER_TILE_DISTANCE /2;
-    public static final int SIXTEENTH_TILE_DISTANCE = EIGHTH_TILE_DISTANCE /2;
-    public static final int THIRTYSECOND_TILE_DISTANCE = SIXTEENTH_TILE_DISTANCE /2;
+    public static final double FULL_TILE_DISTANCE = 25;
+    public static final double HALF_TILE_DISTANCE = FULL_TILE_DISTANCE /2;
+    public static final double QUARTER_TILE_DISTANCE = HALF_TILE_DISTANCE /2;
+    public static final double EIGHTH_TILE_DISTANCE = QUARTER_TILE_DISTANCE /2;
+    public static final double SIXTEENTH_TILE_DISTANCE = EIGHTH_TILE_DISTANCE /2;
+    public static final double THIRTYSECOND_TILE_DISTANCE = SIXTEENTH_TILE_DISTANCE /2;
 
 
     public static final double CONE_HEIGHT_ENC_VAL = 150;

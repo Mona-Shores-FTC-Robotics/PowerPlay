@@ -60,7 +60,7 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
 
         telemetry.addData("Status", "Initializing");
         telemetry.update();
-        //Vision.init(hardwareMap);
+        Vision.init(hardwareMap);
         MecDrive.init(hardwareMap);
         ServoArm.init(hardwareMap);
         ServoIntake.init(hardwareMap);

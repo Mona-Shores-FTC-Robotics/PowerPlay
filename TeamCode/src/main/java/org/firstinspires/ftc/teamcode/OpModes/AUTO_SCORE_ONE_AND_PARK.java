@@ -12,6 +12,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TI
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THIRTYSECOND_TILE_DISTANCE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -33,7 +34,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
     int Signal;
     DriveTrain MecDrive = new DriveTrain(this);
-    ButtonConfig ButtonConfig = new ButtonConfig(this);
+    ButtonConfig BConfig = new ButtonConfig(this);
 
     Intake ServoIntake = new Intake();
     AprilTagVision Vision = new AprilTagVision();
@@ -44,6 +45,9 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
     private final ElapsedTime runtime = new ElapsedTime();
 
+
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad previousGamepad1 = new Gamepad();
     Gamepad currentGamepad2 = new Gamepad();
     Gamepad previousGamepad2 = new Gamepad();
 
@@ -60,7 +64,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         ServoArm.init(hardwareMap);
 
         Vision.init(hardwareMap);
-        ButtonConfig.init();
+        BConfig.init();
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -69,21 +73,30 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         while (!isStarted()) {
             //save current and previous gamepad values for one loop
-            previousGamepad2 = ButtonConfig.copy(currentGamepad2);
-            currentGamepad2 = ButtonConfig.copy(gamepad2);
+            previousGamepad1 = BConfig.copy(currentGamepad1);
+            currentGamepad1 = BConfig.copy(gamepad1);
 
-            //Use Webcam to find out Signal using April Tags
+            previousGamepad2 = BConfig.copy(currentGamepad2);
+            currentGamepad2 = BConfig.copy(gamepad2);
+
+            //Use Webcam to find out Signal using April Tags and save in currentSignal
             Vision.CheckForAprilTags(this);
 
             // User sets starting location left or right, and confirms selection with a button press
             // LEFT is a multiplier of 1, RIGHT is a multiplier of -1
-            ButtonConfig.ConfigureStartingPosition( currentGamepad2.dpad_left, previousGamepad2.dpad_left,
-                                                    currentGamepad2.dpad_right, previousGamepad2.dpad_right,
-                                                    currentGamepad2.b,          previousGamepad2.b);
+            BConfig.ConfigureStartingPosition( currentGamepad1.dpad_left, previousGamepad1.dpad_left,
+                    currentGamepad1.dpad_right, previousGamepad1.dpad_right,
+                    currentGamepad1.b,          previousGamepad1.b);
 
             telemetry.addData("Signal is ", Vision.currentSignal);
-            telemetry.addData("Starting Position ", ButtonConfig.currentStartPosition);
-            telemetry.addData("Status", "Run Time: " + getRuntime());
+            telemetry.addLine(" ");
+            telemetry.addLine("Select Starting Position with D-pad");
+            telemetry.addData("Current Starting Position ", ButtonConfig.currentStartPosition);
+            if (ButtonConfig.confirmStartingPositionSelection == false) {
+                telemetry.addData("Unlocked", "Press B to lock selection");
+            } else {
+                telemetry.addData("Locked", "Press B to unlock selection");
+            }
             telemetry.update();
 
             sleep(20);
@@ -170,11 +183,14 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         //Park after placing cone
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-            MecDrive.startEncoderDrive(LOW_SPEED, ((-FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)-HALF_TILE_DISTANCE), (-(FULL_TILE_DISTANCE* ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(LOW_SPEED,  -(FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)- HALF_TILE_DISTANCE-THIRTYSECOND_TILE_DISTANCE,
+                                                    -(FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)-(HALF_TILE_DISTANCE-THIRTYSECOND_TILE_DISTANCE));
         } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
             MecDrive.startEncoderDrive(LOW_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-            MecDrive.startEncoderDrive(LOW_SPEED, ((FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) -HALF_TILE_DISTANCE), ((FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) -HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(LOW_SPEED,
+                    (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) -(HALF_TILE_DISTANCE-THIRTYSECOND_TILE_DISTANCE),
+                    (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) -(HALF_TILE_DISTANCE-THIRTYSECOND_TILE_DISTANCE));
         }
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
