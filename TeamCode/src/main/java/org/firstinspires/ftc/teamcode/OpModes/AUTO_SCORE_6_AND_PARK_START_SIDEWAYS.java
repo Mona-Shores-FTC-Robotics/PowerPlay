@@ -116,14 +116,12 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         telemetry.update();
 
         //Strafe past line up with the cone stack
-        MecDrive.startStrafeDrive(HIGH_SPEED,   -(FULL_TILE_DISTANCE*2 + EIGHTH_TILE_DISTANCE)* ButtonConfig.startPositionMultiplier,
-                -(FULL_TILE_DISTANCE*2 + EIGHTH_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(HIGH_SPEED,   -(FULL_TILE_DISTANCE*2 + EIGHTH_TILE_DISTANCE)* ButtonConfig.startPositionMultiplier);
         while (opModeIsActive() && MecDrive.alreadyStrafing) {
             MecDrive.ContinueStrafing();
         }
 
-        MecDrive.startStrafeDrive(MED_SPEED,    (SIXTEENTH_TILE_DISTANCE)* ButtonConfig.startPositionMultiplier,
-                (SIXTEENTH_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(MED_SPEED,    (SIXTEENTH_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
         while (opModeIsActive() && MecDrive.alreadyStrafing) {
             MecDrive.ContinueStrafing();
         }
@@ -136,7 +134,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
 
         //drive toward middle of field
         Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
-        MecDrive.startEncoderDrive(HIGH_SPEED, (HALF_TILE_DISTANCE), (HALF_TILE_DISTANCE));
+        MecDrive.startEncoderDrive(HIGH_SPEED, (HALF_TILE_DISTANCE));
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
@@ -149,8 +147,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
             ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
         //strafe to the high pole to deliver to High Junction
-        MecDrive.startStrafeDrive(HIGH_SPEED,   -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier),
-                -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
+        MecDrive.startStrafeDrive(HIGH_SPEED,   -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
         while (opModeIsActive() && (MecDrive.alreadyStrafing )) {
             MecDrive.ContinueStrafing();
         }
@@ -169,8 +166,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         telemetry.update();
 
         //strafe away from the high pole
-        MecDrive.startStrafeDrive(HIGH_SPEED,   (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier),
-                (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
+        MecDrive.startStrafeDrive(HIGH_SPEED, (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
             MecDrive.ContinueStrafing();
         }
@@ -207,8 +203,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
                 }
             }
             //Drive near cone stack while setting lift to correct height
-            MecDrive.startEncoderDrive(HIGH_SPEED,  -(FULL_TILE_DISTANCE+HALF_TILE_DISTANCE),
-                    -(FULL_TILE_DISTANCE+HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE+HALF_TILE_DISTANCE));
             while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
@@ -222,8 +217,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
             ServoIntake.toggleIntake();
 
             //Drive into cone with intake on
-            MecDrive.startEncoderDrive(LOW_SPEED,   -(SIXTEENTH_TILE_DISTANCE+EIGHTH_TILE_DISTANCE),
-                    -(SIXTEENTH_TILE_DISTANCE+EIGHTH_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(LOW_SPEED, -(SIXTEENTH_TILE_DISTANCE+EIGHTH_TILE_DISTANCE));
             while (opModeIsActive() && (MecDrive.alreadyDriving)) {
                 MecDrive.ContinueDriving();
                 telemetry.addData("Cones:", "Stack %s / Delivered %s", coneStackTracker, coneDeliveryTracker);
@@ -255,7 +249,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
             }
 
             //Drive away from cone stack a little bit
-            MecDrive.startEncoderDrive(LOW_SPEED, (EIGHTH_TILE_DISTANCE), (EIGHTH_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(LOW_SPEED, (EIGHTH_TILE_DISTANCE));
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
                 MecDrive.ContinueDriving();
             }
@@ -264,7 +258,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
             MecDrive.turnTo(0, Gyro);
 
             //Drive toward middle of field
-            MecDrive.startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE+HALF_TILE_DISTANCE), (FULL_TILE_DISTANCE+HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE+HALF_TILE_DISTANCE));
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
                 MecDrive.ContinueDriving();
             }
@@ -276,8 +270,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
                 ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
             //Strafe to the high pole while raising lift to height to deliver to High Junction
-            MecDrive.startStrafeDrive(MED_SPEED,   -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier),
-                    -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
+            MecDrive.startStrafeDrive(MED_SPEED, -(QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
             Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
             while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyStrafing)) {
                 Lift.ContinueLifting();
@@ -298,8 +291,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
             telemetry.update();
 
             //strafe away from the high pole
-            MecDrive.startStrafeDrive(HIGH_SPEED,   (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier),
-                    (QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier));
+            MecDrive.startStrafeDrive(HIGH_SPEED, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                 MecDrive.ContinueStrafing();
             }
@@ -316,21 +308,21 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
 
         //Park code
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-            MecDrive.startEncoderDrive(HIGH_SPEED, ((FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)-HALF_TILE_DISTANCE), ((FULL_TILE_DISTANCE* ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(HIGH_SPEED, ((FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)-HALF_TILE_DISTANCE));
 
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
             }
         } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
-            MecDrive.startEncoderDrive(HIGH_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
+            MecDrive.startEncoderDrive(HIGH_SPEED, -HALF_TILE_DISTANCE);
 
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
             }
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-            MecDrive.startEncoderDrive(HIGH_SPEED, ((-FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE), ((-FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(HIGH_SPEED, (-FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE);
 
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                 MecDrive.ContinueDriving();
@@ -347,7 +339,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
                 MecDrive.ContinuePIDTurning(Gyro);
             }
 
-            MecDrive.startEncoderDrive(HIGH_SPEED, -HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE, -HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE);
+            MecDrive.startEncoderDrive(HIGH_SPEED, -HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE);
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
                 MecDrive.ContinueDriving();
             }

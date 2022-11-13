@@ -95,7 +95,7 @@ public class DriveTrain {
     //Turn Related Variables
     public double degreesLeftToTurn;
     public double targetAngleInDegrees;
-    public TurnPIDController pid = new TurnPIDController(0, 0, 0, 0);
+    public TurnPIDController2 pid = new TurnPIDController2(0, 0, 0, 0, 0);
     public boolean alreadyTurning = false;
     public boolean alreadyPIDTurning = false;
     public double targetAngle;
@@ -462,6 +462,51 @@ public class DriveTrain {
         }
     }
 
+    public void startEncoderDrive(double speed, double distanceInches) {
+        topSpeed = speed;
+        if (activeOpMode.opModeIsActive() && alreadyDriving == false) {
+
+            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            int newLeftFrontTarget = (int) (distanceInches * COUNTS_PER_INCH);
+            int newRightFrontTarget = (int) (distanceInches * COUNTS_PER_INCH);
+            int newLeftBackTarget = (int) (distanceInches * COUNTS_PER_INCH);
+            int newRightBackTarget = (int) (distanceInches * COUNTS_PER_INCH);
+
+            LFDrive.setTargetPosition(newLeftFrontTarget);
+            RFDrive.setTargetPosition(newRightFrontTarget);
+            LBDrive.setTargetPosition(newLeftBackTarget);
+            RBDrive.setTargetPosition(newRightBackTarget);
+
+            LFDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RFDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LBDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RBDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            //track how much time we have been driving
+            drivePeriod.reset();
+
+            //reset starting ramp value
+            ramp = STARTING_RAMP_VALUE;
+
+            RFDrive.setPower(abs(ramp));
+            LFDrive.setPower(abs(ramp));
+            LBDrive.setPower(abs(ramp));
+            RBDrive.setPower(abs(ramp));
+
+            //we are now driving
+            alreadyDriving = true;
+        }
+    }
+
     public void ContinueDriving() {
         if (activeOpMode.opModeIsActive() &&
                 alreadyDriving == true &&
@@ -489,6 +534,7 @@ public class DriveTrain {
             RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
+
 
     public void startStrafeDrive(double speed, double leftInches, double rightInches) {
         topSpeed = speed;
@@ -530,6 +576,48 @@ public class DriveTrain {
             alreadyStrafing = true;
         }
     }
+
+    public void startStrafeDrive(double speed, double distanceInches) {
+        topSpeed = speed;
+        if (activeOpMode.opModeIsActive() && alreadyStrafing == false) {
+            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            int newLeftFrontTarget = (int) (distanceInches * COUNTS_PER_INCH);
+            int newRightFrontTarget = (int) (distanceInches * COUNTS_PER_INCH);
+            int newLeftBackTarget = (int) (distanceInches * COUNTS_PER_INCH);
+            int newRightBackTarget = (int) (distanceInches * COUNTS_PER_INCH);
+
+            LFDrive.setTargetPosition(newLeftFrontTarget);
+            RFDrive.setTargetPosition(-newRightFrontTarget);
+            LBDrive.setTargetPosition(-newLeftBackTarget);
+            RBDrive.setTargetPosition(newRightBackTarget);
+
+            LFDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RFDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LBDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RBDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            strafePeriod.reset();
+
+            ramp = .1;
+
+            RFDrive.setPower(abs(ramp));
+            LFDrive.setPower(abs(ramp));
+            LBDrive.setPower(abs(ramp));
+            RBDrive.setPower(abs(ramp));
+
+            alreadyStrafing = true;
+        }
+    }
+
 
     public void ContinueStrafing() {
         if (activeOpMode.opModeIsActive() &&
@@ -705,6 +793,7 @@ public class DriveTrain {
         Gyro.resetAngle();
         targetAngleInDegrees = degrees;
         degreesLeftToTurn = degrees;
+
     }
 
     public void ContinueTurning(Gyro Gyro) {
@@ -734,24 +823,21 @@ public class DriveTrain {
     public void turnToPID (double degrees, Gyro Gyro) {
         double absoluteAngle = Gyro.getAbsoluteAngle();
         targetAngle = degrees - absoluteAngle;
-        if (targetAngle > 180) {
-            targetAngle -= 360;
-        } else if (targetAngle < -180)
-        {
-            targetAngle +=360;
-        }
         turnPID(targetAngle, Gyro);
-
     }
 
     public void turnPID(double degrees, Gyro Gyro){
-        alreadyPIDTurning = true;
         Gyro.resetAngle();
-        pid = new TurnPIDController(degrees, .005, .1, 0);
+        LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pid = new TurnPIDController2(degrees, 0, 0, 0, 1);
+        alreadyPIDTurning = true;
     }
 
     public void ContinuePIDTurning(Gyro Gyro) {
-        if (Math.abs(pid.pidAngleLeftToTurn) > 1.8) {
+        if (Math.abs(pid.m_degreesLeftToTurn) > 2) {
             double motorPower = pid.update(Gyro.getAngle());
             setMotorPower(-motorPower, motorPower, -motorPower, motorPower);
         } else {
@@ -814,7 +900,6 @@ public class DriveTrain {
             drive = 0;
             strafe = 0;
             MecanumDrive();
-            boolean colorStrafing = false;
             }
         }
     }

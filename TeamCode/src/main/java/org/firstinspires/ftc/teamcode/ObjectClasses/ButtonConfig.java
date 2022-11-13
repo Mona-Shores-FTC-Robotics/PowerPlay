@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.ObjectClasses;
 
 import static java.lang.Thread.sleep;
 
-import android.widget.Button;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -81,8 +79,6 @@ public class ButtonConfig {
         }
         activeOpMode.telemetry.addData("Drive Multiplier", MecDrive.multiplier);
     }
-
-
 
     public Gamepad copy(Gamepad gamepad) {
         Gamepad pad = new Gamepad();

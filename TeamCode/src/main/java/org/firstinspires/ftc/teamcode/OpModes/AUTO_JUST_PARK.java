@@ -88,16 +88,17 @@ public class AUTO_JUST_PARK extends LinearOpMode {
 
         //Drive forward 2 tiles plus a little bit more to get into position for deciding where to park
         Lift.StartLifting(400);
-        MecDrive.startEncoderDrive(LOW_SPEED, FULL_TILE_DISTANCE * 2, FULL_TILE_DISTANCE * 2);
+        MecDrive.startEncoderDrive(LOW_SPEED, FULL_TILE_DISTANCE * 2);
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
         }
 
         //Decide where to park
+
         //if current Signal is the LEFT april tag then park on robot's left
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
             //Park on left
-            MecDrive.startStrafeDrive(MED_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE);
+            MecDrive.startStrafeDrive(MED_SPEED, -FULL_TILE_DISTANCE);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                 MecDrive.ContinueStrafing();
             }
@@ -111,7 +112,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         //if current Signal is the RIGHT april tag then park on robot's right
         else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
             //Park on right
-            MecDrive.startStrafeDrive(MED_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE);
+            MecDrive.startStrafeDrive(MED_SPEED, FULL_TILE_DISTANCE);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                     MecDrive.ContinueStrafing();
             }

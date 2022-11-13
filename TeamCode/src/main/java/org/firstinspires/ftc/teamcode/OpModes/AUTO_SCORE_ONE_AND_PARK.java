@@ -111,32 +111,29 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         //Drive Forward
         Lift.StartLifting(400);
-        MecDrive.startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE*2)+QUARTER_TILE_DISTANCE, (FULL_TILE_DISTANCE*2)+QUARTER_TILE_DISTANCE);
+        MecDrive.startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE*2)+QUARTER_TILE_DISTANCE);
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
         }
 
         //Drive Backwards
-        MecDrive.startEncoderDrive(MED_SPEED, -(EIGHTH_TILE_DISTANCE+EIGHTH_TILE_DISTANCE), -(EIGHTH_TILE_DISTANCE+EIGHTH_TILE_DISTANCE));
+        MecDrive.startEncoderDrive(MED_SPEED, -(EIGHTH_TILE_DISTANCE+EIGHTH_TILE_DISTANCE));
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
         }
 
         //Rotate
-        if ((ButtonConfig.currentStartPosition == org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.StartingPosition.RIGHT_SIDE))
+        if (ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)
             {
                 MecDrive.turnTo(90, Gyro);
-                while (opModeIsActive() && MecDrive.alreadyTurning == true) {
-                    MecDrive.ContinueTurning(Gyro);
-                }
             }
         else
             {
                 MecDrive.turnTo(-90, Gyro);
-                while (opModeIsActive() && MecDrive.alreadyTurning == true) {
-                    MecDrive.ContinueTurning(Gyro);
-                }
             }
+        while (opModeIsActive() && MecDrive.alreadyTurning == true) {
+            MecDrive.ContinueTurning(Gyro);
+        }
 
         //Drive in Front of High Pole
         MecDrive.startEncoderDrive(LOW_SPEED, HALF_TILE_DISTANCE, HALF_TILE_DISTANCE);
@@ -149,8 +146,8 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         sleep(1000);
 
         //Strafe close to High Pole
-        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE+EIGHTH_TILE_DISTANCE)* ButtonConfig.startPositionMultiplier, -(QUARTER_TILE_DISTANCE+EIGHTH_TILE_DISTANCE)*ButtonConfig.startPositionMultiplier);
-        if ((ButtonConfig.currentStartPosition == org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig.StartingPosition.RIGHT_SIDE)) {
+        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE+EIGHTH_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
+        if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
             ServoArm.setPosition(ARM_RIGHT_OUTTAKE);
         } else ServoArm.setPosition(ARM_LEFT_OUTTAKE);
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
@@ -158,7 +155,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         }
 
         //Back off just a little
-        MecDrive.startStrafeDrive(LOW_SPEED, (SIXTEENTH_TILE_DISTANCE)* ButtonConfig.startPositionMultiplier, (SIXTEENTH_TILE_DISTANCE)*ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(LOW_SPEED, (SIXTEENTH_TILE_DISTANCE)* ButtonConfig.startPositionMultiplier);
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
             MecDrive.ContinueStrafing();
         }
@@ -170,8 +167,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         sleep (1000);
 
         //Strafe away from High Pole
-        MecDrive.startStrafeDrive(LOW_SPEED, QUARTER_TILE_DISTANCE* ButtonConfig.startPositionMultiplier,
-                                            QUARTER_TILE_DISTANCE* ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(LOW_SPEED, QUARTER_TILE_DISTANCE* ButtonConfig.startPositionMultiplier);
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
             MecDrive.ContinueStrafing();
         }
@@ -183,19 +179,16 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         //Park after placing cone
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-            MecDrive.startEncoderDrive(LOW_SPEED,  -(FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)- HALF_TILE_DISTANCE-THIRTYSECOND_TILE_DISTANCE,
-                                                    -(FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)-(HALF_TILE_DISTANCE-THIRTYSECOND_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(LOW_SPEED,  -(FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE - THIRTYSECOND_TILE_DISTANCE);
         } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
             MecDrive.startEncoderDrive(LOW_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
             MecDrive.startEncoderDrive(LOW_SPEED,
-                    (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) -(HALF_TILE_DISTANCE-THIRTYSECOND_TILE_DISTANCE),
-                    (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) -(HALF_TILE_DISTANCE-THIRTYSECOND_TILE_DISTANCE));
+                    (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE - THIRTYSECOND_TILE_DISTANCE);
         }
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
         }
-
 
         telemetry.addData("Signal is ", Signal);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
