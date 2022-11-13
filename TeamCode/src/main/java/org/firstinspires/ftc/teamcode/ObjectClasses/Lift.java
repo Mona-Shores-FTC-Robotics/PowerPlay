@@ -12,6 +12,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CON
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Lift {
@@ -21,10 +22,10 @@ public class Lift {
     final double LIFT_FALL_THRESHOLD_ENC_VAL = 100;
     final double BELOW_LIFT_FALL_THRESHOLD_POWER = 0;
     public double LIFT_RAISE_POWER = 1;
-    final int MAX_LIFT_HEIGHT = 1480;
+    final int MAX_LIFT_HEIGHT = 3080;
     final int MIN_LIFT_HEIGHT = 0;
-    final int SAFE_FALL_HEIGHT = 400;
-    final double LIFT_TARGET_MULTIPLIER = 20;
+    final int SAFE_FALL_HEIGHT = 650;
+    final double LIFT_TARGET_MULTIPLIER = 100;
 
 
     public enum liftJunctionStates { HIGH_CONE_JUNCTION_SCORE_HEIGHT, MEDIUM_CONE_JUNCTION_SCORE_HEIGHT,
@@ -50,7 +51,7 @@ public class Lift {
     public void init(HardwareMap ahwMap) {
         // Define and Initialize Motor
         liftMotor  = ahwMap.get(DcMotor.class, "lift_motor");
-        liftMotor.setDirection(DcMotor.Direction.REVERSE);
+        liftMotor.setDirection(DcMotor.Direction.FORWARD);
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setPower(0);
         currentLiftJunctionState = liftJunctionStates.CONE_INTAKE_HEIGHT;
@@ -70,7 +71,8 @@ public class Lift {
 
             //turn motor power off if the new target is below the fall threshold encoder value (100) and the current positions is below a safe fall height
             //only do this if the lift is being moved down from a higher position, don't do this if its being lifted up
-            if (deltaLift < 0 && newLiftTarget <= LIFT_FALL_THRESHOLD_ENC_VAL && (liftMotor.getCurrentPosition() <= SAFE_FALL_HEIGHT) ) {
+            if (deltaLift < 0 && newLiftTarget <= LIFT_FALL_THRESHOLD_ENC_VAL &&
+                    (liftMotor.getCurrentPosition() <= SAFE_FALL_HEIGHT) ) {
                 liftMotor.setPower(BELOW_LIFT_FALL_THRESHOLD_POWER);
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -117,7 +119,8 @@ public class Lift {
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //if the lift is being lowered and the new target is below 100 and the lift is below a safe fall height, then turn the power off and re-zero the encoder
-        if (liftTarget < 0 && newLiftTarget < LIFT_FALL_THRESHOLD_ENC_VAL && (liftMotor.getCurrentPosition() <= SAFE_FALL_HEIGHT)) {
+        if (liftTarget < 0 && newLiftTarget < LIFT_FALL_THRESHOLD_ENC_VAL &&
+                (liftMotor.getCurrentPosition() <= SAFE_FALL_HEIGHT)) {
             liftMotor.setPower(BELOW_LIFT_FALL_THRESHOLD_POWER);
             liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -220,6 +223,10 @@ public class Lift {
     public void CheckLift(Boolean liftStageDownCurrentButton, Boolean liftStageDownPreivousButton,
                           Boolean liftStageUpCurrentButton, Boolean liftStageUpPreviousButton,
                           double manualLiftTargetChange) {
+        if (Math.abs(manualLiftTargetChange) <= .2){
+            manualLiftTargetChange = 0;
+        }
+
         if (manualLiftTargetChange != 0) {
             ManualLift(-manualLiftTargetChange);
         } else if (liftStageDownCurrentButton && !liftStageDownPreivousButton) {
@@ -235,6 +242,10 @@ public class Lift {
                                     Boolean liftStageUpCurrentButton, Boolean liftStageUpPreviousButton,
                                     Boolean modifierButton,
                                     double manualLiftTargetChange) {
+        if (Math.abs(manualLiftTargetChange) <= .2){
+            manualLiftTargetChange = 0;
+        }
+
         if (manualLiftTargetChange != 0) {
             ManualLift(-manualLiftTargetChange);
         } else if (liftStageDownCurrentButton && !liftStageDownPreivousButton) {

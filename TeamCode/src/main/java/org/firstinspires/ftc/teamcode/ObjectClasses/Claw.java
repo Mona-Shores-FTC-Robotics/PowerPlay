@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Claw {
 
-    public static final double CLAW_OPEN_POWER = 0;
-    public static final double CLAW_CLOSED_POWER = .18;
+    public static final double CLAW_OPEN_POWER = .32;
+    public static final double CLAW_CLOSED_POWER = .75;
     public Servo claw;
     public enum clawStates {CLAW_OPEN, CLAW_CLOSED}
     public clawStates currentClawState;

@@ -37,6 +37,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER
 import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -57,7 +58,7 @@ public class DriveTrain {
     //Speed Constants
     public static final double LOW_SPEED = .2;
     public static final double MED_SPEED = .6;
-    public static final double HIGH_SPEED = 1;
+    public static final double HIGH_SPEED = .9;
     public static final double STARTING_RAMP_VALUE = .03;
     public static final double RAMP_INCREMENT = .02;
 
@@ -73,6 +74,9 @@ public class DriveTrain {
     public double drive = 0;
     public double strafe = 0;
     public double turn = 0;
+
+
+    public ColorSensor colorSensor;
 
     public double topSpeed;
     public double multiplier = STARTING_DRIVE_MULTIPLIER;
@@ -133,16 +137,28 @@ public class DriveTrain {
         LBDrive = ahwMap.get(DcMotor.class, "LBDrive");
         RBDrive = ahwMap.get(DcMotor.class, "RBDrive");
 
+        LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         LFDrive.setDirection(DcMotor.Direction.REVERSE);
         RFDrive.setDirection(DcMotor.Direction.FORWARD);
         LBDrive.setDirection(DcMotor.Direction.REVERSE);
         RBDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Set all motors to zero power
         LFDrive.setPower(0);
         RFDrive.setPower(0);
         LBDrive.setPower(0);
         RBDrive.setPower(0);
+
+        colorSensor = hwMap.colorSensor.get("color_sensor");
     }
 
     public void CheckManualDriveControls(float driveStick, float strafeStick, float turnStick, float fineTuneLeftTurn, float fineTuneRightTurn) {
@@ -372,10 +388,10 @@ public class DriveTrain {
     }
 
     public void MecanumDrive() {
-        LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Put Mecanum Drive math and motor commands here.
         double dPercent = Math.abs(drive) / (Math.abs(drive) + Math.abs(strafe) + Math.abs(turn));
@@ -743,6 +759,64 @@ public class DriveTrain {
             setAllPower(0);
         }
     }
-}
+
+
+
+    public void colorDrive(double speed, int allianceColor, LinearOpMode activeOpMode)
+    {
+
+        if (allianceColor == 1)
+        {
+            while (activeOpMode.opModeIsActive() && colorSensor.blue() < 230 && colorSensor.red() > 50)
+            {
+                setAllPower(speed);
+                activeOpMode.telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+                activeOpMode.telemetry.update();
+            }
+
+        }
+        else if (allianceColor == -1)
+        {
+            while (activeOpMode.opModeIsActive() && colorSensor.red() < 230 && colorSensor.blue() > 50)
+            {
+                setAllPower(speed);
+                activeOpMode.telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+                activeOpMode.telemetry.update();
+            }
+
+        }
+
+        setAllPower(0);
+        activeOpMode.telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+        activeOpMode.telemetry.update();
+
+    }
+    public void ColorStrafe(double speed, LinearOpMode activeOpMode) {
+
+        activeOpMode.telemetry.addLine("Seeking LINE with Color Sensor");
+        activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+        activeOpMode.telemetry.update();
+
+        if (    activeOpMode.opModeIsActive() &&
+                (colorSensor.blue() < 230 && colorSensor.red() > 50) &&
+                (colorSensor.red() < 230 && colorSensor.blue() > 50)) {
+
+            // Color is not red or blue
+            //strafe left
+            activeOpMode.telemetry.addLine("PIPE LEFT");
+            turn = 0;
+            drive = 0;
+            strafe = -.2*ButtonConfig.startPositionMultiplier;
+            MecanumDrive();
+
+            } else {
+            turn = 0;
+            drive = 0;
+            strafe = 0;
+            MecanumDrive();
+            boolean colorStrafing = false;
+            }
+        }
+    }
 
 

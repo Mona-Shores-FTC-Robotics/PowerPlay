@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Arm {
 
-    public static final double ARM_CENTER_INTAKE = 0.7;
-    public static final double ARM_LEFT_OUTTAKE = 1;
+    public static final double ARM_CENTER_INTAKE = 0.63;
+    public static final double ARM_LEFT_OUTTAKE = .95;
     public static final double ARM_RIGHT_OUTTAKE = .33;
     public static final double ARM_FRONT_OUTTAKE = 0;
 
-    public static final double HEIGHT_FOR_PREVENTING_ARM_ROTATION = 400;
-    public static final double SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION = 700;
+    public static final double HEIGHT_FOR_PREVENTING_ARM_ROTATION = 650;
+    public static final double SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION = 800;
     public static final double SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER = 1.2;
 
     public Servo arm;

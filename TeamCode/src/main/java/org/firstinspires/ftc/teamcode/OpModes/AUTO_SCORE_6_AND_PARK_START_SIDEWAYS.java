@@ -67,6 +67,7 @@ public class AUTO_SCORE_6_AND_PARK_START_SIDEWAYS extends LinearOpMode {
         Lift.init(hardwareMap);
         Gyro.init(hardwareMap);
         ButtonConfig.init();
+        Vision.init(hardwareMap);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
