@@ -31,7 +31,6 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
 import static java.lang.Math.abs;
@@ -885,21 +884,21 @@ public class DriveTrain {
         while (activeOpMode.opModeIsActive() &&
                 (colorSensor.blue() < 230 && colorSensor.red() > 50) &&
                 (colorSensor.red() < 230 && colorSensor.blue() > 50) &&
-                colorTimer.seconds() < 1) {
+                colorTimer.seconds() < .8) {
 
             // Color is not red or blue
-            //strafe left for half second to the right
-            if (colorTimer.seconds() < .5) {
+            //strafe left for .4 seconds to the left, if still no red or blue line then strafe to right
+            if (colorTimer.seconds() < .3) {
                 activeOpMode.telemetry.addLine("PIPE LEFT");
                 turn = 0;
                 drive = 0;
-                strafe = -.2 * ButtonConfig.startPositionMultiplier;
+                strafe = .5 * ButtonConfig.startPositionMultiplier;
                 MecanumDrive();
             } else if (colorTimer.seconds() > .5) {
                 activeOpMode.telemetry.addLine("PIPE LEFT");
                 turn = 0;
                 drive = 0;
-                strafe = .2 * ButtonConfig.startPositionMultiplier;
+                strafe = -.2 * ButtonConfig.startPositionMultiplier;
                 MecanumDrive();
             }
         }
@@ -908,6 +907,22 @@ public class DriveTrain {
         strafe = 0;
         MecanumDrive();
     }
+
+    public void lineFollow(double speed, double targetPath, double Kp, LinearOpMode activeOpMode) {
+
+        // Assuming alpha values 0-100, with 50 being halfway inbetween, a Kp of .01 would make corrections between .5 and -.5
+        // try Kp = .01;
+
+        double correction = (targetPath - colorSensor.alpha())*Kp;
+        setMotorPower(speed+correction, speed-correction, speed+correction, speed-correction);
+
+        while (colorSensor.alpha() < 50) {
+            // Drive Forward
+        }
+
+    }
+
+
 }
 
 

@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
+import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
@@ -17,16 +15,21 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 
-@Autonomous(name = "AUTO_TEST_COLOR")
-public class AUTO_TEST_COLOR extends LinearOpMode {
+@Autonomous(name = "AUTO_SCORE_ONE_AND_PARK")
+public class AUTO_TEST_LINE_FOLLOW extends LinearOpMode {
 
+    int Signal;
     DriveTrain MecDrive = new DriveTrain(this);
-    AprilTagVision Vision = new AprilTagVision();
     ButtonConfig BConfig = new ButtonConfig(this);
+
     Intake ServoIntake = new Intake();
+    AprilTagVision Vision = new AprilTagVision();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
+    Arm ServoArm = new Arm(Lift);
     Gyro Gyro = new Gyro(this);
+
+    private final ElapsedTime runtime = new ElapsedTime();
 
 
     Gamepad currentGamepad1 = new Gamepad();
@@ -36,23 +39,25 @@ public class AUTO_TEST_COLOR extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
         MecDrive.init(hardwareMap);
-        Vision.init(hardwareMap);
-        Lift.init(hardwareMap);
         ServoIntake.init(hardwareMap);
         ServoClaw.init(hardwareMap);
+        Lift.init(hardwareMap);
+        ServoArm.init(hardwareMap);
+
+        Vision.init(hardwareMap);
         BConfig.init();
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        sleep(500);
+        sleep(1000);
 
         while (!isStarted()) {
-
             //save current and previous gamepad values for one loop
             previousGamepad1 = BConfig.copy(currentGamepad1);
             currentGamepad1 = BConfig.copy(gamepad1);
@@ -83,24 +88,20 @@ public class AUTO_TEST_COLOR extends LinearOpMode {
             sleep(20);
         }
 
+        runtime.reset();
         Gyro.init(hardwareMap);
-        telemetry.addData("Signal is ", Vision.currentSignal);
+
+        //Use this code to just test if we can score by strafing into a pole
+
+        telemetry.addData("Signal is ", Signal);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
-        telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
 
-        //Strafe until color seen
-
-        MecDrive.ColorStrafe(LOW_SPEED, this);
-        while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
-            MecDrive.ContinueStrafing();
+        while (opModeIsActive() && getRuntime() < 5) {
+            MecDrive.lineFollow(.2, 50, .01, this);
         }
-
-        MecDrive.turnTo(0, Gyro);
-
+      }
     }
-}
-
 
 
 
