@@ -26,8 +26,8 @@ public class ButtonConfig {
     }
 
     public void init() {
-        ButtonConfig.currentStartPosition = StartingPosition.NOT_SET_YET;
-        ButtonConfig.startPositionMultiplier = 1;
+        ButtonConfig.currentStartPosition = StartingPosition.RIGHT_SIDE;
+        ButtonConfig.startPositionMultiplier = -1;
         ButtonConfig.confirmStartingPositionSelection = false;
     }
 

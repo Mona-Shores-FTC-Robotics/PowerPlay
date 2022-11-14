@@ -8,6 +8,7 @@ public class Claw {
 
     public static final double CLAW_OPEN_POWER = .32;
     public static final double CLAW_CLOSED_POWER = .75;
+    public static final double CLAW_EASY_INTAKE = .6;
     public Servo claw;
     public enum clawStates {CLAW_OPEN, CLAW_CLOSED}
     public clawStates currentClawState;
@@ -31,6 +32,11 @@ public class Claw {
             claw.setPosition(CLAW_OPEN_POWER);
             currentClawState = clawStates.CLAW_OPEN;
         }
+    }
+
+
+    public void setEasyIntake() {
+            claw.setPosition(CLAW_EASY_INTAKE);
     }
 
     public void CheckClaw(boolean currentButton , boolean lastButton) {

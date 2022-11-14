@@ -32,7 +32,8 @@ public class TurnPIDController2 {
         double derivative = (m_degreesLeftToTurn - m_lastDegreesLeftToTurn) / timer.seconds();
         m_lastDegreesLeftToTurn = m_degreesLeftToTurn;
         timer.reset();
-        double output = (m_degreesLeftToTurn * m_kP) + (derivative*m_kD) + (integralSum*m_kI) + (m_degreesLeftToTurn*m_kF);
+        double output = (m_degreesLeftToTurn * m_kP) + (derivative*m_kD) + (integralSum*m_kI) + (m_kF);
         return output;
     }
+
 }

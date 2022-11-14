@@ -102,6 +102,7 @@ public class DriveTrain {
 
     private final ElapsedTime drivePeriod = new ElapsedTime();
     private final ElapsedTime strafePeriod = new ElapsedTime();
+    public final ElapsedTime colorTimer = new ElapsedTime();
 
 
     public enum autoDeliverStates {
@@ -117,6 +118,7 @@ public class DriveTrain {
         DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION,
         END_AUTOMATIC_DELIVER
     }
+
     public boolean manualDriving = false;
 
     public autoDeliverStates currentAutomaticTask;
@@ -175,7 +177,7 @@ public class DriveTrain {
 
             //Strafe deadzone - don't strafe unless stick is pushed to at least .2 or -.2
             if (Math.abs(strafeStick) <= .2) {
-                strafeStick =0;
+                strafeStick = 0;
             }
             drive = -driveStick; //-1.0 to 1.0
             strafe = strafeStick; //-1.0 to 1.0
@@ -194,56 +196,57 @@ public class DriveTrain {
     public void CheckDpadDriveControls(boolean dpad_up, boolean dpad_right, boolean dpad_down, boolean dpad_left,
                                        boolean lastDpad_up, boolean lastDpad_right, boolean lastDpad_down, boolean lastDpad_left,
                                        boolean changeFunction) {
-            if (dpad_right && !lastDpad_right) {
-                if (changeFunction) {
-                    startStrafeDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE);
-                } else {
-                    startStrafeDrive(HIGH_SPEED, HALF_TILE_DISTANCE, HALF_TILE_DISTANCE);
-                }
-            } else if (dpad_down && !lastDpad_down) {
-                if (changeFunction) {
-                    startEncoderDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE);
-                } else {
-                    startEncoderDrive(HIGH_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
-                }
-            } else if (dpad_left && !lastDpad_left) {
-                if (changeFunction) {
-                    startStrafeDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE);
-                } else {
-                    startStrafeDrive(HIGH_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
-                }
-            } else if (dpad_up && !lastDpad_up) {
-                if (changeFunction) {
-                    startEncoderDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE);
-                } else {
-                    startEncoderDrive(HIGH_SPEED, HALF_TILE_DISTANCE, HALF_TILE_DISTANCE);
-                }
+        if (dpad_right && !lastDpad_right) {
+            if (changeFunction) {
+                startStrafeDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE);
+            } else {
+                startStrafeDrive(HIGH_SPEED, HALF_TILE_DISTANCE, HALF_TILE_DISTANCE);
+            }
+        } else if (dpad_down && !lastDpad_down) {
+            if (changeFunction) {
+                startEncoderDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE);
+            } else {
+                startEncoderDrive(HIGH_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
+            }
+        } else if (dpad_left && !lastDpad_left) {
+            if (changeFunction) {
+                startStrafeDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE);
+            } else {
+                startStrafeDrive(HIGH_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
+            }
+        } else if (dpad_up && !lastDpad_up) {
+            if (changeFunction) {
+                startEncoderDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE);
+            } else {
+                startEncoderDrive(HIGH_SPEED, HALF_TILE_DISTANCE, HALF_TILE_DISTANCE);
             }
         }
+    }
 
     public void CheckAutoAwayFromAllianceSubstation(boolean button, boolean lastButton) {
-              if (button && lastButton) {
-                //move from alliance substation to scoring position
-                startEncoderDrive(MED_SPEED, HALF_TILE_DISTANCE + FULL_TILE_DISTANCE + EIGHTH_TILE_DISTANCE, HALF_TILE_DISTANCE + FULL_TILE_DISTANCE + EIGHTH_TILE_DISTANCE);
-            }
+        if (button && lastButton) {
+            //move from alliance substation to scoring position
+            startEncoderDrive(MED_SPEED, HALF_TILE_DISTANCE + FULL_TILE_DISTANCE + EIGHTH_TILE_DISTANCE, HALF_TILE_DISTANCE + FULL_TILE_DISTANCE + EIGHTH_TILE_DISTANCE);
+        }
     }
 
     public void CheckVisionStrafing(boolean button, boolean lastButton) {
-            if (button && lastButton) {
-                visionStrafing = true;
-            }
+        if (button && lastButton) {
+            visionStrafing = true;
         }
+    }
 
     public void CheckSquareTurning(boolean button1, boolean lastButton1, boolean button2, boolean lastButton2, Gyro Gyro) {
-            if (button1 && !lastButton1) {
-                //ROTATE TO THE LEFT TO THE CLOSEST RIGHT ANGLE 0, 90, 180, 270
-                RotateClosestRightAngleToLeft(Gyro);
+        if (button1 && !lastButton1) {
+            //ROTATE TO THE LEFT TO THE CLOSEST RIGHT ANGLE 0, 90, 180, 270
+            RotateClosestRightAngleToLeft(Gyro);
 
-            } else if (button2 && !lastButton2) {
-                //ROTATE TO THE LEFT TO THE CLOSEST RIGHT ANGLE 0, 90, 180, 270
-                RotateClosestRightAngleToRight(Gyro);
-            }
+        } else if (button2 && !lastButton2) {
+            //ROTATE TO THE LEFT TO THE CLOSEST RIGHT ANGLE 0, 90, 180, 270
+            RotateClosestRightAngleToRight(Gyro);
+        }
     }
+
     public void CheckAutoDeliver(boolean selectButton, boolean lastSelectButton,
                                  boolean startButton, boolean lastStartButton) {
         if (selectButton && !lastSelectButton) {
@@ -277,22 +280,22 @@ public class DriveTrain {
 
     //have this here just in case we have to take vision out of the code so we can still call this method
     public void ContinueAutomaticTasksWithoutVision(Gyro Gyro, Arm ServoArm, Lift Lift, Claw ServoClaw, Intake ServoIntake) {
-         if (alreadyDriving) {
+        if (alreadyDriving) {
             ContinueDriving();
         } else if (alreadyStrafing) {
             ContinueStrafing();
         } else if (alreadyPIDTurning) {
             ContinuePIDTurning(Gyro);
         } else if (autoDeliver1) {
-             auto_deliver1(ServoArm, Lift, ServoClaw, ServoIntake);
-         }else if (autoDeliver2) {
-             auto_deliver2(ServoArm, Lift, ServoClaw, ServoIntake);
-         }
+            auto_deliver1(ServoArm, Lift, ServoClaw, ServoIntake);
+        } else if (autoDeliver2) {
+            auto_deliver2(ServoArm, Lift, ServoClaw, ServoIntake);
+        }
     }
 
     public void CheckNoManualDriveControls(float driveStick, float strafeStick, float turnStick, float fineTuneLeftTurn, float fineTuneRightTurn) {
         if (driveStick == 0 && strafeStick == 0 && turnStick == 0 && fineTuneLeftTurn < .1 && fineTuneRightTurn < .1 &&
-            !visionStrafing && !alreadyDriving && !alreadyStrafing && !alreadyPIDTurning && !alreadyTurning && !autoDeliver1 && !autoDeliver2) {
+                !visionStrafing && !alreadyDriving && !alreadyStrafing && !alreadyPIDTurning && !alreadyTurning && !autoDeliver1 && !autoDeliver2) {
             drive = 0;
             strafe = 0;
             turn = 0;
@@ -303,47 +306,44 @@ public class DriveTrain {
 
     private void RotateClosestRightAngleToLeft(Gyro Gyro) {
         double currentAngle = Gyro.getAbsoluteAngle();
-        turnToPID(45,Gyro);
-        /*
-        if (currentAngle < 0 && currentAngle > -85){
-            turnTo(0, Gyro);
+
+        if (currentAngle < 0 && currentAngle > -85) {
+            turnToPID(0, Gyro);
         }
 
         if (currentAngle >= 5 && currentAngle < 90) {
-            turnTo(90, Gyro);
+            turnToPID(90, Gyro);
         }
 
-        if (currentAngle < -90 && currentAngle >= -175){
-            turnTo(-90, Gyro);
+        if (currentAngle < -90 && currentAngle >= -175) {
+            turnToPID(-90, Gyro);
         }
 
-        if (currentAngle >= 95 && currentAngle < 180){
-            turnTo(180, Gyro);
+        if (currentAngle >= 95 && currentAngle < 180) {
+            turnToPID(180, Gyro);
         }
-        */
+
     }
 
     private void RotateClosestRightAngleToRight(Gyro Gyro) {
         double currentAngle = Gyro.getAbsoluteAngle();
-        turnToPID(-45, Gyro);
-       /*
+
         if (currentAngle < -5 && currentAngle >= -90) {
-            turnTo(-90, Gyro);
+            turnToPID(-90, Gyro);
         }
 
-        if (currentAngle < -95 && currentAngle >= -180){
-            turnTo(-180, Gyro);
+        if (currentAngle < -95 && currentAngle >= -180) {
+            turnToPID(-180, Gyro);
         }
 
-        if (currentAngle < 175 && currentAngle >= 90){
-            turnTo(90, Gyro);
+        if (currentAngle < 175 && currentAngle >= 90) {
+            turnToPID(90, Gyro);
         }
 
-        if (currentAngle < 85 && currentAngle >= 0){
-            turnTo(0, Gyro);
+        if (currentAngle < 85 && currentAngle >= 0) {
+            turnToPID(0, Gyro);
         }
 
-        */
     }
 
     public void VisionStrafing(PipeVision AutoVision) {
@@ -661,26 +661,26 @@ public class DriveTrain {
         //Drive to the alliance substation
         else if (currentAutomaticTask == autoDeliverStates.FIRST_STEP) {
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION;
-            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE+HALF_TILE_DISTANCE+QUARTER_TILE_DISTANCE),-(FULL_TILE_DISTANCE+HALF_TILE_DISTANCE+QUARTER_TILE_DISTANCE));
+            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE), -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE));
         }
 
         //intake a cone
-        else if   (currentAutomaticTask== autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION && !alreadyDriving ||
-                (currentAutomaticTask== autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState != Intake.intakeState.INTAKE_OFF)){
+        else if (currentAutomaticTask == autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION && !alreadyDriving ||
+                (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState != Intake.intakeState.INTAKE_OFF)) {
             currentAutomaticTask = autoDeliverStates.INTAKE_CONE;
             ServoIntake.AutoDeliverIntakeToggle();
         }
 
         //drive away from alliance substation
-        else if (currentAutomaticTask== autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
+        else if (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
             currentAutomaticTask = autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION;
-            startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE+HALF_TILE_DISTANCE+EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE +HALF_TILE_DISTANCE+EIGHTH_TILE_DISTANCE));
+            startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE));
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
 
         }
 
         // Rotate arm, strafe toward the pole, lift to correct height
-        else if (currentAutomaticTask== autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION && !alreadyDriving && !Lift.alreadyLifting) {
+        else if (currentAutomaticTask == autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION && !alreadyDriving && !Lift.alreadyLifting) {
 
             if (ButtonConfig.startPositionMultiplier == -1) {
                 ServoArm.setPosition(Arm.ARM_LEFT_OUTTAKE);
@@ -688,7 +688,7 @@ public class DriveTrain {
                 ServoArm.setPosition(Arm.ARM_RIGHT_OUTTAKE);
             }
 
-            startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE*ButtonConfig.startPositionMultiplier, QUARTER_TILE_DISTANCE*ButtonConfig.startPositionMultiplier);
+            startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
 
             Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
 
@@ -696,25 +696,25 @@ public class DriveTrain {
 
         }
         //release cone
-        else if (currentAutomaticTask== autoDeliverStates.STRAFE_TO_POLE && !alreadyStrafing && !Lift.alreadyLifting ){
+        else if (currentAutomaticTask == autoDeliverStates.STRAFE_TO_POLE && !alreadyStrafing && !Lift.alreadyLifting) {
             currentAutomaticTask = autoDeliverStates.DELIVER_CONE;
             ServoClaw.AutoDeliverClawTogggle();
         }
 
         //strafe away
-        else if (currentAutomaticTask== autoDeliverStates.DELIVER_CONE && ServoClaw.currentClawState == Claw.clawStates.CLAW_CLOSED){
+        else if (currentAutomaticTask == autoDeliverStates.DELIVER_CONE && ServoClaw.currentClawState == Claw.clawStates.CLAW_CLOSED) {
             currentAutomaticTask = autoDeliverStates.STRAFE_AWAY_FROM_POLE;
-            startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE *ButtonConfig.startPositionMultiplier, -QUARTER_TILE_DISTANCE*ButtonConfig.startPositionMultiplier);
+            startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier, -QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
         }
 
         //drive to just outside the alliance substation
-        else if (currentAutomaticTask== autoDeliverStates.STRAFE_AWAY_FROM_POLE){
+        else if (currentAutomaticTask == autoDeliverStates.STRAFE_AWAY_FROM_POLE) {
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION;
-            startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE),-(FULL_TILE_DISTANCE));
+            startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE), -(FULL_TILE_DISTANCE));
         }
 
         //end auto deliver
-        else if (currentAutomaticTask== autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION){
+        else if (currentAutomaticTask == autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION) {
             currentAutomaticTask = autoDeliverStates.END_AUTOMATIC_DELIVER;
             autoDeliver1 = false;
         }
@@ -731,33 +731,33 @@ public class DriveTrain {
         //Drive to the alliance substation
         else if (currentAutomaticTask == autoDeliverStates.FIRST_STEP) {
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION;
-            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE+HALF_TILE_DISTANCE+QUARTER_TILE_DISTANCE),-(FULL_TILE_DISTANCE+HALF_TILE_DISTANCE+QUARTER_TILE_DISTANCE));
+            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE), -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE));
         }
 
         //intake a cone
-        else if   (currentAutomaticTask== autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION && !alreadyDriving ||
-                (currentAutomaticTask== autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState != Intake.intakeState.INTAKE_OFF)){
+        else if (currentAutomaticTask == autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION && !alreadyDriving ||
+                (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState != Intake.intakeState.INTAKE_OFF)) {
             currentAutomaticTask = autoDeliverStates.INTAKE_CONE;
             ServoIntake.AutoDeliverIntakeToggle();
         }
 
         //drive away from alliance substation
-        else if (currentAutomaticTask== autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
+        else if (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
             currentAutomaticTask = autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION;
-            startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE*2+HALF_TILE_DISTANCE+EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE*2+HALF_TILE_DISTANCE+EIGHTH_TILE_DISTANCE));
+            startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE * 2 + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE * 2 + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE));
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
 
         }
 
         // Rotate arm, strafe toward the pole, lift to correct height
-        else if (currentAutomaticTask== autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION && !alreadyDriving && !Lift.alreadyLifting) {
+        else if (currentAutomaticTask == autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION && !alreadyDriving && !Lift.alreadyLifting) {
             if (ButtonConfig.startPositionMultiplier == 1) {
                 ServoArm.setPosition(Arm.ARM_LEFT_OUTTAKE);
             } else {
                 ServoArm.setPosition(Arm.ARM_RIGHT_OUTTAKE);
             }
 
-            startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE*ButtonConfig.startPositionMultiplier, -QUARTER_TILE_DISTANCE*ButtonConfig.startPositionMultiplier);
+            startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier, -QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
 
             Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
 
@@ -765,29 +765,30 @@ public class DriveTrain {
 
         }
         //release cone
-        else if (currentAutomaticTask== autoDeliverStates.STRAFE_TO_POLE && !alreadyStrafing && !Lift.alreadyLifting ){
+        else if (currentAutomaticTask == autoDeliverStates.STRAFE_TO_POLE && !alreadyStrafing && !Lift.alreadyLifting) {
             currentAutomaticTask = autoDeliverStates.DELIVER_CONE;
             ServoClaw.AutoDeliverClawTogggle();
         }
 
         //strafe away
-        else if (currentAutomaticTask== autoDeliverStates.DELIVER_CONE && ServoClaw.currentClawState == Claw.clawStates.CLAW_CLOSED){
+        else if (currentAutomaticTask == autoDeliverStates.DELIVER_CONE && ServoClaw.currentClawState == Claw.clawStates.CLAW_CLOSED) {
             currentAutomaticTask = autoDeliverStates.STRAFE_AWAY_FROM_POLE;
-            startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE *ButtonConfig.startPositionMultiplier, QUARTER_TILE_DISTANCE*ButtonConfig.startPositionMultiplier);
+            startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
         }
 
         //drive to just outside the alliance substation
-        else if (currentAutomaticTask== autoDeliverStates.STRAFE_AWAY_FROM_POLE){
+        else if (currentAutomaticTask == autoDeliverStates.STRAFE_AWAY_FROM_POLE) {
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION;
-            startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE*2),-(FULL_TILE_DISTANCE*2));
+            startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE * 2), -(FULL_TILE_DISTANCE * 2));
         }
 
         //end auto deliver
-        else if (currentAutomaticTask== autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION){
+        else if (currentAutomaticTask == autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION) {
             currentAutomaticTask = autoDeliverStates.END_AUTOMATIC_DELIVER;
             autoDeliver2 = false;
         }
     }
+
     public void turn(double degrees, Gyro Gyro) {
         alreadyTurning = true;
         Gyro.resetAngle();
@@ -813,31 +814,34 @@ public class DriveTrain {
 
         if (targetAngle > 180) {
             targetAngle -= 360;
-        } else if (targetAngle < -180)
-        {
-            targetAngle +=360;
+        } else if (targetAngle < -180) {
+            targetAngle += 360;
         }
         turn(targetAngle, Gyro);
     }
 
-    public void turnToPID (double degrees, Gyro Gyro) {
+    public void turnToPID(double degrees, Gyro Gyro) {
         double absoluteAngle = Gyro.getAbsoluteAngle();
         targetAngle = degrees - absoluteAngle;
         turnPID(targetAngle, Gyro);
     }
 
-    public void turnPID(double degrees, Gyro Gyro){
+    public void turnPID(double degrees, Gyro Gyro) {
         Gyro.resetAngle();
+        double kF = -.5;
         LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        pid = new TurnPIDController2(degrees, 0, 0, 0, 1);
+        if (degrees > 0) {
+            kF = kF * -1;
+        }
+        pid = new TurnPIDController2(degrees, .008, 0, 0, kF);
         alreadyPIDTurning = true;
     }
 
     public void ContinuePIDTurning(Gyro Gyro) {
-        if (Math.abs(pid.m_degreesLeftToTurn) > 2) {
+        if (Math.abs(pid.m_degreesLeftToTurn) > 1) {
             double motorPower = pid.update(Gyro.getAngle());
             setMotorPower(-motorPower, motorPower, -motorPower, motorPower);
         } else {
@@ -847,61 +851,63 @@ public class DriveTrain {
     }
 
 
+    public void colorDrive(double speed, int allianceColor, LinearOpMode activeOpMode) {
 
-    public void colorDrive(double speed, int allianceColor, LinearOpMode activeOpMode)
-    {
-
-        if (allianceColor == 1)
-        {
-            while (activeOpMode.opModeIsActive() && colorSensor.blue() < 230 && colorSensor.red() > 50)
-            {
+        if (allianceColor == 1) {
+            while (activeOpMode.opModeIsActive() && colorSensor.blue() < 230 && colorSensor.red() > 50) {
                 setAllPower(speed);
-                activeOpMode.telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+                activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
                 activeOpMode.telemetry.update();
             }
 
-        }
-        else if (allianceColor == -1)
-        {
-            while (activeOpMode.opModeIsActive() && colorSensor.red() < 230 && colorSensor.blue() > 50)
-            {
+        } else if (allianceColor == -1) {
+            while (activeOpMode.opModeIsActive() && colorSensor.red() < 230 && colorSensor.blue() > 50) {
                 setAllPower(speed);
-                activeOpMode.telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+                activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
                 activeOpMode.telemetry.update();
             }
 
         }
 
         setAllPower(0);
-        activeOpMode.telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+        activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
         activeOpMode.telemetry.update();
 
     }
+
     public void ColorStrafe(double speed, LinearOpMode activeOpMode) {
 
         activeOpMode.telemetry.addLine("Seeking LINE with Color Sensor");
         activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
         activeOpMode.telemetry.update();
 
-        if (    activeOpMode.opModeIsActive() &&
+        colorTimer.reset();
+        while (activeOpMode.opModeIsActive() &&
                 (colorSensor.blue() < 230 && colorSensor.red() > 50) &&
-                (colorSensor.red() < 230 && colorSensor.blue() > 50)) {
+                (colorSensor.red() < 230 && colorSensor.blue() > 50) &&
+                colorTimer.seconds() < 1) {
 
             // Color is not red or blue
-            //strafe left
-            activeOpMode.telemetry.addLine("PIPE LEFT");
-            turn = 0;
-            drive = 0;
-            strafe = -.2*ButtonConfig.startPositionMultiplier;
-            MecanumDrive();
-
-            } else {
-            turn = 0;
-            drive = 0;
-            strafe = 0;
-            MecanumDrive();
+            //strafe left for half second to the right
+            if (colorTimer.seconds() < .5) {
+                activeOpMode.telemetry.addLine("PIPE LEFT");
+                turn = 0;
+                drive = 0;
+                strafe = -.2 * ButtonConfig.startPositionMultiplier;
+                MecanumDrive();
+            } else if (colorTimer.seconds() > .5) {
+                activeOpMode.telemetry.addLine("PIPE LEFT");
+                turn = 0;
+                drive = 0;
+                strafe = .2 * ButtonConfig.startPositionMultiplier;
+                MecanumDrive();
             }
         }
+        turn = 0;
+        drive = 0;
+        strafe = 0;
+        MecanumDrive();
     }
+}
 
 

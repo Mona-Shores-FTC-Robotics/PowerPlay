@@ -10,6 +10,7 @@ public class Arm {
     public static final double ARM_LEFT_OUTTAKE = .95;
     public static final double ARM_RIGHT_OUTTAKE = .33;
     public static final double ARM_FRONT_OUTTAKE = 0;
+    public static final double ARM_NEAR_FRONT= .15;
 
     public static final double HEIGHT_FOR_PREVENTING_ARM_ROTATION = 650;
     public static final double SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION = 800;
@@ -28,11 +29,20 @@ public class Arm {
        Lift = m_Lift;
     }
 
-    public void init(HardwareMap ahwMap) {
+    public void init(HardwareMap ahwMap){
+
+    arm = ahwMap.servo.get("turret_servo");
+    //set arm at intake position
+        arm.setPosition(ARM_CENTER_INTAKE);
+    currentArmState = armState.ARM_CENTER;
+    }
+
+    public void init2(HardwareMap ahwMap) {
         arm = ahwMap.servo.get("turret_servo");
         //set arm at intake position
-        arm.setPosition(ARM_CENTER_INTAKE);
-        currentArmState = armState.ARM_CENTER;
+        arm.setPosition(ARM_NEAR_FRONT);
+        currentArmState = armState.ARM_FRONT;
+
     }
 
     public void CheckArm(Boolean armLeftCurrentButton, Boolean armLeftPreviousButton,

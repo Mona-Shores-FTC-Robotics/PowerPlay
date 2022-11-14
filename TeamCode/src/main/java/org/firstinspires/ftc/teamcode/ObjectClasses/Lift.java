@@ -10,6 +10,8 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CON
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 
+import static java.lang.Math.abs;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -18,15 +20,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class Lift {
 
     //lift power parameters
-    final double ABOVE_LIFT_FALL_THRESHOLD_POWER = .3;
+    final double ABOVE_LIFT_FALL_THRESHOLD_POWER = .8;
     final double LIFT_FALL_THRESHOLD_ENC_VAL = 100;
     final double BELOW_LIFT_FALL_THRESHOLD_POWER = 0;
-    public double LIFT_RAISE_POWER = 1;
-    final int MAX_LIFT_HEIGHT = 3080;
+    public double LIFT_RAISE_POWER = .9;
+    final int MAX_LIFT_HEIGHT = 3050;
     final int MIN_LIFT_HEIGHT = 0;
     final int SAFE_FALL_HEIGHT = 650;
-    final double LIFT_TARGET_MULTIPLIER = 100;
+    final double LIFT_TARGET_MULTIPLIER = 200;
 
+    public double topLiftPower;
+    public static final double STARTING_LIFT_RAMP_VALUE = .6;
+    public static final double RAMP_LIFT_INCREMENT = .08;
+    public double ramp = STARTING_LIFT_RAMP_VALUE;
 
     public enum liftJunctionStates { HIGH_CONE_JUNCTION_SCORE_HEIGHT, MEDIUM_CONE_JUNCTION_SCORE_HEIGHT,
         LOW_CONE_JUNCTION_SCORE_HEIGHT, GROUND_CONE_JUNCTION_SCORE_HEIGHT,
@@ -86,7 +92,10 @@ public class Lift {
                 //Could we try a different mode rather than run to position here?
                 liftMotor.setPower(ABOVE_LIFT_FALL_THRESHOLD_POWER);
             } else
-                liftMotor.setPower(LIFT_RAISE_POWER);
+                //reset starting ramp value
+                ramp = STARTING_LIFT_RAMP_VALUE;
+                topLiftPower = LIFT_RAISE_POWER;
+                liftMotor.setPower(abs(ramp));
             }
             alreadyLifting = true;
         }
@@ -94,9 +103,19 @@ public class Lift {
 
     public void ContinueLifting() {
         if (liftMotor.isBusy() == true) {
+
+            liftMotor.setPower(abs(ramp));
+            if (ramp < topLiftPower) {
+                ramp = ramp + RAMP_LIFT_INCREMENT;
+            } else if (ramp > topLiftPower) {
+                ramp = ramp - RAMP_LIFT_INCREMENT;
+            }
+
             //keep lifting because liftMotor is still trying to reach the target
         } else if (liftMotor.isBusy() == false) {
             //lift has reached target
+
+
             alreadyLifting = false;
         }
     }
