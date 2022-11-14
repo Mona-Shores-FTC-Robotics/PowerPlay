@@ -77,8 +77,8 @@ public class Lift {
 
             //turn motor power off if the new target is below the fall threshold encoder value (100) and the current positions is below a safe fall height
             //only do this if the lift is being moved down from a higher position, don't do this if its being lifted up
-            if (deltaLift < 0 && newLiftTarget <= LIFT_FALL_THRESHOLD_ENC_VAL &&
-                    (liftMotor.getCurrentPosition() <= SAFE_FALL_HEIGHT) ) {
+            if ((deltaLift < 0) && (newLiftTarget <= LIFT_FALL_THRESHOLD_ENC_VAL) &&
+                    (liftMotor.getCurrentPosition() <= SAFE_FALL_HEIGHT)) {
                 liftMotor.setPower(BELOW_LIFT_FALL_THRESHOLD_POWER);
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
