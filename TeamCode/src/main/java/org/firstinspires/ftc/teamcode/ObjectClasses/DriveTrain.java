@@ -85,8 +85,11 @@ public class DriveTrain {
     public boolean alreadyDriving = false;
     public boolean alreadyStrafing = false;
     public boolean visionStrafing = false;
+    public boolean alreadyLineFollowing = false;
     public boolean autoDeliver1 = false;
     public boolean autoDeliver2 = false;
+
+    int encoderTargetLineFollow;
 
     public LinearOpMode activeOpMode;
     HardwareMap hwMap = null;
@@ -276,13 +279,14 @@ public class DriveTrain {
         }
     }
 
-
     //have this here just in case we have to take vision out of the code so we can still call this method
-    public void ContinueAutomaticTasksWithoutVision(Gyro Gyro, Arm ServoArm, Lift Lift, Claw ServoClaw, Intake ServoIntake) {
+    public void ContinueAutomaticTasks(Gyro Gyro, Arm ServoArm, Lift Lift, Claw ServoClaw, Intake ServoIntake) {
         if (alreadyDriving) {
             ContinueDriving();
         } else if (alreadyStrafing) {
             ContinueStrafing();
+        } else if (alreadyTurning) {
+            ContinueTurning(Gyro);
         } else if (alreadyPIDTurning) {
             ContinuePIDTurning(Gyro);
         } else if (autoDeliver1) {
@@ -908,21 +912,34 @@ public class DriveTrain {
         MecanumDrive();
     }
 
-    public void lineFollow(double speed, double targetPath, double Kp, LinearOpMode activeOpMode) {
-
+    public void lineFollow(double speed, double distanceInInches, double targetPath, double Kp, LinearOpMode activeOpMode) {
         // Assuming alpha values 0-100, with 50 being halfway inbetween, a Kp of .01 would make corrections between .5 and -.5
         // try Kp = .01;
 
-        double correction = (targetPath - colorSensor.alpha())*Kp;
-        setMotorPower(speed+correction, speed-correction, speed+correction, speed-correction);
+        if (!alreadyLineFollowing)
+        {
+            alreadyLineFollowing = true;
 
-        while (colorSensor.alpha() < 50) {
-            // Drive Forward
+            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            encoderTargetLineFollow = (int) (distanceInInches * COUNTS_PER_INCH);
         }
 
+        if (LFDrive.getCurrentPosition() < encoderTargetLineFollow) {
+            double correction = (targetPath - colorSensor.alpha()) * Kp;
+            setMotorPower(speed + correction, speed - correction, speed + correction, speed - correction);
+        } else {
+            alreadyLineFollowing = false;
+        }
     }
-
-
 }
 
 

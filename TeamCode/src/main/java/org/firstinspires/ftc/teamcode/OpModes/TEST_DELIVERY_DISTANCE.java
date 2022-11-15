@@ -1,5 +1,16 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_RIGHT_OUTTAKE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THIRTYSECOND_TILE_DISTANCE;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -15,8 +26,8 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 
-@Autonomous(name = "AUTO_TEST_LINE_FOLLOW")
-public class AUTO_TEST_LINE_FOLLOW extends LinearOpMode {
+@Autonomous(name = "TEST_DELIVERY_DISTANCE")
+public class TEST_DELIVERY_DISTANCE extends LinearOpMode {
 
     int Signal;
     DriveTrain MecDrive = new DriveTrain(this);
@@ -97,9 +108,48 @@ public class AUTO_TEST_LINE_FOLLOW extends LinearOpMode {
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
         telemetry.update();
 
-        while (opModeIsActive() && getRuntime() < 5) {
-            MecDrive.lineFollow(.2, 50, .01, this);
+        Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        while (opModeIsActive() && (Lift.alreadyLifting)) {
+            Lift.ContinueLifting();
         }
+
+        if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
+            ServoArm.setPosition(ARM_RIGHT_OUTTAKE);
+        } else ServoArm.setPosition(ARM_LEFT_OUTTAKE);
+
+        //Strafe close to High Pole
+        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE + SIXTEENTH_TILE_DISTANCE+THIRTYSECOND_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
+        while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
+            MecDrive.ContinueStrafing();
+        }
+
+        //If on the right side, need to back off just a little
+        /*
+        if (ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE) {
+            MecDrive.startStrafeDrive(LOW_SPEED, (SIXTEENTH_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
+            while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
+                MecDrive.ContinueStrafing();
+            }
+        }
+        */
+
+        sleep(200);
+        //Open claw to drop cone
+        ServoClaw.toggleClaw();
+        sleep(400);
+
+            //Strafe away from High Pole
+            MecDrive.startStrafeDrive(LOW_SPEED, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
+            while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
+                MecDrive.ContinueStrafing();
+            }
+
+            //close the claw
+            ServoClaw.toggleClaw();
+            ServoArm.setPosition(ARM_CENTER_INTAKE);
+            Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+
       }
     }
 

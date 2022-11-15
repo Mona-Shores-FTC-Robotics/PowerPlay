@@ -1,10 +1,16 @@
 HIGH PRIORITY - MUST DO THESE BEFORE FRUITPORT:
 Print Sleeves for Team 20245
 Print Sleeves for Team 19429
-Confirm only usable Autos are listed in Driver Station
+
+Test and tune moving "FULL TILE DISTANCE" with AUTO_TEST_TILE_DISTANCE
+Test and tune delivery distance with AUTO_TEST_DELIVERY_DISTANCE
+
+Tune and finalize autos for Fruitport
+Confirm only tuned and usable Autos are listed in Driver Station
 Confirm drive teams understand the autos and what they do
 
-Tune delivery distance with final robot - AUTO_TEST_DELIVERY_CODE should help to test rapidly
+
+
 
 MIDDLE PRIORITY - IF WE HAVE TIME BEFORE FRUITPORT
 Create, Print, and Laminate TeleOp Button Map
