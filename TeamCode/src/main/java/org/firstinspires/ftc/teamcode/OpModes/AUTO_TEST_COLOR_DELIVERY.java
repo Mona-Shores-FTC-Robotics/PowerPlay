@@ -92,7 +92,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
                     currentGamepad1.dpad_right, previousGamepad1.dpad_right,
                     currentGamepad1.b,          previousGamepad1.b);
 
-            telemetry.addData("Signal is ", Vision.currentSignal);
+            telemetry.addData("Signal", "Signal(%s), Number(%s)", Vision.currentSignal, Vision.currentSignal);
             telemetry.addLine(" ");
             telemetry.addLine("Select Starting Position with D-pad");
             telemetry.addData("Current Starting Position ", ButtonConfig.currentStartPosition);

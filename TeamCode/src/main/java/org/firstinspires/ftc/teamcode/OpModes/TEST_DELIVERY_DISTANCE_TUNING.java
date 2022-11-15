@@ -8,8 +8,8 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CO
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -23,10 +23,9 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 
-@Autonomous(name = "TEST_DELIVERY_DISTANCE_TUNING")
+@TeleOp(name = "TEST_DELIVERY_DISTANCE_TUNING")
 public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
 
-    int Signal;
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig BConfig = new ButtonConfig(this);
 
@@ -48,7 +47,7 @@ public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
     Gamepad currentGamepad2 = new Gamepad();
     Gamepad previousGamepad2 = new Gamepad();
 
-    double test_stafe_into_pole_distance = HALF_TILE_DISTANCE;
+    double test_strafe_into_pole_distance = HALF_TILE_DISTANCE;
     double test_speed;
     int delivery_side = 1; //1 is right side, -1 is left side
 
@@ -105,13 +104,13 @@ public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
 
             //Change distance in .25 inch increments
             if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
-                test_stafe_into_pole_distance += .25;
-                if (test_stafe_into_pole_distance >= 30) test_stafe_into_pole_distance = 30;
+                test_strafe_into_pole_distance += .25;
+                if (test_strafe_into_pole_distance >= 30) test_strafe_into_pole_distance = 30;
             }
 
             if (currentGamepad1.dpad_left && !previousGamepad1.dpad_left) {
-                test_stafe_into_pole_distance -= .25;
-                if (test_stafe_into_pole_distance <= 5) test_stafe_into_pole_distance = 5;
+                test_strafe_into_pole_distance -= .25;
+                if (test_strafe_into_pole_distance <= 5) test_strafe_into_pole_distance = 5;
             }
 
             //Change delivery side with left stick
@@ -171,7 +170,7 @@ public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
             telemetry.addLine("Change delay before opening claw (left/right) and delay after opening claw (up/down) in milliseconds");
             telemetry.addLine("Press X button to close claw and raise lift to safe driving height");
             telemetry.addLine("Press A button to strafe test_distance into pole and drop off cone at test_speed");
-            telemetry.addData("Test Strafe Distance", test_stafe_into_pole_distance);
+            telemetry.addData("Test Strafe Distance", test_strafe_into_pole_distance);
             telemetry.addData("Test Speed", test_speed);
             telemetry.addData("Side: 1 is right, -1 is left", delivery_side);
             telemetry.addData("Delay before opening claw", delay_before_claw_open);
@@ -188,8 +187,8 @@ public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
 
         //Strafe close to High Pole
         Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
-        MecDrive.startStrafeDrive(test_speed, test_stafe_into_pole_distance*side);
-        while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
+        MecDrive.startStrafeDrive(test_speed, test_strafe_into_pole_distance*side);
+        while (opModeIsActive() && MecDrive.alreadyStrafing) {
             MecDrive.ContinueStrafing();
         }
 
@@ -199,8 +198,8 @@ public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
         sleep(delay_after_claw_open);
 
         //Strafe away from High Pole
-        MecDrive.startStrafeDrive(test_speed, -test_stafe_into_pole_distance*side);
-        while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
+        MecDrive.startStrafeDrive(test_speed, -test_strafe_into_pole_distance*side);
+        while (opModeIsActive() && MecDrive.alreadyStrafing) {
             MecDrive.ContinueStrafing();
         }
 

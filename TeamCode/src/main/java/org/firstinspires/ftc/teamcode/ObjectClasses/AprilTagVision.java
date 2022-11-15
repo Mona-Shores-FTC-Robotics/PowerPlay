@@ -19,6 +19,7 @@ public class AprilTagVision {
 
     //Set default to MIDDLE in case something goes wrong with vision
     public Signal currentSignal = Signal.MIDDLE;
+    public int currentSignalNumber = 2;
 
     // NOTE: this calibration is for the C920 webcam at 800x448.
     double fx = 578.272;
@@ -80,12 +81,15 @@ public class AprilTagVision {
                         {
                             if (tagOfInterest.id == ID_TAG_FOR_LEFT) {
                                 currentSignal = Signal.LEFT;
+                                currentSignalNumber = 1;
                             }
                             else if (tagOfInterest.id == ID_TAG_FOR_MIDDLE) {
                                 currentSignal = Signal.MIDDLE;
+                                currentSignalNumber = 2;
                             }
                             else if (tagOfInterest.id == ID_TAG_FOR_RIGHT) {
                                 currentSignal = Signal.RIGHT;
+                                currentSignalNumber = 3;
                             }
                         }
                         break;

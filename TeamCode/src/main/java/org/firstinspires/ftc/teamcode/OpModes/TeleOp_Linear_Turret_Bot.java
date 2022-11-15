@@ -19,7 +19,6 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig ButtonConfig = new ButtonConfig(this);
-
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
@@ -28,8 +27,6 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
     PipeVision AutoVision = new PipeVision(this, MecDrive);
 
     private final ElapsedTime runtime = new ElapsedTime();
-
-    private int teleopConeDeliveryTracker = 0;
 
     public void runOpMode() {
 
@@ -71,45 +68,64 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             currentGamepad1 = ButtonConfig.copy(gamepad1);
             currentGamepad2 = ButtonConfig.copy(gamepad2);
 
-            //alert driver 5 seconds until END GAME
+            //------------------------------------------------------//
+            //--------------------RUMBLE FEATURES-------------------//
+            //------------------------------------------------------//
+
+            /**
+            Alert driver 5 seconds until END GAME
+             */
             if (runtime.seconds() > 84 && runtime.seconds() < 85) {
                 gamepad1.rumble(100);
                 gamepad2.rumble(100);
             }
 
-            //alert driver 5 seconds until GAME END
+            /**
+            Alert driver 5 seconds until GAME END
+             */
+
             if (runtime.seconds() > 114 && runtime.seconds() < 115) {
                 gamepad1.rumble(100);
                 gamepad2.rumble(100);
             }
 
-            //-----CHECK OPERATOR CONTROLS ------//
+            //------------------------------------------------------//
+            //--------------------OPERATOR CONTROLS-----------------//
+            //------------------------------------------------------//
 
-            //Y button opens claw on press
-            //One second after release, claw closes and arm automatically centers
-            ServoClaw.AdvancedCheckClaw(    currentGamepad2.y, previousGamepad2.y, ServoArm);
+            /**
+            Y button opens claw on press
+            One second after release, claw closes and arm automatically centers
+             */
 
-            //X button turns Intake ON
-            //Intake shuts OFF upon release of X button
+            ServoClaw.AdvancedCheckClaw(currentGamepad2.y, previousGamepad2.y, ServoArm);
+
+            /**
+            X button turns Intake ON
+            Intake shuts OFF upon release of X button
+            */
+
             ServoIntake.AdvancedCheckIntake(currentGamepad2.x, previousGamepad2.x);
 
-            //Left/Right/Up D-pad moves arm, raising lift to safe level first, if needed
-            //Down D-pad moves arm to center intake position and lowers lift after short delay
+            /**
+            Left/Right/Up D-pad moves arm, raising lift to safe level first, if needed
+            Down D-pad moves arm to center intake position and lowers lift after short delay
 
-            //Isaac's Operator Bumper Request
-            //  left bumper:
+            Isaac's Operator Bumper Request
+              left bumper:
                     // Opens Claw
                     // Centers Arm
                     // Lowers Lift
                     // Sets claw to "easy" intake position
                     // Turns Intake On
 
-            // right bumper:
+             right bumper:
                     // Turns Intake Off
                     // Closes Claw
                     // Raises lift to safe height for rotation
                     // Rotates Arm to Front
                     // Raises lift to High Pole height
+            */
 
             ServoArm.AdvancedCheckArm(      currentGamepad2.dpad_left, previousGamepad2.dpad_left,
                                             currentGamepad2.dpad_down, previousGamepad2.dpad_down,
@@ -118,36 +134,40 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                                             currentGamepad2.left_bumper, previousGamepad2.left_bumper,
                                             currentGamepad2.right_bumper, previousGamepad2.right_bumper);
 
-            //Left Trigger, lowers lift by one Junction Height Level (Ground, Low, Medium, High)
-            //Right Trigger, raises lift by one Junction height level (Ground, Low, Medium, High)
-            //Left Trigger w/ Modifier(B) pressed, lowers lift to next  Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
-            //Right Trigger w/ Modifier(B) pressed, raises lift to next Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
-
-            //Left Stick up/down - raise/lower lift by fixed amount, lift only decides whether to go up or down
-
-            //Whenever the lift zeroes out, the ConeStack Height Level is set to level 1 and the junction level is set to ground
+            /**
+            Left Trigger, lowers lift by one Junction Height Level (Intake, Ground, Low, Medium, High)
+            Right Trigger, raises lift by one Junction height level (Intake, Ground, Low, Medium, High)
+            Left Trigger w/ Modifier(B) pressed, lowers lift to next  Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
+            Right Trigger w/ Modifier(B) pressed, raises lift to next Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
+            Left Stick up/down - raise/lower lift by fixed amount, lift only decides whether to go up or down
+            Whenever the lift zeroes out, the ConeStack Height Level is set to level 1 and the junction level is set to ground
+            */
 
             Lift.AdvancedCheckLift(         currentGamepad2.left_trigger, previousGamepad2.left_trigger,
                                             currentGamepad2.right_trigger, previousGamepad2.right_trigger,
                                             currentGamepad2.b,
                                             currentGamepad2.left_stick_y);
 
+            /** Unused Operator Gamepad Elements:
+                A Button
+                B Button (but this is used as a modifier for the lift controls) - be careful about using buttons for two things
+                Start Button (be careful using this, especially for automated functions because
+                            you have to press it to select the controller which can be annoying)
+                Back Button
 
-            //Unused Operator Gamepad Elements:
-                //A Button
-                //B Button (but this is used as a modifier for the lift controls) - be careful about using buttons for two things
-                //Right Stick (up/down)
-                //Right Stick (left/right)
-                //Left Stick (left/right)
-                //Back Button
-                //Start Button (be careful using this, especially for automated functions because
-                //              you have to press it to select the controller which can be annoying)
-                //Left Stick Button
-                //Right Stick Button
-                //touchpad controls
+                Right Stick (up/down)
+                Right Stick (left/right)
+                Left Stick (left/right)
 
 
-            //-----CHECK DRIVER CONTROLS ------//
+                Left Stick Button
+                Right Stick Button
+                touchpad controls
+            */
+
+            //------------------------------------------------------//
+            //--------------------DRIVER CONTROLS-------------------//
+            //------------------------------------------------------//
 
             //Driver manual controls - if any of these are non-zero, all automatic tasks are halted
             MecDrive.CheckManualDriveControls(  currentGamepad1.left_stick_y, currentGamepad1.left_stick_x, currentGamepad1.right_stick_x,
@@ -179,30 +199,27 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             MecDrive.CheckNoManualDriveControls(currentGamepad1.left_stick_y, currentGamepad1.left_stick_x, currentGamepad1.right_stick_x,
                     currentGamepad1.left_trigger, currentGamepad1.right_trigger);
 
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Run Time:","%s", runtime);
+            //------------------------------------------------------//
+            //------------------TELEMETRY---------------------------//
+            //------------------------------------------------------//
 
-            /*
-            telemetry.addData("Motors", "leftfront(%.2f), rightfront (%.2f)", MecDrive.leftFrontPower*MecDrive.multiplier, MecDrive.rightFrontPower*MecDrive.multiplier);
-            telemetry.addData("Motors", "leftback (%.2f), rightback (%.2f)", MecDrive.leftBackPower*MecDrive.multiplier, MecDrive.rightBackPower*MecDrive.multiplier);
-            telemetry.addData("Encoders" , "leftfront(%s), rightfront(%s)", MecDrive.LFDrive.getCurrentPosition(), MecDrive.RFDrive.getCurrentPosition());
-            telemetry.addData("Encoders", "leftback(%s), rightback(%s)", MecDrive.LBDrive.getCurrentPosition(), MecDrive.RBDrive.getCurrentPosition());
-            telemetry.addData("Automatic Deliver State", "(%s)", MecDrive.currentAutomaticTask);
-            telemetry.addData("# of Cones Delivered", teleopConeDeliveryTracker);
-           */
+            telemetry.addData("Run Time:","%s", runtime.seconds());
+
             telemetry.addData("Lift", "Position(%s), Target(%s)", Lift.liftMotor.getCurrentPosition(), Lift.newLiftTarget);
             telemetry.addData("Arm Position", ServoArm.currentArmState);
             telemetry.addData("Claw Position", ServoClaw.currentClawState);
             telemetry.addData("Intake State", ServoIntake.currentIntakeState);
 
-            telemetry.addData("Gyro Angle", (int) Gyro.getAngle());
-            telemetry.addData("Absolute Gyro Angle", (int) Gyro.getAbsoluteAngle());
-            telemetry.addData("Gyro Angle", (int) Gyro.getAngle());
+            telemetry.addData("Gyro", "Current Angle(%s), Target Angle(%s)", (int) Gyro.getAbsoluteAngle(), MecDrive.pid.m_target);
+            telemetry.addData("PID Angle Left to Turn", (int) MecDrive.pid.m_degreesLeftToTurn);
+            telemetry.addData("Lift Limit Switch State", Lift.limitIsPressed());
+            telemetry.addData("Color", "R %d  G %d  B %d", MecDrive.colorSensor.red(), MecDrive.colorSensor.green(), MecDrive.colorSensor.blue());
+            telemetry.addData("Reflected Light", "Alpha %d", MecDrive.colorSensor.alpha());
 
-            telemetry.addData("Target PID Angle", (int) MecDrive.pid.m_degreesLeftToTurn);
-            telemetry.addData("PID Angle Left to Turn", (int) MecDrive.pid.m_target);
+            telemetry.addData("Encoders", "LF(%s), RF(%s)", MecDrive.LFDrive.getCurrentPosition(), MecDrive.RFDrive.getCurrentPosition());
+            telemetry.addData("Encoders", "LB(%s), RB(%s)", MecDrive.LBDrive.getCurrentPosition(), MecDrive.RBDrive.getCurrentPosition());
 
-            telemetry.addData("LIMIT", Lift.limitIsPressed());
+            //telemetry.addData("Automatic Deliver State", "(%s)", MecDrive.currentAutomaticTask);
 
             telemetry.update();
         }
@@ -210,7 +227,6 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
         MecDrive.strafe = 0;
         MecDrive.turn = 0;
         MecDrive.MecanumDrive();
-
     }
 }
 

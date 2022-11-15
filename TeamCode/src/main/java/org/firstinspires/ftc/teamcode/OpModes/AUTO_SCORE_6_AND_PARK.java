@@ -85,7 +85,6 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
             previousGamepad2 = BConfig.copy(currentGamepad2);
             currentGamepad2 = BConfig.copy(gamepad2);
 
-
             //Use Webcam to find out Signal using April Tags
             Vision.CheckForAprilTags(this);
 
@@ -95,7 +94,7 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
                     currentGamepad1.dpad_right, previousGamepad1.dpad_right,
                     currentGamepad1.b,          previousGamepad1.b);
 
-            telemetry.addData("Signal is ", Vision.currentSignal);
+            telemetry.addData("Signal", "Signal(%s), Number(%s)", Vision.currentSignal, Vision.currentSignal);
             telemetry.addLine(" ");
             telemetry.addLine("Select Starting Position with D-pad");
             telemetry.addData("Current Starting Position ", ButtonConfig.currentStartPosition);
