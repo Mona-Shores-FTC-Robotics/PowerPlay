@@ -33,7 +33,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 
-@Autonomous(name = "AUTO_SCORE_2_AND_PARK_color_test")
+@Autonomous(name = "AUTO_TEST_COLOR DELIVERY")
 public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
 
     int Signal;
@@ -104,12 +104,11 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
             telemetry.update();
 
         }
-
-
         runtime.reset();
         Gyro.init(hardwareMap);
 
         //Use this code to see if we can find the color stack line, pick up a cone, and score it and then repeat (how fast can we do it?)
+        //This code assumes you start lined up with the small pole near the cone stack line
 
         telemetry.addData("Signal is ", Signal);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);

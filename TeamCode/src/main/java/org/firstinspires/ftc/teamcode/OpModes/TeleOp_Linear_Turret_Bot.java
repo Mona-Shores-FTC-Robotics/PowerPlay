@@ -118,16 +118,34 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                                             currentGamepad2.left_bumper, previousGamepad2.left_bumper,
                                             currentGamepad2.right_bumper, previousGamepad2.right_bumper);
 
-            //Left Trigger, lowers lift by one Junction Height Level (Ground, Low, Medium, Heigh)
-               // w/ Modifier pressed, lowers lift to next  Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
+            //Left Trigger, lowers lift by one Junction Height Level (Ground, Low, Medium, High)
             //Right Trigger, raises lift by one Junction height level (Ground, Low, Medium, High)
-                // w/ Modifier pressed, raises lift to next Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
+            //Left Trigger w/ Modifier(B) pressed, lowers lift to next  Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
+            //Right Trigger w/ Modifier(B) pressed, raises lift to next Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
+
+            //Left Stick up/down - raise/lower lift by fixed amount, lift only decides whether to go up or down
+
             //Whenever the lift zeroes out, the ConeStack Height Level is set to level 1 and the junction level is set to ground
 
             Lift.AdvancedCheckLift(         currentGamepad2.left_trigger, previousGamepad2.left_trigger,
                                             currentGamepad2.right_trigger, previousGamepad2.right_trigger,
                                             currentGamepad2.b,
                                             currentGamepad2.left_stick_y);
+
+
+            //Unused Operator Gamepad Elements:
+                //A Button
+                //B Button (but this is used as a modifier for the lift controls) - be careful about using buttons for two things
+                //Right Stick (up/down)
+                //Right Stick (left/right)
+                //Left Stick (left/right)
+                //Back Button
+                //Start Button (be careful using this, especially for automated functions because
+                //              you have to press it to select the controller which can be annoying)
+                //Left Stick Button
+                //Right Stick Button
+                //touchpad controls
+
 
             //-----CHECK DRIVER CONTROLS ------//
 
@@ -153,7 +171,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             //Driver control to automatically pickup and deliver a cone
             //MecDrive.CheckAutoDeliver(  currentGamepad1.back, previousGamepad1.back,
-            //                            currentGamepad1.start, previousGamepad1.start);
+            //                            currentGamepad1.right_stick_button, previousGamepad1.right_stick_button);
 
             //Automated tasks (driving, turning, strafing, vision strafing, auto deliver)
             MecDrive.ContinueAutomaticTasks(Gyro, AutoVision, ServoArm, Lift, ServoClaw, ServoIntake);

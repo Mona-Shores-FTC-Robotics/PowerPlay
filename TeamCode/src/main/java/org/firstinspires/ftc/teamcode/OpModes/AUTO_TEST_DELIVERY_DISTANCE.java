@@ -26,8 +26,8 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 
-@Autonomous(name = "AUTO_SCORE_ONE_AND_PAR_test_deliver")
-public class AUTO_TEST_DELIVERY_CODE extends LinearOpMode {
+@Autonomous(name = "AUTO_TEST_DELIVERY_DISTANCE")
+public class AUTO_TEST_DELIVERY_DISTANCE extends LinearOpMode {
 
     int Signal;
     DriveTrain MecDrive = new DriveTrain(this);

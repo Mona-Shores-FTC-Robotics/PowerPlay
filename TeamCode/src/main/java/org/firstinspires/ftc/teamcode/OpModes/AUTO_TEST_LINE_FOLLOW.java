@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 
-@Autonomous(name = "AUTO_SCORE_ONE_AND_PARK_test_line")
+@Autonomous(name = "AUTO_TEST_LINE_FOLLOW")
 public class AUTO_TEST_LINE_FOLLOW extends LinearOpMode {
 
     int Signal;
