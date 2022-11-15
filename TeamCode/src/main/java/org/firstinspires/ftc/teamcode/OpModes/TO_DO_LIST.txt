@@ -9,9 +9,9 @@ Todo: Confirm only tuned and usable Autos are listed in Driver Station
 Todo: Confirm drive teams understand the autos and what they do
 
 MIDDLE PRIORITY - IF WE HAVE TIME BEFORE FRUITPORT
-Todo: Create, Print, and Laminate TeleOp Button Map
-Todo: Find/Buy clipboard
-Todo: Create, Print, and Laminate Map of Field to Discuss Strategy with other teams
+COMPLETED: Create and Print TeleOp Button Map for Driver and Operator Controls
+Todo: Find/Buy clipboard(s)
+Todo: Print/Laminate Map of Field to Discuss Strategy with other teams (dry-erase markers?)
 Todo: Null checks for disconnected equipment (look at how the limit switch init is done)
 Todo: Test and tune TeleOp Auto_deliver1 and Auto_deliver2 - currently commented out
 Todo: Test and tune TeleOp Auto_drive to pole - CheckAutoAwayFromAllianceSubstation - currently commented out

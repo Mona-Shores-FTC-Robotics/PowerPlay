@@ -9,14 +9,10 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
-
 import static java.lang.Math.abs;
-
-import android.sax.StartElementListener;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -146,13 +142,13 @@ public class Lift {
         alreadyLifting = false;
 
         //how do we get rid of bumpy lowering of lift? could we make step size larger when lowering the lift? would this even work? How could we quickly test?
-
         if (liftTarget <0) {
             liftTarget=-1;
         } else
         {
             liftTarget =1;
         }
+
         newLiftTarget = (int) ((liftTarget*LIFT_TARGET_MULTIPLIER) + newLiftTarget);
         if (liftTarget >0 && newLiftTarget > MAX_LIFT_HEIGHT) {newLiftTarget = MAX_LIFT_HEIGHT;}
         if (liftTarget <0 && newLiftTarget < MIN_LIFT_HEIGHT) {newLiftTarget = MIN_LIFT_HEIGHT;}
@@ -270,7 +266,6 @@ public class Lift {
         if (Math.abs(manualLiftTargetChange) <= .2){
             manualLiftTargetChange = 0;
         }
-
         if (manualLiftTargetChange != 0) {
             ManualLift(-manualLiftTargetChange);
         } else if (liftStageDownCurrentButton && !liftStageDownPreivousButton) {
@@ -289,6 +284,7 @@ public class Lift {
         //check if the limit switch is pressed (false is pressed) and reset encoder if it is
         if (limitSwitch1.getState() == false){
             liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
             currentLiftJunctionState = liftJunctionStates.GROUND_CONE_JUNCTION_SCORE_HEIGHT;
         }

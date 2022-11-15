@@ -98,6 +98,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             One second after release, claw closes and arm automatically centers
              */
 
+
             ServoClaw.AdvancedCheckClaw(currentGamepad2.y, previousGamepad2.y, ServoArm);
 
             /**
