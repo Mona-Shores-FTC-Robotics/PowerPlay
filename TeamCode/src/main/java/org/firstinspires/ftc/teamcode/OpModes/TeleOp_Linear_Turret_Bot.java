@@ -23,7 +23,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
-    Arm ServoArm = new Arm(Lift);
+    Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
     PipeVision AutoVision = new PipeVision(this, MecDrive);
 
@@ -47,8 +47,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
         Gamepad currentGamepad1 = new Gamepad();
         Gamepad currentGamepad2 = new Gamepad();
 
-        Gamepad previousGamepad1 = new Gamepad();
-        Gamepad previousGamepad2 = new Gamepad();
+        Gamepad previousGamepad1;
+        Gamepad previousGamepad2;
 
         telemetry.addData("Status", "Hardware Initialized");
         telemetry.update();
@@ -85,17 +85,47 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             //-----CHECK OPERATOR CONTROLS ------//
 
+            //Y button opens claw on press
+            //One second after release, claw closes and arm automatically centers
             ServoClaw.AdvancedCheckClaw(    currentGamepad2.y, previousGamepad2.y, ServoArm);
 
+            //X button turns Intake ON
+            //Intake shuts OFF upon release of X button
             ServoIntake.AdvancedCheckIntake(currentGamepad2.x, previousGamepad2.x);
+
+            //Left/Right/Up D-pad moves arm, raising lift to safe level first, if needed
+            //Down D-pad moves arm to center intake position and lowers lift after short delay
+
+            //Isaac's Operator Bumper Request
+            //  left bumper:
+                    // Opens Claw
+                    // Centers Arm
+                    // Lowers Lift
+                    // Sets claw to "easy" intake position
+                    // Turns Intake On
+
+            // right bumper:
+                    // Turns Intake Off
+                    // Closes Claw
+                    // Raises lift to safe height for rotation
+                    // Rotates Arm to Front
+                    // Raises lift to High Pole height
 
             ServoArm.AdvancedCheckArm(      currentGamepad2.dpad_left, previousGamepad2.dpad_left,
                                             currentGamepad2.dpad_down, previousGamepad2.dpad_down,
                                             currentGamepad2.dpad_right, previousGamepad2.dpad_right,
-                                            currentGamepad2.dpad_up, previousGamepad2.dpad_up);
+                                            currentGamepad2.dpad_up, previousGamepad2.dpad_up,
+                                            currentGamepad2.left_bumper, previousGamepad2.left_bumper,
+                                            currentGamepad2.right_bumper, previousGamepad2.right_bumper);
 
-            Lift.AdvancedCheckLift(         currentGamepad2.left_bumper, previousGamepad2.left_bumper,
-                                            currentGamepad2.right_bumper, previousGamepad2.right_bumper,
+            //Left Trigger, lowers lift by one Junction Height Level (Ground, Low, Medium, Heigh)
+               // w/ Modifier pressed, lowers lift to next  Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
+            //Right Trigger, raises lift by one Junction height level (Ground, Low, Medium, High)
+                // w/ Modifier pressed, raises lift to next Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
+            //Whenever the lift zeroes out, the ConeStack Height Level is set to level 1 and the junction level is set to ground
+
+            Lift.AdvancedCheckLift(         currentGamepad2.left_trigger, previousGamepad2.left_trigger,
+                                            currentGamepad2.right_trigger, previousGamepad2.right_trigger,
                                             currentGamepad2.b,
                                             currentGamepad2.left_stick_y);
 
@@ -119,7 +149,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             //MecDrive.CheckAutoAwayFromAllianceSubstation(currentGamepad1.b, previousGamepad1.b);
 
             //Driver control to use vision to center on pipe by strafing
-            MecDrive.CheckVisionStrafing(currentGamepad1.y, previousGamepad1.y);
+            //MecDrive.CheckVisionStrafing(currentGamepad1.y, previousGamepad1.y);
 
             //Driver control to automatically pickup and deliver a cone
             //MecDrive.CheckAutoDeliver(  currentGamepad1.back, previousGamepad1.back,
@@ -153,6 +183,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             telemetry.addData("Target PID Angle", (int) MecDrive.pid.m_degreesLeftToTurn);
             telemetry.addData("PID Angle Left to Turn", (int) MecDrive.pid.m_target);
+
+            telemetry.addData("LIMIT", Lift.limitIsPressed());
 
             telemetry.update();
         }

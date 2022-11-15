@@ -33,7 +33,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 
-@Autonomous(name = "AUTO_SCORE_2_AND_PARK")
+@Autonomous(name = "AUTO_SCORE_2_AND_PARK_color_test")
 public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
 
     int Signal;
@@ -44,7 +44,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
-    Arm ServoArm = new Arm(Lift);
+    Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
 
     public final ElapsedTime runtime = new ElapsedTime();

@@ -1,24 +1,19 @@
 
-Confirm JUST PARK works for final robot
-Confirm SCORE ONE AND PARK works for final robot
+
 
 DONE Make turning more accurate
 DONE Make turn squaring work
-
+Confirm JUST PARK works for final robot
+Confirm SCORE ONE AND PARK works for final robot
+Speed up SCORE_SIX_AND_PARK
 limit switch for Lift to rest encoder
 
-Speed up SCORE_SIX_AND_PARK
-
-Pole Seeking with a button
-
-
+LOW PRIORITY
 Pole Seeking in Autos
 Test auto_deliver functionality
-
+Pole Seeking with a button
 Move arm when strafing in that direction for certain amount of time?
-
 end autos in a smart position for LEFT, MIDDLE, RIGHT
-
 Null checks for disconnected equipment?
 MotorEx class - can we tell when we hit a pole by the motor change?
 

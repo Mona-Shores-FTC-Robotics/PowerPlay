@@ -47,7 +47,7 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
-    Arm ServoArm = new Arm(Lift);
+    Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
 
     public final ElapsedTime runtime = new ElapsedTime();

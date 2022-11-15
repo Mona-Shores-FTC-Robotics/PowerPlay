@@ -48,7 +48,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
-    Arm ServoArm = new Arm(Lift);
+    Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
 
     public final ElapsedTime runtime = new ElapsedTime();
@@ -367,11 +367,13 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
         //Park code
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-            MecDrive.startEncoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)+HALF_TILE_DISTANCE);
+            MecDrive.startEncoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)
+                                                                + HALF_TILE_DISTANCE);
         } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
-            MecDrive.startEncoderDrive(LOW_SPEED, -HALF_TILE_DISTANCE*ButtonConfig.startPositionMultiplier);
+            MecDrive.startEncoderDrive(LOW_SPEED, HALF_TILE_DISTANCE);
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-            MecDrive.startEncoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)+HALF_TILE_DISTANCE);
+            MecDrive.startEncoderDrive(LOW_SPEED, -(FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)
+                                                                -HALF_TILE_DISTANCE);
         }
         while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
             MecDrive.ContinueDriving();

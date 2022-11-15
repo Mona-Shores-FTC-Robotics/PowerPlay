@@ -8,9 +8,9 @@ public class Claw {
 
     public static final double CLAW_OPEN_POWER = .32;
     public static final double CLAW_CLOSED_POWER = .75;
-    public static final double CLAW_EASY_INTAKE = .6;
+    public static final double CLAW_EASY_INTAKE = .63;
     public Servo claw;
-    public enum clawStates {CLAW_OPEN, CLAW_CLOSED}
+    public enum clawStates {CLAW_OPEN, CLAW_CLOSED, CLAW_EASY_INTAKE}
     public clawStates currentClawState;
 
     public ElapsedTime afterClawOpensDelayPeriod = new ElapsedTime();
@@ -24,7 +24,7 @@ public class Claw {
     }
 
     public void toggleClaw() {
-        if (currentClawState == clawStates.CLAW_OPEN) {
+        if (currentClawState == clawStates.CLAW_OPEN || currentClawState == clawStates.CLAW_EASY_INTAKE) {
             claw.setPosition(CLAW_CLOSED_POWER);
             currentClawState = clawStates.CLAW_CLOSED;
         }
@@ -37,6 +37,7 @@ public class Claw {
 
     public void setEasyIntake() {
             claw.setPosition(CLAW_EASY_INTAKE);
+            currentClawState = clawStates.CLAW_EASY_INTAKE;
     }
 
     public void CheckClaw(boolean currentButton , boolean lastButton) {

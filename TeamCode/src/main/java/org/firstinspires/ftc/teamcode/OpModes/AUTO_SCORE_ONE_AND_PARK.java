@@ -40,7 +40,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
     AprilTagVision Vision = new AprilTagVision();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
-    Arm ServoArm = new Arm(Lift);
+    Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
 
     private final ElapsedTime runtime = new ElapsedTime();
@@ -154,7 +154,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         //If on the right side, need to back off just a little
         if (ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE) {
-            MecDrive.startStrafeDrive(LOW_SPEED, (SIXTEENTH_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
+            MecDrive.startStrafeDrive(LOW_SPEED, (EIGHTH_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                 MecDrive.ContinueStrafing();
             }
@@ -179,12 +179,14 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
             //Park after placing cone
             if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-                MecDrive.startEncoderDrive(LOW_SPEED, -(FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE - THIRTYSECOND_TILE_DISTANCE);
+                MecDrive.startEncoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)
+                                                                    - HALF_TILE_DISTANCE);
             } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
                 MecDrive.startEncoderDrive(LOW_SPEED, (HALF_TILE_DISTANCE-THIRTYSECOND_TILE_DISTANCE)*ButtonConfig.startPositionMultiplier);
             } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
                 MecDrive.startEncoderDrive(LOW_SPEED,
-                        (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier) - HALF_TILE_DISTANCE - THIRTYSECOND_TILE_DISTANCE);
+                        (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)
+                                    - HALF_TILE_DISTANCE - THIRTYSECOND_TILE_DISTANCE);
             }
             while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving == true)) {
                 MecDrive.ContinueDriving();

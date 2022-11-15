@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.ObjectClasses;
 
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,19 +17,28 @@ public class Arm {
 
     public static final double HEIGHT_FOR_PREVENTING_ARM_ROTATION = 650;
     public static final double SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION = 800;
-    public static final double SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER = 1.2;
+
+    //we had this value at 1.2 yesterday, trying .7 to see if still gets arm centered in time
+    public static final double SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER = .7;
 
     public Servo arm;
-
     public armState currentArmState;
     public enum armState {  ARM_LEFT, ARM_CENTER, ARM_RIGHT, ARM_FRONT,
-                            ARM_CENTERED_MOVE_LIFT_TO_INTAKE, ARM_LEFT_WAITING_FOR_LIFT,
-                            ARM_RIGHT_WAITING_FOR_LIFT, ARM_FRONT_WAITING_FOR_LIFT}
-    public Lift Lift;
+                            ARM_CENTERED_MOVE_LIFT_TO_INTAKE,
+                            OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON,
+                            INTAKE_OFF_CLOSE_CLAW_LIFT_MAX_HEIGHT_ARM_FRONT}
+    public Lift lift;
+    public Intake intake;
+    public Claw claw;
     public ElapsedTime liftTimer = new ElapsedTime();
+    public LinearOpMode activeOpMode;
 
-    public Arm (Lift m_Lift) {
-       Lift = m_Lift;
+    public Arm (Lift m_Lift, Intake m_ServoIntake, Claw m_claw, LinearOpMode mode)
+    {
+       lift = m_Lift;
+       intake = m_ServoIntake;
+       claw = m_claw;
+       activeOpMode = mode;
     }
 
     public void init(HardwareMap ahwMap){
@@ -63,7 +75,9 @@ public class Arm {
     public void AdvancedCheckArm(Boolean armLeftCurrentButton, Boolean armLeftPreviousButton,
                                  Boolean armCenterCurrentButton, Boolean armCenterPreviousButton,
                                  Boolean armRightCurrentButton, Boolean armRightPreviousButton,
-                                 Boolean armFrontCurrentButton, Boolean armFrontPreviousButton){
+                                 Boolean armFrontCurrentButton, Boolean armFrontPreviousButton,
+                                 Boolean autoIntakeCurrentButton, Boolean autoIntakePreviousButton,
+                                 Boolean autoOuttakeCurrentButton, Boolean autoOuttakePreviousButton){
         if (armLeftCurrentButton && !armLeftPreviousButton) {
             currentArmState = armState.ARM_LEFT;
             setArmState(currentArmState);
@@ -76,65 +90,116 @@ public class Arm {
         } else if (armFrontCurrentButton && !armFrontPreviousButton) {
             currentArmState = armState.ARM_FRONT;
             setArmState(currentArmState);
-        } else if ( currentArmState == armState.ARM_LEFT_WAITING_FOR_LIFT ||
-                currentArmState == armState.ARM_RIGHT_WAITING_FOR_LIFT ||
-                currentArmState == armState.ARM_FRONT_WAITING_FOR_LIFT ||
-                currentArmState == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE){
+        } else if (autoIntakeCurrentButton && !autoIntakePreviousButton){
+            currentArmState = armState.OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON;
+            setArmState(currentArmState);
+        } else if (autoOuttakeCurrentButton && !autoOuttakePreviousButton) {
+            currentArmState = armState.INTAKE_OFF_CLOSE_CLAW_LIFT_MAX_HEIGHT_ARM_FRONT;
+            setArmState(currentArmState);
+        }
+        else if (   currentArmState == armState.ARM_CENTER ||
+                    currentArmState == armState.ARM_LEFT ||
+                    currentArmState == armState.ARM_RIGHT ||
+                    currentArmState == armState.ARM_FRONT||
+                    currentArmState == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE){
             setArmState(currentArmState);
         }
     }
-
 
     public void setPosition(double position) {
         arm.setPosition(position);
     }
 
-    public void setArmState(armState state) {
-        if (state == armState.ARM_CENTER) {
+    public void setArmState(armState targetState) {
+        if (targetState == armState.ARM_CENTER) {
             //if the arm position isn't in the intake position already, then we need to set the lift timer so that we wait for a moment to center the arm before lowering the lift
-            if (arm.getPosition() <.5 || arm.getPosition() > .9) {
+            if (currentArmState!= armState.ARM_CENTER) {
                 liftTimer.reset();
             }
             //Center the Arm
             arm.setPosition(ARM_CENTER_INTAKE);
+            //Set the targetState so the lift will be lowered to the intake position on a future loop
+            currentArmState = armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE;
+        }
 
-            //Set the state so the lift will be lowered to the intake position on a future loop
+        else if (targetState == armState.OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON) {
+
+            //Open the claw
+            if (claw.currentClawState == Claw.clawStates.CLAW_CLOSED) {
+                claw.setEasyIntake();
+            }
+
+            //might need to add a small delay after opening the claw to give it a moment before we start moving
+            activeOpMode.sleep(250);
+
+            //if the arm position isn't in the intake position already, then we need to set the lift timer so that we wait for a moment to center the arm before lowering the lift
+            if (currentArmState!=armState.ARM_CENTER) {
+                liftTimer.reset();
+            }
+
+            //Center the Arm
+            arm.setPosition(ARM_CENTER_INTAKE);
+
+            //Start the Intake
+            if (intake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
+                intake.toggleIntake();
+            }
+
+            //Set the targetState so the lift will be lowered to the intake position on a future loop
             currentArmState = armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE;
         }
 
         //Check if the lift is too low and trying to rotate to a non-center position, then move the lift to a safe height before we rotate the arm
-        else if (Lift.liftMotor.getCurrentPosition() < HEIGHT_FOR_PREVENTING_ARM_ROTATION && currentArmState !=armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE) {
+        else if (lift.liftMotor.getCurrentPosition() < HEIGHT_FOR_PREVENTING_ARM_ROTATION &&
+                currentArmState !=armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE &&
+                !lift.alreadyLifting) {
 
-            //Raise the lift to a safe height that is well above the height for preventing arm rotation
-            Lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION);
-            Lift.alreadyLifting = true;
+            //Start raising the lift to the high junction height
+            if (targetState == armState.INTAKE_OFF_CLOSE_CLAW_LIFT_MAX_HEIGHT_ARM_FRONT)
+            {
+                if (intake.currentIntakeState == Intake.intakeState.INTAKE_ON) {
+                    intake.toggleIntake();
+                }
 
-            //change the state for left/front/right arm positions so we can check if the lift has raised to a safe height before rotating the arm
-            if (state == armState.ARM_LEFT) {
-                currentArmState = armState.ARM_LEFT_WAITING_FOR_LIFT;
-            } else if (state == armState.ARM_RIGHT) {
-                currentArmState = armState.ARM_RIGHT_WAITING_FOR_LIFT;
-            } else if (state == armState.ARM_FRONT) {
-                currentArmState = armState.ARM_FRONT_WAITING_FOR_LIFT;
+                //Close the claw
+                if (claw.currentClawState == Claw.clawStates.CLAW_EASY_INTAKE ||
+                        claw.currentClawState == Claw.clawStates.CLAW_OPEN) {
+                    claw.toggleClaw();
+                }
+
+                lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
             }
+             //Start raising the lift to a safe height that is well above the height for preventing arm rotation
+             else {
+                lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION);
+            }
+            lift.alreadyLifting = true;
         }
-
         //next three else statements check whether we are at a safe lift height and then rotates the arm
-        else if ((state == armState.ARM_LEFT_WAITING_FOR_LIFT || state==armState.ARM_LEFT) && Lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
+        else if (   targetState==armState.ARM_LEFT &&
+                    lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
             arm.setPosition(ARM_LEFT_OUTTAKE);
             currentArmState = armState.ARM_LEFT;
-        } else if ((state == armState.ARM_RIGHT_WAITING_FOR_LIFT || state==armState.ARM_RIGHT) && Lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
+        } else if ( targetState == armState.ARM_RIGHT &&
+                    lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION ) {
             arm.setPosition(ARM_RIGHT_OUTTAKE);
             currentArmState = armState.ARM_RIGHT;
-        } else if ((state == armState.ARM_FRONT_WAITING_FOR_LIFT || state==armState.ARM_FRONT) && Lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+        } else if ( targetState==armState.ARM_FRONT &&
+                    lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+            arm.setPosition(ARM_FRONT_OUTTAKE);
+            currentArmState = armState.ARM_FRONT;
+        } else if ( targetState == armState.INTAKE_OFF_CLOSE_CLAW_LIFT_MAX_HEIGHT_ARM_FRONT &&
+                    lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION){
+            if (lift.liftMotor.getTargetPosition() != HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL){
+                lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+            }
             arm.setPosition(ARM_FRONT_OUTTAKE);
             currentArmState = armState.ARM_FRONT;
         }
 
         //Lower the lift if the arm is centered and enough time has passed
-        else if (state == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE && liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
-            Lift.StartLifting(GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
-            Lift.alreadyLifting = true;
+        else if (targetState == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE && liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
+            lift.StartLifting(GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
             currentArmState = armState.ARM_CENTER;
         }
     }

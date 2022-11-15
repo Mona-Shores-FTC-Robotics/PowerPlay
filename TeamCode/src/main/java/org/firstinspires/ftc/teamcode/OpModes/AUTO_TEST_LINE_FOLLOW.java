@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 
-@Autonomous(name = "AUTO_SCORE_ONE_AND_PARK")
+@Autonomous(name = "AUTO_SCORE_ONE_AND_PARK_test_line")
 public class AUTO_TEST_LINE_FOLLOW extends LinearOpMode {
 
     int Signal;
@@ -26,7 +26,7 @@ public class AUTO_TEST_LINE_FOLLOW extends LinearOpMode {
     AprilTagVision Vision = new AprilTagVision();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
-    Arm ServoArm = new Arm(Lift);
+    Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
 
     private final ElapsedTime runtime = new ElapsedTime();
