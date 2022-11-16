@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_STRAFE;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -32,7 +32,7 @@ public class TEST_DRIVE_AND_STRAFE_DISTANCE_TUNING extends LinearOpMode {
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
 
-    double test_distance = FULL_TILE_DISTANCE;
+    double test_distance = FULL_TILE_DISTANCE_STRAFE;
     double test_speed = LOW_SPEED;
 
     private final ElapsedTime runtime = new ElapsedTime();
@@ -88,7 +88,7 @@ public class TEST_DRIVE_AND_STRAFE_DISTANCE_TUNING extends LinearOpMode {
                 if (test_speed >= 1) test_speed =1;
             }
 
-            if (currentGamepad1.dpad_up && !previousGamepad1.dpad_up){
+            if (currentGamepad1.dpad_down && !previousGamepad1.dpad_down){
                 test_speed -= .05;
                 if (test_speed <= 0) test_speed =0;
             }
@@ -119,15 +119,20 @@ public class TEST_DRIVE_AND_STRAFE_DISTANCE_TUNING extends LinearOpMode {
             if (currentGamepad1.b && !previousGamepad1.b) {
                 //Use this code to test strafing a tile distance
                 //Might want to test using ORs instead of ANDs for the encoder finish distance
-                MecDrive.startEncoderDrive(test_speed, test_distance);
+                MecDrive.startStrafeDrive(test_speed, test_distance);
             }
 
 
             if (currentGamepad1.x && !previousGamepad1.x) {
                 //Use this code to test strafing a tile distance
                 //Might want to test using ORs instead of ANDs for the encoder finish distance
-                MecDrive.startEncoderDrive(test_speed, -test_distance);
+                MecDrive.startStrafeDrive(test_speed, -test_distance);
             }
+
+            //Driver manual controls - if any of these are non-zero, all automatic tasks are halted
+            MecDrive.CheckManualDriveControls(  currentGamepad1.left_stick_y, currentGamepad1.left_stick_x, currentGamepad1.right_stick_x,
+                    currentGamepad1.left_trigger, currentGamepad1.right_trigger);
+
 
             //Automated tasks (driving, turning, strafing, vision strafing, auto deliver)
             MecDrive.ContinueAutomaticTasks(Gyro, ServoArm, Lift, ServoClaw, ServoIntake);
@@ -137,6 +142,10 @@ public class TEST_DRIVE_AND_STRAFE_DISTANCE_TUNING extends LinearOpMode {
             telemetry.addLine("Press X/B button to strafe left/right test_distance at test_speed");
             telemetry.addData("Test Distance", test_distance);
             telemetry.addData("Test Speed", test_speed);
+
+            telemetry.addData("Encoders", "LF(%s), RF(%s)", MecDrive.LFDrive.getCurrentPosition(), MecDrive.RFDrive.getCurrentPosition());
+            telemetry.addData("Encoders", "LB(%s), RB(%s)", MecDrive.LBDrive.getCurrentPosition(), MecDrive.RBDrive.getCurrentPosition());
+
             telemetry.update();
         }
       }

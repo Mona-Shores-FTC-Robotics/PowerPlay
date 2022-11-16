@@ -5,27 +5,50 @@ public final class GameConstants {
     private GameConstants() {
         // No need to instantiate the class, we can hide its constructor
     }
-
-    //25 inches
-    public static final double FULL_TILE_DISTANCE = 25;
+    //23 inches
+    public static final double FULL_TILE_DISTANCE_DRIVE= 23.5;
 
     // 12.5 inches
-    public static final double HALF_TILE_DISTANCE = FULL_TILE_DISTANCE /2;
+    public static final double HALF_TILE_DISTANCE_DRIVE = FULL_TILE_DISTANCE_DRIVE /2;
 
     //6.25 inches
-    public static final double QUARTER_TILE_DISTANCE = HALF_TILE_DISTANCE /2;
+    public static final double QUARTER_TILE_DISTANCE_DRIVE = HALF_TILE_DISTANCE_DRIVE /2;
 
     // 3.125 inches
-    public static final double EIGHTH_TILE_DISTANCE = QUARTER_TILE_DISTANCE /2;
+    public static final double EIGHTH_TILE_DISTANCE_DRIVE = QUARTER_TILE_DISTANCE_DRIVE /2;
 
     //1.5625 inches
-    public static final double SIXTEENTH_TILE_DISTANCE = EIGHTH_TILE_DISTANCE /2;
+    public static final double SIXTEENTH_TILE_DISTANCE_DRIVE = EIGHTH_TILE_DISTANCE_DRIVE /2;
 
     //.78125 inches
-    public static final double THIRTYSECOND_TILE_DISTANCE = SIXTEENTH_TILE_DISTANCE /2;
+    public static final double THIRTYSECOND_TILE_DISTANCE_DRIVE = SIXTEENTH_TILE_DISTANCE_DRIVE /2;
 
     //0.390625 inches
-    public static final double SIXTYFOURTH_TILE_DISTANCE = THIRTYSECOND_TILE_DISTANCE /2;
+    public static final double SIXTYFOURTH_TILE_DISTANCE_DRIVE = THIRTYSECOND_TILE_DISTANCE_DRIVE /2;
+
+
+
+
+    //25 inches
+    public static final double FULL_TILE_DISTANCE_STRAFE = 27;
+
+
+    public static final double HALF_TILE_DISTANCE_STRAFE = FULL_TILE_DISTANCE_STRAFE /2;
+
+    //6.25 inches
+    public static final double QUARTER_TILE_DISTANCE_STRAFE = HALF_TILE_DISTANCE_STRAFE /2;
+
+    // 3.125 inches
+    public static final double EIGHTH_TILE_DISTANCE_STRAFE = QUARTER_TILE_DISTANCE_STRAFE /2;
+
+    //1.5625 inches
+    public static final double SIXTEENTH_TILE_DISTANCE_STRAFE = EIGHTH_TILE_DISTANCE_STRAFE  /2;
+
+    //.78125 inches
+    public static final double THIRTYSECOND_TILE_DISTANCE_STRAFE  = SIXTEENTH_TILE_DISTANCE_STRAFE  /2;
+
+    //0.390625 inches
+    public static final double SIXTYFOURTH_TILE_DISTANCE_STRAFE  = THIRTYSECOND_TILE_DISTANCE_STRAFE  /2;
 
     public static final double CONE_HEIGHT_ENC_VAL = 500;
     public static final double CONE_CLEARANCE_HEIGHT_ENC_VAL = CONE_HEIGHT_ENC_VAL / 2;

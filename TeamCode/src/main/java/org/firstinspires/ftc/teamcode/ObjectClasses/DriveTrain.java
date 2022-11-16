@@ -27,12 +27,16 @@ package org.firstinspires.ftc.teamcode.ObjectClasses;/* Copyright (c) 2017 FIRST
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_STRAFE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_STRAFE;
+
 import static java.lang.Math.abs;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -200,27 +204,27 @@ public class DriveTrain {
                                        boolean changeFunction) {
         if (dpad_right && !lastDpad_right) {
             if (changeFunction) {
-                startStrafeDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE);
+                startStrafeDrive(HIGH_SPEED, FULL_TILE_DISTANCE_STRAFE);
             } else {
-                startStrafeDrive(HIGH_SPEED, HALF_TILE_DISTANCE, HALF_TILE_DISTANCE);
+                startStrafeDrive(HIGH_SPEED, HALF_TILE_DISTANCE_STRAFE);
             }
         } else if (dpad_down && !lastDpad_down) {
             if (changeFunction) {
-                startEncoderDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE);
+                startEncoderDrive(HIGH_SPEED, -FULL_TILE_DISTANCE_DRIVE);
             } else {
-                startEncoderDrive(HIGH_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
+                startEncoderDrive(HIGH_SPEED, -HALF_TILE_DISTANCE_DRIVE);
             }
         } else if (dpad_left && !lastDpad_left) {
             if (changeFunction) {
-                startStrafeDrive(HIGH_SPEED, -FULL_TILE_DISTANCE, -FULL_TILE_DISTANCE);
+                startStrafeDrive(MED_SPEED, -FULL_TILE_DISTANCE_STRAFE);
             } else {
-                startStrafeDrive(HIGH_SPEED, -HALF_TILE_DISTANCE, -HALF_TILE_DISTANCE);
+                startStrafeDrive(MED_SPEED, -HALF_TILE_DISTANCE_STRAFE);
             }
         } else if (dpad_up && !lastDpad_up) {
             if (changeFunction) {
-                startEncoderDrive(HIGH_SPEED, FULL_TILE_DISTANCE, FULL_TILE_DISTANCE);
+                startEncoderDrive(HIGH_SPEED, FULL_TILE_DISTANCE_DRIVE);
             } else {
-                startEncoderDrive(HIGH_SPEED, HALF_TILE_DISTANCE, HALF_TILE_DISTANCE);
+                startEncoderDrive(HIGH_SPEED, HALF_TILE_DISTANCE_DRIVE);
             }
         }
     }
@@ -228,7 +232,7 @@ public class DriveTrain {
     public void CheckAutoAwayFromAllianceSubstation(boolean button, boolean lastButton) {
         if (button && lastButton) {
             //move from alliance substation to scoring position
-            startEncoderDrive(MED_SPEED, HALF_TILE_DISTANCE + FULL_TILE_DISTANCE + EIGHTH_TILE_DISTANCE, HALF_TILE_DISTANCE + FULL_TILE_DISTANCE + EIGHTH_TILE_DISTANCE);
+            startEncoderDrive(MED_SPEED, HALF_TILE_DISTANCE_DRIVE + FULL_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE);
         }
     }
 
@@ -513,7 +517,7 @@ public class DriveTrain {
     public void ContinueDriving() {
         if (activeOpMode.opModeIsActive() &&
                 alreadyDriving == true &&
-                (RFDrive.isBusy() && LFDrive.isBusy() && LBDrive.isBusy() && RBDrive.isBusy())) {
+                (RFDrive.isBusy() || LFDrive.isBusy() || LBDrive.isBusy() || RBDrive.isBusy())) {
             RFDrive.setPower(abs(ramp));
             LFDrive.setPower(abs(ramp));
             LBDrive.setPower(abs(ramp));
@@ -526,15 +530,7 @@ public class DriveTrain {
         } else {
             alreadyDriving = false;
             setAllPower(0);
-            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -625,7 +621,7 @@ public class DriveTrain {
     public void ContinueStrafing() {
         if (activeOpMode.opModeIsActive() &&
                 alreadyStrafing == true &&
-                (RFDrive.isBusy() && LFDrive.isBusy() && LBDrive.isBusy() && RBDrive.isBusy())) {
+                (RFDrive.isBusy() || LFDrive.isBusy() || LBDrive.isBusy() || RBDrive.isBusy())) {
             RFDrive.setPower(abs(ramp));
             LFDrive.setPower(abs(ramp));
             LBDrive.setPower(abs(ramp));
@@ -638,16 +634,6 @@ public class DriveTrain {
         } else {
             alreadyStrafing = false;
             setAllPower(0);
-
-            LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            RBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            LFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            RFDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -664,7 +650,7 @@ public class DriveTrain {
         //Drive to the alliance substation
         else if (currentAutomaticTask == autoDeliverStates.FIRST_STEP) {
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION;
-            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE), -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE));
+            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE_DRIVE + HALF_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE));
         }
 
         //intake a cone
@@ -677,7 +663,7 @@ public class DriveTrain {
         //drive away from alliance substation
         else if (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
             currentAutomaticTask = autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION;
-            startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE));
+            startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE_DRIVE + HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE));
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
 
         }
@@ -691,7 +677,7 @@ public class DriveTrain {
                 ServoArm.setPosition(Arm.ARM_RIGHT_OUTTAKE);
             }
 
-            startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
+            startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE_STRAFE * ButtonConfig.startPositionMultiplier);
 
             Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
 
@@ -707,13 +693,13 @@ public class DriveTrain {
         //strafe away
         else if (currentAutomaticTask == autoDeliverStates.DELIVER_CONE && ServoClaw.currentClawState == Claw.clawStates.CLAW_CLOSED) {
             currentAutomaticTask = autoDeliverStates.STRAFE_AWAY_FROM_POLE;
-            startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier, -QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
+            startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE_STRAFE * ButtonConfig.startPositionMultiplier);
         }
 
         //drive to just outside the alliance substation
         else if (currentAutomaticTask == autoDeliverStates.STRAFE_AWAY_FROM_POLE) {
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION;
-            startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE), -(FULL_TILE_DISTANCE));
+            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE_DRIVE));
         }
 
         //end auto deliver
@@ -734,7 +720,7 @@ public class DriveTrain {
         //Drive to the alliance substation
         else if (currentAutomaticTask == autoDeliverStates.FIRST_STEP) {
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION;
-            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE), -(FULL_TILE_DISTANCE + HALF_TILE_DISTANCE + QUARTER_TILE_DISTANCE));
+            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE_DRIVE + HALF_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE));
         }
 
         //intake a cone
@@ -747,9 +733,8 @@ public class DriveTrain {
         //drive away from alliance substation
         else if (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
             currentAutomaticTask = autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION;
-            startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE * 2 + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE), (FULL_TILE_DISTANCE * 2 + HALF_TILE_DISTANCE + EIGHTH_TILE_DISTANCE));
+            startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE_DRIVE * 2 + HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE));
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
-
         }
 
         // Rotate arm, strafe toward the pole, lift to correct height
@@ -760,7 +745,7 @@ public class DriveTrain {
                 ServoArm.setPosition(Arm.ARM_RIGHT_OUTTAKE);
             }
 
-            startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier, -QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
+            startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier, -QUARTER_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier);
 
             Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
 
@@ -776,13 +761,13 @@ public class DriveTrain {
         //strafe away
         else if (currentAutomaticTask == autoDeliverStates.DELIVER_CONE && ServoClaw.currentClawState == Claw.clawStates.CLAW_CLOSED) {
             currentAutomaticTask = autoDeliverStates.STRAFE_AWAY_FROM_POLE;
-            startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier, QUARTER_TILE_DISTANCE * ButtonConfig.startPositionMultiplier);
+            startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier, QUARTER_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier);
         }
 
         //drive to just outside the alliance substation
         else if (currentAutomaticTask == autoDeliverStates.STRAFE_AWAY_FROM_POLE) {
             currentAutomaticTask = autoDeliverStates.DRIVE_TO_OUTSIDE_ALLIANCE_SUBSTATION;
-            startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE * 2), -(FULL_TILE_DISTANCE * 2));
+            startEncoderDrive(HIGH_SPEED, -(FULL_TILE_DISTANCE_DRIVE * 2), -(FULL_TILE_DISTANCE_DRIVE * 2));
         }
 
         //end auto deliver

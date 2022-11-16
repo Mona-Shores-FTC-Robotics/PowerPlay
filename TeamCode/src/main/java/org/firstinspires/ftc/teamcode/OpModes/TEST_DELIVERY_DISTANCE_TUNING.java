@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_RIGHT_OUTTAKE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
@@ -47,7 +47,7 @@ public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
     Gamepad currentGamepad2 = new Gamepad();
     Gamepad previousGamepad2 = new Gamepad();
 
-    double test_strafe_into_pole_distance = HALF_TILE_DISTANCE;
+    double test_strafe_into_pole_distance = HALF_TILE_DISTANCE_STRAFE;
     double test_speed;
     int delivery_side = 1; //1 is right side, -1 is left side
 

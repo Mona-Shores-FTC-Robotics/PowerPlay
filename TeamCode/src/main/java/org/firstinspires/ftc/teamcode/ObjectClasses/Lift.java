@@ -26,7 +26,7 @@ public class Lift {
     final int MAX_LIFT_HEIGHT = 3050;
     final int MIN_LIFT_HEIGHT = 0;
     final int SAFE_FALL_HEIGHT = 650;
-    final double LIFT_TARGET_MULTIPLIER = 200;
+    final double LIFT_TARGET_MULTIPLIER = 100;
 
     public double topLiftPower;
     public static final double STARTING_LIFT_RAMP_VALUE = .6;
@@ -73,12 +73,12 @@ public class Lift {
             activeOpMode.telemetry.update();
         }
     }
-
+/*
     public boolean limitIsPressed() {
         //Checks if the current state of the input pin is true
         return limitSwitch1.getState();
     }
-
+*/
     public void StartLifting(double targetHeightEncVal) {
         if (activeOpMode.opModeIsActive()) {
 
@@ -149,7 +149,7 @@ public class Lift {
             liftTarget =1;
         }
 
-        newLiftTarget = (int) ((liftTarget*LIFT_TARGET_MULTIPLIER) + newLiftTarget);
+        newLiftTarget = (int) ((liftMotor.getCurrentPosition()+LIFT_TARGET_MULTIPLIER));
         if (liftTarget >0 && newLiftTarget > MAX_LIFT_HEIGHT) {newLiftTarget = MAX_LIFT_HEIGHT;}
         if (liftTarget <0 && newLiftTarget < MIN_LIFT_HEIGHT) {newLiftTarget = MIN_LIFT_HEIGHT;}
         liftMotor.setTargetPosition(newLiftTarget);
@@ -282,12 +282,14 @@ public class Lift {
                                     Boolean modifierButton,
                                     double manualLiftTargetChange) {
         //check if the limit switch is pressed (false is pressed) and reset encoder if it is
+        /*
         if (limitSwitch1.getState() == false){
             liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
             currentLiftJunctionState = liftJunctionStates.GROUND_CONE_JUNCTION_SCORE_HEIGHT;
         }
+
+         */
 
         if (Math.abs(manualLiftTargetChange) <= .2){
             manualLiftTargetChange = 0;

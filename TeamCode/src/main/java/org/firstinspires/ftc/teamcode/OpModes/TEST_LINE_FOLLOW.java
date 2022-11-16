@@ -107,7 +107,7 @@ public class TEST_LINE_FOLLOW extends LinearOpMode {
             telemetry.update();
 
             if (currentGamepad1.a && !previousGamepad1.a) {
-                MecDrive.lineFollow(.2, GameConstants.FULL_TILE_DISTANCE, 50, .01, this);
+                MecDrive.lineFollow(.2, GameConstants.FULL_TILE_DISTANCE_DRIVE, 50, .01, this);
             }
 
         }

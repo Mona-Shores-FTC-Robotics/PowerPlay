@@ -2,7 +2,8 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_STRAFE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -88,7 +89,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
 
         //Drive forward 2 tiles plus a little bit more to get into position for deciding where to park
         Lift.StartLifting(400);
-        MecDrive.startEncoderDrive(LOW_SPEED, FULL_TILE_DISTANCE * 2);
+        MecDrive.startEncoderDrive(LOW_SPEED, FULL_TILE_DISTANCE_DRIVE * 2);
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
         }
@@ -98,7 +99,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         //if current Signal is the LEFT april tag then park on robot's left
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
             //Park on left
-            MecDrive.startStrafeDrive(MED_SPEED, -FULL_TILE_DISTANCE);
+            MecDrive.startStrafeDrive(MED_SPEED, -FULL_TILE_DISTANCE_STRAFE);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                 MecDrive.ContinueStrafing();
             }
@@ -112,7 +113,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         //if current Signal is the RIGHT april tag then park on robot's right
         else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
             //Park on right
-            MecDrive.startStrafeDrive(MED_SPEED, FULL_TILE_DISTANCE);
+            MecDrive.startStrafeDrive(MED_SPEED, FULL_TILE_DISTANCE_STRAFE);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                     MecDrive.ContinueStrafing();
             }

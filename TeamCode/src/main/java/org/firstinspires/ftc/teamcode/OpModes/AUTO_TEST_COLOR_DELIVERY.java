@@ -7,14 +7,17 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Claw.CLAW_CLOSED_POWER;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE;
+
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE;
+
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE;
+
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 
@@ -127,7 +130,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
             MecDrive.ContinuePIDTurning(Gyro);
         }
 
-        MecDrive.startEncoderDrive(MED_SPEED, -(QUARTER_TILE_DISTANCE));
+        MecDrive.startEncoderDrive(MED_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE));
         while (opModeIsActive() && (MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
@@ -178,7 +181,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
             }
 
             //Drive near cone stack while setting lift to correct height
-            MecDrive.startEncoderDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE));
             while (opModeIsActive() && (MecDrive.alreadyDriving)) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
@@ -198,7 +201,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
             ServoIntake.toggleIntake();
 
             //Drive near cone stack with intake on
-            MecDrive.startEncoderDrive(LOW_SPEED, -(HALF_TILE_DISTANCE-EIGHTH_TILE_DISTANCE));
+            MecDrive.startEncoderDrive(LOW_SPEED, -(HALF_TILE_DISTANCE_DRIVE-EIGHTH_TILE_DISTANCE_DRIVE));
             while (opModeIsActive() && ( MecDrive.alreadyDriving)) {
                 MecDrive.ContinueDriving();
                 telemetry.addData("Cones:", "Stack(%s)/Delivered(%s)", coneStackTracker, coneDeliveryTracker);
@@ -235,7 +238,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
             }
 
             //Drive toward middle of field after cone has been lifted off the stack
-            MecDrive.startEncoderDrive(LOW_SPEED, HALF_TILE_DISTANCE+EIGHTH_TILE_DISTANCE);
+            MecDrive.startEncoderDrive(LOW_SPEED, HALF_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE);
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
                 MecDrive.ContinueDriving();
@@ -255,7 +258,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
                 ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
             //Strafe to the LOW pole
-            MecDrive.startStrafeDrive(LOW_SPEED,(EIGHTH_TILE_DISTANCE+QUARTER_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
+            MecDrive.startStrafeDrive(LOW_SPEED,(EIGHTH_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
             while (opModeIsActive() && (MecDrive.alreadyStrafing)) {
                 MecDrive.ContinueStrafing();
                 Lift.ContinueLifting();
@@ -283,7 +286,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
             sleep(700);
 
             //strafe away from the LOW pole
-            MecDrive.startStrafeDrive(LOW_SPEED,-(QUARTER_TILE_DISTANCE+EIGHTH_TILE_DISTANCE) * ButtonConfig.startPositionMultiplier);
+            MecDrive.startStrafeDrive(LOW_SPEED,-(QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                 MecDrive.ContinueStrafing();
             }
@@ -300,11 +303,11 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
 
         //Park code
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-            MecDrive.startEncoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)+HALF_TILE_DISTANCE);
+            MecDrive.startEncoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)+HALF_TILE_DISTANCE_DRIVE);
         } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
-            MecDrive.startEncoderDrive(LOW_SPEED, -HALF_TILE_DISTANCE*ButtonConfig.startPositionMultiplier);
+            MecDrive.startEncoderDrive(LOW_SPEED, -HALF_TILE_DISTANCE_DRIVE*ButtonConfig.startPositionMultiplier);
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-            MecDrive.startEncoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE * ButtonConfig.startPositionMultiplier)+HALF_TILE_DISTANCE);
+            MecDrive.startEncoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)+HALF_TILE_DISTANCE_DRIVE);
         }
         while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
             MecDrive.ContinueDriving();
@@ -316,7 +319,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
             MecDrive.ContinuePIDTurning(Gyro);
         }
 
-        MecDrive.startEncoderDrive(MED_SPEED, -HALF_TILE_DISTANCE+QUARTER_TILE_DISTANCE);
+        MecDrive.startEncoderDrive(MED_SPEED, -HALF_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE);
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
         }

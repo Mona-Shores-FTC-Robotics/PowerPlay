@@ -213,7 +213,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             telemetry.addData("Gyro", "Current Angle(%s), Target Angle(%s)", (int) Gyro.getAbsoluteAngle(), MecDrive.pid.m_target);
             telemetry.addData("PID Angle Left to Turn", (int) MecDrive.pid.m_degreesLeftToTurn);
-            telemetry.addData("Lift Limit Switch State", Lift.limitIsPressed());
+            //telemetry.addData("Lift Limit Switch State", Lift.limitIsPressed());
             telemetry.addData("Color", "R %d  G %d  B %d", MecDrive.colorSensor.red(), MecDrive.colorSensor.green(), MecDrive.colorSensor.blue());
             telemetry.addData("Reflected Light", "Alpha %d", MecDrive.colorSensor.alpha());
 
