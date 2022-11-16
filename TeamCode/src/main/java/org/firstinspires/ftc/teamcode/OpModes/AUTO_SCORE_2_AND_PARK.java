@@ -119,7 +119,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         telemetry.update();
 
         //Drive Forward
-        Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
         MecDrive.startEncoderDrive(MED_SPEED , (FULL_TILE_DISTANCE_DRIVE*2));
         while (opModeIsActive() && (MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
@@ -144,7 +144,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
         //Drive in Front of High Pole
         MecDrive.startEncoderDrive(MED_SPEED, HALF_TILE_DISTANCE_DRIVE);
-        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
         while (opModeIsActive() && (MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
@@ -195,7 +195,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
         //DRIVE TO LINEUP WITH THE SMALL POLE SO WE CAN DO A LOOP
         ServoArm.setPosition(ARM_CENTER_INTAKE);
-        Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
         MecDrive.startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE_DRIVE-SIXTEENTH_TILE_DISTANCE_DRIVE));
         while (opModeIsActive() && (MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
@@ -226,23 +226,22 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             //lower lift to correct cone stack intake height
             switch (coneStackTracker) {
                 case 5: {
-                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                     break;
                 }
                 case 4: {
-                    Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                     break;
                 }
                 case 3: {
-                    Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
-                    break;
+                    Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                 }
                 case 2: {
-                    Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                     break;
                 }
                 case 1: {
-                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                     break;
                 }
             }
@@ -292,7 +291,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
 
             //raise lift to above five cone starting stack height
-            Lift.StartLifting(Lift.liftMotor.getCurrentPosition() + 400);
+            Lift.StartLifting(Lift.liftMotor.getCurrentPosition() + 400, ServoArm);
             while (opModeIsActive() && Lift.alreadyLifting == true) {
                 Lift.ContinueLifting();
                 telemetry.addData("Cones:", "Stack(%s)/Delivered(%s)", coneStackTracker, coneDeliveryTracker);
@@ -304,7 +303,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
             //Drive toward middle of field after cone has been lifted off the stack
             MecDrive.startEncoderDrive(MED_SPEED, HALF_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE);
-            Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+            Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
@@ -364,7 +363,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
         ServoArm.setArmState(armState.ARM_CENTER);
         ServoClaw.toggleClaw();
-        Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
+        Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, ServoArm);
 
         //Park code
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {

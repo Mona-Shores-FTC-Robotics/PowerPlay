@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
+import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
@@ -26,7 +27,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
     Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
     Lift Lift = new Lift(this);
-
+    Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
 
     Gamepad currentGamepad1 = new Gamepad();
     Gamepad previousGamepad1 = new Gamepad();
@@ -43,6 +44,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         Lift.init(hardwareMap);
         ServoIntake.init(hardwareMap);
         ServoClaw.init(hardwareMap);
+        ServoArm.init(hardwareMap);
         BConfig.init();
 
         // Tell the driver that initialization is complete.
@@ -88,7 +90,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         telemetry.update();
 
         //Drive forward 2 tiles plus a little bit more to get into position for deciding where to park
-        Lift.StartLifting(400);
+        Lift.StartLifting(400, ServoArm);
         MecDrive.startEncoderDrive(LOW_SPEED, FULL_TILE_DISTANCE_DRIVE * 2);
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();

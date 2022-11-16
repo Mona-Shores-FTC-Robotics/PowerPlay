@@ -156,7 +156,7 @@ public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
             //close claw on cone, raise lift to a starting height
             if (currentGamepad1.x && !previousGamepad1.x) {
                 ServoClaw.toggleClaw();
-                Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+                Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
             }
 
             if (currentGamepad1.a && !previousGamepad1.a) {
@@ -186,7 +186,7 @@ public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
         } else ServoArm.setPosition(ARM_LEFT_OUTTAKE);
 
         //Strafe close to High Pole
-        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
         MecDrive.startStrafeDrive(test_speed, test_strafe_into_pole_distance*side);
         while (opModeIsActive() && MecDrive.alreadyStrafing) {
             MecDrive.ContinueStrafing();
@@ -204,7 +204,7 @@ public class TEST_DELIVERY_DISTANCE_TUNING extends LinearOpMode {
         }
 
         ServoArm.setPosition(ARM_CENTER_INTAKE);
-        Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
+        Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, ServoArm);
     }
 }
 

@@ -640,7 +640,7 @@ public class DriveTrain {
 
     //auto deliver to the left side high pole
     //maybe have a modifier for distance to select a pole?
-    public void auto_deliver1(Arm ServoArm, Lift Lift, Claw ServoClaw, Intake ServoIntake) {
+    public void auto_deliver1(Arm arm, Lift lift, Claw claw, Intake intake) {
 
         //set the arm for the auto delivery depending on if we are in the LEFT or RIGHT starting position
         if (currentAutomaticTask == autoDeliverStates.START_AUTOMATIC_DELIVER1) {
@@ -655,43 +655,43 @@ public class DriveTrain {
 
         //intake a cone
         else if (currentAutomaticTask == autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION && !alreadyDriving ||
-                (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState != Intake.intakeState.INTAKE_OFF)) {
+                (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && intake.currentIntakeState != Intake.intakeState.INTAKE_OFF)) {
             currentAutomaticTask = autoDeliverStates.INTAKE_CONE;
-            ServoIntake.AutoDeliverIntakeToggle();
+            intake.AutoDeliverIntakeToggle();
         }
 
         //drive away from alliance substation
-        else if (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
+        else if (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && intake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
             currentAutomaticTask = autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION;
             startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE_DRIVE + HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE));
-            Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+            lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
 
         }
 
         // Rotate arm, strafe toward the pole, lift to correct height
-        else if (currentAutomaticTask == autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION && !alreadyDriving && !Lift.alreadyLifting) {
+        else if (currentAutomaticTask == autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION && !alreadyDriving && !lift.alreadyLifting) {
 
             if (ButtonConfig.startPositionMultiplier == -1) {
-                ServoArm.setPosition(Arm.ARM_LEFT_OUTTAKE);
+                arm.setPosition(Arm.ARM_LEFT_OUTTAKE);
             } else {
-                ServoArm.setPosition(Arm.ARM_RIGHT_OUTTAKE);
+                arm.setPosition(Arm.ARM_RIGHT_OUTTAKE);
             }
 
             startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE_STRAFE * ButtonConfig.startPositionMultiplier);
 
-            Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+            lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
 
             currentAutomaticTask = autoDeliverStates.STRAFE_TO_POLE;
 
         }
         //release cone
-        else if (currentAutomaticTask == autoDeliverStates.STRAFE_TO_POLE && !alreadyStrafing && !Lift.alreadyLifting) {
+        else if (currentAutomaticTask == autoDeliverStates.STRAFE_TO_POLE && !alreadyStrafing && !lift.alreadyLifting) {
             currentAutomaticTask = autoDeliverStates.DELIVER_CONE;
-            ServoClaw.AutoDeliverClawTogggle();
+            claw.AutoDeliverClawTogggle();
         }
 
         //strafe away
-        else if (currentAutomaticTask == autoDeliverStates.DELIVER_CONE && ServoClaw.currentClawState == Claw.clawStates.CLAW_CLOSED) {
+        else if (currentAutomaticTask == autoDeliverStates.DELIVER_CONE && claw.currentClawState == Claw.clawStates.CLAW_CLOSED) {
             currentAutomaticTask = autoDeliverStates.STRAFE_AWAY_FROM_POLE;
             startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE_STRAFE * ButtonConfig.startPositionMultiplier);
         }
@@ -711,7 +711,7 @@ public class DriveTrain {
 
     //auto deliver to the right side high pole
     //maybe have a modifier for distance to select a pole?
-    public void auto_deliver2(Arm ServoArm, Lift Lift, Claw ServoClaw, Intake ServoIntake) {
+    public void auto_deliver2(Arm arm, Lift lift, Claw claw, Intake intake) {
 
         //set the arm for the auto delivery depending on if we are in the LEFT or RIGHT starting position
         if (currentAutomaticTask == autoDeliverStates.START_AUTOMATIC_DELIVER2) {
@@ -725,41 +725,41 @@ public class DriveTrain {
 
         //intake a cone
         else if (currentAutomaticTask == autoDeliverStates.DRIVE_TO_ALLIANCE_SUBSTATION && !alreadyDriving ||
-                (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState != Intake.intakeState.INTAKE_OFF)) {
+                (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && intake.currentIntakeState != Intake.intakeState.INTAKE_OFF)) {
             currentAutomaticTask = autoDeliverStates.INTAKE_CONE;
-            ServoIntake.AutoDeliverIntakeToggle();
+            intake.AutoDeliverIntakeToggle();
         }
 
         //drive away from alliance substation
-        else if (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && ServoIntake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
+        else if (currentAutomaticTask == autoDeliverStates.INTAKE_CONE && intake.currentIntakeState == Intake.intakeState.INTAKE_OFF) {
             currentAutomaticTask = autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION;
             startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE_DRIVE * 2 + HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE));
-            Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+            lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
         }
 
         // Rotate arm, strafe toward the pole, lift to correct height
-        else if (currentAutomaticTask == autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION && !alreadyDriving && !Lift.alreadyLifting) {
+        else if (currentAutomaticTask == autoDeliverStates.DRIVE_FROM_ALLIANCE_SUBSTATION && !alreadyDriving && !lift.alreadyLifting) {
             if (ButtonConfig.startPositionMultiplier == 1) {
-                ServoArm.setPosition(Arm.ARM_LEFT_OUTTAKE);
+                arm.setPosition(Arm.ARM_LEFT_OUTTAKE);
             } else {
-                ServoArm.setPosition(Arm.ARM_RIGHT_OUTTAKE);
+                arm.setPosition(Arm.ARM_RIGHT_OUTTAKE);
             }
 
             startStrafeDrive(MED_SPEED, -QUARTER_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier, -QUARTER_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier);
 
-            Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+            lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
 
             currentAutomaticTask = autoDeliverStates.STRAFE_TO_POLE;
 
         }
         //release cone
-        else if (currentAutomaticTask == autoDeliverStates.STRAFE_TO_POLE && !alreadyStrafing && !Lift.alreadyLifting) {
+        else if (currentAutomaticTask == autoDeliverStates.STRAFE_TO_POLE && !alreadyStrafing && !lift.alreadyLifting) {
             currentAutomaticTask = autoDeliverStates.DELIVER_CONE;
-            ServoClaw.AutoDeliverClawTogggle();
+            claw.AutoDeliverClawTogggle();
         }
 
         //strafe away
-        else if (currentAutomaticTask == autoDeliverStates.DELIVER_CONE && ServoClaw.currentClawState == Claw.clawStates.CLAW_CLOSED) {
+        else if (currentAutomaticTask == autoDeliverStates.DELIVER_CONE && claw.currentClawState == Claw.clawStates.CLAW_CLOSED) {
             currentAutomaticTask = autoDeliverStates.STRAFE_AWAY_FROM_POLE;
             startStrafeDrive(MED_SPEED, QUARTER_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier, QUARTER_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier);
         }

@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
-import org.firstinspires.ftc.teamcode.ObjectClasses.PipeVision;
 
 @TeleOp(name = "TeleOp Mode", group = "Turret Bot")
 public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
@@ -138,13 +137,12 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             /**
             Left Trigger, lowers lift by one Junction Height Level (Intake, Ground, Low, Medium, High)
             Right Trigger, raises lift by one Junction height level (Intake, Ground, Low, Medium, High)
-            Left Trigger w/ Modifier(B) pressed, lowers lift to next  Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
-            Right Trigger w/ Modifier(B) pressed, raises lift to next Cone Stack Height Level (1, 2, 3, 4, 5 cones stacked)
-            Left Stick up/down - raise/lower lift by fixed amount, lift only decides whether to go up or down
-            Whenever the lift zeroes out, the ConeStack Height Level is set to level 1 and the junction level is set to ground
+            Left Trigger w/ Modifier(B) pressed, lowers lift to next  Cone Stack Intake Height Level (1, 2, 3, 4, 5 cone stack)
+            Right Trigger w/ Modifier(B) pressed, raises lift to next Cone Stack Intake Height Level (1, 2, 3, 4, 5 cones stack)
+            Left Stick up/down - raise/lower lift, stop when stick is zeroed
             */
 
-            Lift.AdvancedCheckLift(         currentGamepad2.left_trigger, previousGamepad2.left_trigger,
+            Lift.CheckLift(                 currentGamepad2.left_trigger, previousGamepad2.left_trigger,
                                             currentGamepad2.right_trigger, previousGamepad2.right_trigger,
                                             currentGamepad2.b,
                                             currentGamepad2.left_stick_y,
@@ -207,14 +205,14 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             telemetry.addData("Run Time:","%s", runtime.seconds());
 
-            telemetry.addData("Lift", "Position(%s), Target(%s)", Lift.liftMotor.getCurrentPosition(), Lift.newLiftTarget);
+            telemetry.addData("Lift", "Position(%s), Target(%s)", Lift.liftMotor.getCurrentPosition(), Lift.getLiftTarget());
             telemetry.addData("Arm Position", ServoArm.currentArmState);
             telemetry.addData("Claw Position", ServoClaw.currentClawState);
             telemetry.addData("Intake State", ServoIntake.currentIntakeState);
 
             telemetry.addData("Gyro", "Current Angle(%s), Target Angle(%s)", (int) Gyro.getAbsoluteAngle(), MecDrive.pid.m_target);
             telemetry.addData("PID Angle Left to Turn", (int) MecDrive.pid.m_degreesLeftToTurn);
-            telemetry.addData("Lift Limit Switch State", Lift.limitIsPressed());
+            telemetry.addData("Lift Limit Switch State", Lift.LimitSwitchIsPressed());
             telemetry.addData("Color", "R %d  G %d  B %d", MecDrive.colorSensor.red(), MecDrive.colorSensor.green(), MecDrive.colorSensor.blue());
             telemetry.addData("Reflected Light", "Alpha %d", MecDrive.colorSensor.alpha());
 

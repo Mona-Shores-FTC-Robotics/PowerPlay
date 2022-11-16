@@ -33,6 +33,9 @@ public class Arm {
     public ElapsedTime liftTimer = new ElapsedTime();
     public LinearOpMode activeOpMode;
 
+
+    private double targetLiftPositionAfterArmRotation;
+
     public Arm (Lift m_Lift, Intake m_ServoIntake, Claw m_claw, LinearOpMode mode)
     {
        lift = m_Lift;
@@ -45,7 +48,7 @@ public class Arm {
 
     arm = ahwMap.servo.get("turret_servo");
     //set arm at intake position
-        arm.setPosition(ARM_CENTER_INTAKE);
+    arm.setPosition(ARM_CENTER_INTAKE);
     currentArmState = armState.ARM_CENTER;
     }
 
@@ -167,11 +170,11 @@ public class Arm {
                     claw.toggleClaw();
                 }
 
-                lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+                lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, this);
             }
              //Start raising the lift to a safe height that is well above the height for preventing arm rotation
              else {
-                lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION);
+                lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION, this);
             }
             lift.alreadyLifting = true;
         }
@@ -191,7 +194,7 @@ public class Arm {
         } else if ( targetState == armState.INTAKE_OFF_CLOSE_CLAW_LIFT_MAX_HEIGHT_ARM_FRONT &&
                     lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION){
             if (lift.liftMotor.getTargetPosition() != HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL){
-                lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+                lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, this);
             }
             arm.setPosition(ARM_FRONT_OUTTAKE);
             currentArmState = armState.ARM_FRONT;
@@ -199,8 +202,23 @@ public class Arm {
 
         //Lower the lift if the arm is centered and enough time has passed
         else if (targetState == armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE && liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
-            lift.StartLifting(GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
             currentArmState = armState.ARM_CENTER;
+            lift.StartLifting(targetLiftPositionAfterArmRotation, this);
+        }
+    }
+
+
+    public void centerArmBeforeRotation(armState targetState, double target) {
+        if (targetState == armState.ARM_CENTER) {
+            //if the arm position isn't in the intake position already, then we need to set the lift timer so that we wait for a moment to center the arm before lowering the lift
+            if (currentArmState!= armState.ARM_CENTER) {
+                liftTimer.reset();
+                targetLiftPositionAfterArmRotation = target;
+            }
+            //Center the Arm
+            arm.setPosition(ARM_CENTER_INTAKE);
+            //Set the targetState so the lift will be lowered to the intake position on a future loop once enough time to ensure the arm is centered has passed
+            currentArmState = armState.ARM_CENTERED_MOVE_LIFT_TO_INTAKE;
         }
     }
 }

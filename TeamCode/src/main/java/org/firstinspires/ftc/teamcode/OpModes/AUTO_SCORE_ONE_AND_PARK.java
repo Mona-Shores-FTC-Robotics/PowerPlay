@@ -111,7 +111,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         telemetry.update();
 
         //Drive Forward
-        Lift.StartLifting(400);
+        Lift.StartLifting(400, ServoArm);
         MecDrive.startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE_DRIVE * 2) + QUARTER_TILE_DISTANCE_DRIVE);
         while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
@@ -136,7 +136,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         //Drive in Front of High Pole
         MecDrive.startEncoderDrive(LOW_SPEED, QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE+SIXTEENTH_TILE_DISTANCE_DRIVE);
-        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
         while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
@@ -176,7 +176,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
             //close the claw
             ServoClaw.toggleClaw();
             ServoArm.setPosition(ARM_CENTER_INTAKE);
-            Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+            Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
 
             //Park after placing cone
             if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
