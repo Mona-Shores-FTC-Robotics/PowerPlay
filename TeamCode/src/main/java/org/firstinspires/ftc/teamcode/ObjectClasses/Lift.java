@@ -80,17 +80,20 @@ public class Lift {
         if (activeOpMode.opModeIsActive()) {
 
             int currentLiftPosition = liftMotor.getCurrentPosition();
-            newLiftTarget = (int) (targetHeightEncVal);
+
+            //deltaLift is the amount the lift has to move to get to the new height
+            //if its negative the lift needs to be lowered, if its positive the lift needs to be raised
+            double deltaLift = targetHeightEncVal - currentLiftPosition;
+            if (Math.abs(deltaLift) <= 50){
+                deltaLift = 0;
+                newLiftTarget = (int) (currentLiftPosition);
+            } else {
+                newLiftTarget = (int) (targetHeightEncVal);
+            }
 
             liftMotor.setTargetPosition(newLiftTarget);
             liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            //deltaLift is the amount the lift has to move to get to the new height
-            //if its negative the lift needs to be lowered, if its positive the lift needs to be raised
-            double deltaLift = newLiftTarget - currentLiftPosition;
-            if (Math.abs(deltaLift) <= 50){
-                deltaLift = 0;
-            }
 
             //if lift is 1) being lowered, 2) to below the MUST_FALL_HEIGHT, and 3) the arm is centered, then let the lift fall
             if (deltaLift <= 0 && newLiftTarget < MUST_FALL_HEIGHT && arm.currentArmState == Arm.armState.ARM_CENTER) {
@@ -110,7 +113,7 @@ public class Lift {
             //if lift is 1) being lowered, 2) to below the SAFE CRASH HEIGHT, and 3) the arm is not centered,
             // then center the arm and let that code move the lift to the new target after the arm is centered
             else if (deltaLift < 0 && newLiftTarget < SAFE_CRASH_HEIGHT && arm.currentArmState != Arm.armState.ARM_CENTER) {
-                arm.centerArmBeforeRotation(Arm.armState.ARM_CENTER, newLiftTarget);
+                arm.centerArmSetLiftDelay(Arm.armState.ARM_CENTER, newLiftTarget);
             }
 
             //if lift is 1) being lowered, 2) to above the MUST_FALL_HEIGHT, and 3) the arm is centered, then give lift power

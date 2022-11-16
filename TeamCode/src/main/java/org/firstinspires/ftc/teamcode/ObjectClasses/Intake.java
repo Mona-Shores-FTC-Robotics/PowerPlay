@@ -24,6 +24,18 @@ public class Intake {
         currentIntakeState = intakeState.INTAKE_OFF;
     }
 
+    public void turnIntakeOff() {
+        intake1.setPosition(.5);
+        intake2.setPosition(.5);
+        currentIntakeState = intakeState.INTAKE_OFF;
+    }
+
+    public void turnIntakeOn() {
+        intake1.setPosition(1);
+        intake2.setPosition(0);
+        currentIntakeState = intakeState.INTAKE_ON;
+    }
+
     public void toggleIntake() {
         if (currentIntakeState == intakeState.INTAKE_ON) {
             intake1.setPosition(.5);
@@ -37,31 +49,25 @@ public class Intake {
     }
 
     public void CheckIntake(Boolean currentButtonPress, Boolean previousButtonPress) {
-        //When you press and release the button, toggle the intake
+        //When you press the button, turn the intake on
         if (currentButtonPress && !previousButtonPress) {
-            toggleIntake();
+            turnIntakeOn();
         }
-    }
-
-    public void AdvancedCheckIntake(Boolean currentButtonPress, Boolean previousButtonPress) {
-        //When you press and release the button, toggle the intake
-        if (currentButtonPress && !previousButtonPress) {
-            toggleIntake();
-        }
-        //When you release the button, reset the delay period one final time after which the intake will automatically toggle
+        //When you release the button, turn the intake off
         else if (!currentButtonPress && previousButtonPress){
-            toggleIntake();
+            turnIntakeOff();
         }
     }
 
+    //If we add a cone sensor, this code should replace the CheckIntake
     public void SuperAdvancedCheckIntake(Boolean currentButtonPress, Boolean previousButtonPress) {
         //When you press and release the button, toggle the intake
         if (currentButtonPress && !previousButtonPress) {
-            toggleIntake();
+            turnIntakeOn();
         }
         //When you release the button, reset the delay period one final time after which the intake will automatically toggle
         else if ((!currentButtonPress && previousButtonPress) || coneSensor){
-            toggleIntake();
+            turnIntakeOff();
         }
     }
 

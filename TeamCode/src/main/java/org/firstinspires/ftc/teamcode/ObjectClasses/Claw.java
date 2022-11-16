@@ -23,6 +23,24 @@ public class Claw {
         currentClawState = clawStates.CLAW_CLOSED;
     }
 
+    public void closeClaw() {
+        claw.setPosition(CLAW_CLOSED_POWER);
+        currentClawState = clawStates.CLAW_CLOSED;
+    }
+
+    public void setEasyIntake(Arm arm) {
+        claw.setPosition(CLAW_EASY_INTAKE);
+        currentClawState = clawStates.CLAW_EASY_INTAKE;
+        //Center the arm, which also lowers the lift to the cone intake height after short delay if coming from non-center position
+        arm.setArmState(Arm.armState.ARM_CENTER);
+    }
+
+    public void openClaw() {
+        claw.setPosition(CLAW_OPEN_POWER);
+        currentClawState = clawStates.CLAW_OPEN;
+    }
+
+    //Toggles claw on and off depending on currentClawState
     public void toggleClaw() {
         if (currentClawState == clawStates.CLAW_OPEN || currentClawState == clawStates.CLAW_EASY_INTAKE) {
             claw.setPosition(CLAW_CLOSED_POWER);
@@ -34,20 +52,21 @@ public class Claw {
         }
     }
 
-
-    public void setEasyIntake() {
-            claw.setPosition(CLAW_EASY_INTAKE);
-            currentClawState = clawStates.CLAW_EASY_INTAKE;
-    }
-
-    public void CheckClaw(boolean currentButton , boolean lastButton) {
-        if (currentButton && !lastButton) {
-            //open and close the claw
-           toggleClaw();
+    //Toggles claw on and off depending on currentClawState, but centers/lowers arm after closing claw
+    public void smartToggleClaw(Arm servoarm) {
+        if (currentClawState == clawStates.CLAW_OPEN || currentClawState == clawStates.CLAW_EASY_INTAKE) {
+            //If the claw was open, close it
+            claw.setPosition(CLAW_CLOSED_POWER);
+            currentClawState = clawStates.CLAW_CLOSED;
+        } else if (currentClawState == clawStates.CLAW_CLOSED) {
+            //If the claw was closed, open it
+            claw.setPosition(CLAW_OPEN_POWER);
+            currentClawState = clawStates.CLAW_OPEN;
         }
     }
 
-    public void AdvancedCheckClaw(boolean currentButton , boolean lastButton, Arm servoarm) {
+
+    public void CheckClaw(boolean currentButton , boolean lastButton, Arm servoarm) {
         //Keep resetting the delay period as long as the button is pressed
         if (currentButton){
             afterClawOpensDelayPeriod.reset();
@@ -62,25 +81,14 @@ public class Claw {
         else if (!currentButton && lastButton) {
             afterClawOpensDelayPeriod.reset();
         }
-        //if the claw is open and the delay period has passed, close the claw (including centering the arm and lowering the lift)
+        //if the claw is open and the delay period has passed,
+        //  1) set the claw to easy intake position (which also centers and lowers lift)
         else if (currentClawState == clawStates.CLAW_OPEN && afterClawOpensDelayPeriod.seconds() > 1){
-            smartToggleClaw(servoarm);
+            setEasyIntake(servoarm);
         }
     }
 
-    public void smartToggleClaw(Arm servoarm) {
-        if (currentClawState == clawStates.CLAW_OPEN) {
-            //If the claw was open, close it
-            claw.setPosition(CLAW_CLOSED_POWER);
-            currentClawState = clawStates.CLAW_CLOSED;
-            //Center the arm, which also lowers the lift to the cone intake height after 1 second
-            servoarm.setArmState(Arm.armState.ARM_CENTER);
-        } else if (currentClawState == clawStates.CLAW_CLOSED) {
-            //If the claw was closed, open it
-            claw.setPosition(CLAW_OPEN_POWER);
-            currentClawState = clawStates.CLAW_OPEN;
-        }
-    }
+
 
 
     public void AutoDeliverClawTogggle() {

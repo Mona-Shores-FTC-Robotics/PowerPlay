@@ -218,7 +218,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             }
 
             //close claw for next intake
-            ServoClaw.setEasyIntake();
+            ServoClaw.setEasyIntake(ServoArm);
 
             //move turret to pickup position
             ServoArm.setPosition(ARM_CENTER_INTAKE);

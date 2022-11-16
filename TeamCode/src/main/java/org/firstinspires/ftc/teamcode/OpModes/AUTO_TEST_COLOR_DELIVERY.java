@@ -151,7 +151,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
             }
 
             //set claw for intake
-            ServoClaw.setEasyIntake();
+            ServoClaw.setEasyIntake(ServoArm);
 
             //move turret to pickup position
             ServoArm.setPosition(ARM_CENTER_INTAKE);

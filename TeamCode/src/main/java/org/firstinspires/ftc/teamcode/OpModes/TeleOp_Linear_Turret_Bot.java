@@ -97,15 +97,14 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             One second after release, claw closes and arm automatically centers
              */
 
-
-            ServoClaw.AdvancedCheckClaw(currentGamepad2.y, previousGamepad2.y, ServoArm);
+            ServoClaw.CheckClaw(currentGamepad2.y, previousGamepad2.y, ServoArm);
 
             /**
             X button turns Intake ON
             Intake shuts OFF upon release of X button
             */
 
-            ServoIntake.AdvancedCheckIntake(currentGamepad2.x, previousGamepad2.x);
+            ServoIntake.CheckIntake(currentGamepad2.x, previousGamepad2.x);
 
             /**
             Left/Right/Up D-pad moves arm, raising lift to safe level first, if needed
@@ -127,7 +126,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                     // Raises lift to High Pole height
             */
 
-            ServoArm.AdvancedCheckArm(      currentGamepad2.dpad_left, previousGamepad2.dpad_left,
+            ServoArm.CheckArm(              currentGamepad2.dpad_left, previousGamepad2.dpad_left,
                                             currentGamepad2.dpad_down, previousGamepad2.dpad_down,
                                             currentGamepad2.dpad_right, previousGamepad2.dpad_right,
                                             currentGamepad2.dpad_up, previousGamepad2.dpad_up,
