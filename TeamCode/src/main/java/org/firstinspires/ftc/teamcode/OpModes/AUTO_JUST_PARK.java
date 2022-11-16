@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_STRAFE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -90,8 +91,8 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         telemetry.update();
 
         //Drive forward 2 tiles plus a little bit more to get into position for deciding where to park
-        Lift.StartLifting(400, ServoArm);
-        MecDrive.startEncoderDrive(LOW_SPEED, FULL_TILE_DISTANCE_DRIVE * 2);
+        Lift.StartLifting(CONE_HEIGHT_ENC_VAL, ServoArm);
+        MecDrive.startEncoderDrive(MED_SPEED, FULL_TILE_DISTANCE_DRIVE * 2 + HALF_TILE_DISTANCE_DRIVE);
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
         }

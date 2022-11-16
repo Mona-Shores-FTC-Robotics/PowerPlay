@@ -870,6 +870,8 @@ public class DriveTrain {
         activeOpMode.telemetry.update();
 
         colorTimer.reset();
+
+        //if don't currently see blue or red, then strafe left and right to find the line
         while (activeOpMode.opModeIsActive() &&
                 (colorSensor.blue() < 230 && colorSensor.red() > 50) &&
                 (colorSensor.red() < 230 && colorSensor.blue() > 50) &&
@@ -878,16 +880,14 @@ public class DriveTrain {
             // Color is not red or blue
             //strafe left for .4 seconds to the left, if still no red or blue line then strafe to right
             if (colorTimer.seconds() < .3) {
-                activeOpMode.telemetry.addLine("PIPE LEFT");
                 turn = 0;
                 drive = 0;
-                strafe = .5 * ButtonConfig.startPositionMultiplier;
+                strafe = speed * ButtonConfig.startPositionMultiplier;
                 MecanumDrive();
             } else if (colorTimer.seconds() > .5) {
-                activeOpMode.telemetry.addLine("PIPE LEFT");
                 turn = 0;
                 drive = 0;
-                strafe = -.2 * ButtonConfig.startPositionMultiplier;
+                strafe = -speed * ButtonConfig.startPositionMultiplier;
                 MecanumDrive();
             }
         }
@@ -895,7 +895,16 @@ public class DriveTrain {
         drive = 0;
         strafe = 0;
         MecanumDrive();
-    }
+
+        //once we find the line, drive backwards until we don't see the color
+        while ( activeOpMode.opModeIsActive() &&
+                !((colorSensor.blue() < 230 && colorSensor.red() > 50) && (colorSensor.red() < 230 && colorSensor.blue() > 50))){
+                turn = 0;
+                drive = -speed;
+                strafe = 0;
+                MecanumDrive();
+            }
+        }
 
     public void lineFollow(double speed, double distanceInInches, double targetPath, double Kp, LinearOpMode activeOpMode) {
         // Assuming alpha values 0-100, with 50 being halfway inbetween, a Kp of .01 would make corrections between .5 and -.5

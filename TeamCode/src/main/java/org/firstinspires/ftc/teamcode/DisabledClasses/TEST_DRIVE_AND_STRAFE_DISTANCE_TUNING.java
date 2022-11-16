@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.DisabledClasses;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_STRAFE;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -17,7 +18,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
-
+@Disabled
 @TeleOp(name = "TEST_DRIVE_AND_STRAFE_DISTANCE_TUNING")
 public class TEST_DRIVE_AND_STRAFE_DISTANCE_TUNING extends LinearOpMode {
 
