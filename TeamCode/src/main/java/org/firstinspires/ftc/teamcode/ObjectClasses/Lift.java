@@ -20,12 +20,12 @@ public class Lift {
 
     //lift power parameters
     final double ABOVE_LIFT_FALL_THRESHOLD_POWER = .8;
-    final double LIFT_FALL_THRESHOLD_ENC_VAL = 100;
+    final double BUFFER_HEIGHT = 400;
     final double BELOW_LIFT_FALL_THRESHOLD_POWER = 0;
     public double LIFT_RAISE_POWER = .9;
     final int MAX_LIFT_HEIGHT = 3050;
     final int MIN_LIFT_HEIGHT = 0;
-    final int SAFE_FALL_HEIGHT = 650;
+    final int SAFE_CRASH_HEIGHT = 650;
     final double LIFT_TARGET_MULTIPLIER = 100;
 
     public double topLiftPower;
@@ -73,12 +73,12 @@ public class Lift {
             activeOpMode.telemetry.update();
         }
     }
-/*
+
     public boolean limitIsPressed() {
         //Checks if the current state of the input pin is true
         return limitSwitch1.getState();
     }
-*/
+
     public void StartLifting(double targetHeightEncVal) {
         if (activeOpMode.opModeIsActive()) {
 
@@ -93,7 +93,7 @@ public class Lift {
 
             //turn motor power off if the new target is below the fall threshold encoder value (100) and the current positions is below a safe fall height
             //only do this if the lift is being moved down from a higher position, don't do this if its being lifted up
-            if ((deltaLift < 0) && (newLiftTarget <= LIFT_FALL_THRESHOLD_ENC_VAL) && (liftMotor.getCurrentPosition() <= SAFE_FALL_HEIGHT)) {
+            if ((deltaLift < 0) && (newLiftTarget <= BUFFER_HEIGHT) && (liftMotor.getCurrentPosition() <= SAFE_CRASH_HEIGHT)) {
                 liftMotor.setPower(BELOW_LIFT_FALL_THRESHOLD_POWER);
 
                 //encoder value being reset here, but should also be reset again by the limit switch
@@ -106,7 +106,7 @@ public class Lift {
 
             //if the lift is trying to go below the fall threshold (100), but its too high to turn the power off, then just lower the lift power
             //once lift is below the safe fall height, the if statement above will shut off power completely
-            else if (deltaLift < 0 && newLiftTarget <= LIFT_FALL_THRESHOLD_ENC_VAL && (liftMotor.getCurrentPosition() > SAFE_FALL_HEIGHT)) {
+            else if (deltaLift < 0 && newLiftTarget <= BUFFER_HEIGHT && (liftMotor.getCurrentPosition() > SAFE_CRASH_HEIGHT)) {
                 //how do we make it go slower but in a smoother way on the way down?
                 //Could we try a different mode rather than run to position here?
                 liftMotor.setPower(ABOVE_LIFT_FALL_THRESHOLD_POWER);
@@ -125,12 +125,14 @@ public class Lift {
 
         //if lift motor is busy, keep ramping power to the top lift power
         if (liftMotor.isBusy() == true) {
+           /*
             liftMotor.setPower(abs(ramp));
             if (ramp < topLiftPower) {
                 ramp = ramp + RAMP_LIFT_INCREMENT;
             } else if (ramp > topLiftPower) {
                 ramp = ramp - RAMP_LIFT_INCREMENT;
             }
+            */
         }
         //if lift has reached target lift motor wont be busy and alreadylifting state can be changed
         else if (liftMotor.isBusy() == false) {
@@ -138,46 +140,35 @@ public class Lift {
         }
     }
 
-    public void ManualLift(double liftTarget) {
+    public void ManualLift(double liftTarget, Arm arm) {
         alreadyLifting = false;
 
         //how do we get rid of bumpy lowering of lift? could we make step size larger when lowering the lift? would this even work? How could we quickly test?
         if (liftTarget <0) {
-            liftTarget=-1;
-        } else
+            newLiftTarget = MIN_LIFT_HEIGHT;
+        } else if (liftTarget>0)
         {
-            liftTarget =1;
+            newLiftTarget = MAX_LIFT_HEIGHT;
+        } else if (liftTarget ==0 )
+        {
+            if (Math.abs(liftMotor.getTargetPosition() - liftMotor.getCurrentPosition()) > 50) {
+                newLiftTarget = liftMotor.getCurrentPosition();
+                liftMotor.setPower(LIFT_RAISE_POWER);
+            }
         }
 
-        newLiftTarget = (int) ((liftMotor.getCurrentPosition()+LIFT_TARGET_MULTIPLIER));
-        if (liftTarget >0 && newLiftTarget > MAX_LIFT_HEIGHT) {newLiftTarget = MAX_LIFT_HEIGHT;}
-        if (liftTarget <0 && newLiftTarget < MIN_LIFT_HEIGHT) {newLiftTarget = MIN_LIFT_HEIGHT;}
         liftMotor.setTargetPosition(newLiftTarget);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //if the lift is being lowered and the new target is below 100 and the lift is below a safe fall height, then turn the power off and re-zero the encoder
-        if (liftTarget < 0 && newLiftTarget < LIFT_FALL_THRESHOLD_ENC_VAL &&
-                (liftMotor.getCurrentPosition() <= SAFE_FALL_HEIGHT)) {
+        if (liftTarget < 0 && (liftMotor.getCurrentPosition() > SAFE_CRASH_HEIGHT + BUFFER_HEIGHT || arm.currentArmState == Arm.armState.ARM_CENTER) ){
             liftMotor.setPower(BELOW_LIFT_FALL_THRESHOLD_POWER);
-            liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            //encoder reset here, but also by limit switch once it hits bottom
-            liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            currentLiftJunctionState = liftJunctionStates.CONE_INTAKE_HEIGHT;
-            currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
         }
-
-        //if the lift is being lowered and the new target is below 100 and the lift is above the safe fall height, then just lower power
-        else if (liftTarget < 0 && newLiftTarget < LIFT_FALL_THRESHOLD_ENC_VAL &&
-                (liftMotor.getCurrentPosition() > SAFE_FALL_HEIGHT)) {
+        //if the lift is not centered then make sure to stop the lift from falling
+        else if (liftTarget < 0 && arm.currentArmState != Arm.armState.ARM_CENTER){
+            liftMotor.setTargetPosition(SAFE_CRASH_HEIGHT);
             liftMotor.setPower(ABOVE_LIFT_FALL_THRESHOLD_POWER);
         }
-
-        //if the lift is being lowered and the new target is above the fall threshold, then lower the lift power
-        else if (liftTarget < 0 && newLiftTarget > LIFT_FALL_THRESHOLD_ENC_VAL) {
-            liftMotor.setPower(ABOVE_LIFT_FALL_THRESHOLD_POWER);
-        }
-
         //if the lift is being raised, set the power to .8
         else if (liftTarget >0) {
             liftMotor.setPower(LIFT_RAISE_POWER);
@@ -262,42 +253,38 @@ public class Lift {
 
     public void CheckLift(Boolean liftStageDownCurrentButton, Boolean liftStageDownPreivousButton,
                           Boolean liftStageUpCurrentButton, Boolean liftStageUpPreviousButton,
-                          double manualLiftTargetChange) {
+                          double manualLiftTargetChange,
+                          Arm arm) {
         if (Math.abs(manualLiftTargetChange) <= .2){
             manualLiftTargetChange = 0;
         }
         if (manualLiftTargetChange != 0) {
-            ManualLift(-manualLiftTargetChange);
+            ManualLift(-manualLiftTargetChange, arm);
         } else if (liftStageDownCurrentButton && !liftStageDownPreivousButton) {
             StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
         } else if (liftStageUpCurrentButton && !liftStageUpPreviousButton) {
             StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
         } else if (alreadyLifting) {
             ContinueLifting();
+        } else if (manualLiftTargetChange ==0){
+            ManualLift(manualLiftTargetChange, arm);
         }
     }
 
     public void AdvancedCheckLift(  double  liftStageDownCurrentTrigger, double liftStageDownPreviousTrigger,
                                     double  liftStageUpCurrentTrigger, double liftStageUpPreviousTrigger,
                                     Boolean modifierButton,
-                                    double manualLiftTargetChange) {
-        //check if the limit switch is pressed (false is pressed) and reset encoder if it is
-        /*
-        if (limitSwitch1.getState() == false){
-            liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
-            currentLiftJunctionState = liftJunctionStates.GROUND_CONE_JUNCTION_SCORE_HEIGHT;
-        }
+                                    double manualLiftTargetChange,
+                                    Arm arm) {
 
-         */
 
         if (Math.abs(manualLiftTargetChange) <= .2){
             manualLiftTargetChange = 0;
         }
 
         if (manualLiftTargetChange != 0) {
-            ManualLift(-manualLiftTargetChange);
-        } else if (liftStageDownCurrentTrigger >= .2  && liftStageDownPreviousTrigger < .2) {
+            ManualLift(-manualLiftTargetChange, arm);
+        }  else if (liftStageDownCurrentTrigger >= .2  && liftStageDownPreviousTrigger < .2) {
             if (!modifierButton) {
                 LowerLiftOneJunctionStage();
             } else if (modifierButton) {
@@ -312,6 +299,18 @@ public class Lift {
         }
             else if (alreadyLifting) {
             ContinueLifting();
+        }else if (manualLiftTargetChange ==0){
+            //check if the limit switch is pressed (false is pressed) and reset encoder if it is
+
+            if (limitSwitch1.getState() == false){
+                liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
+               currentLiftJunctionState = liftJunctionStates.GROUND_CONE_JUNCTION_SCORE_HEIGHT;
+            }
+
+            ManualLift(manualLiftTargetChange, arm);
+
+
         }
     }
 

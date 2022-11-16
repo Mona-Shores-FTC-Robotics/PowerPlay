@@ -97,7 +97,7 @@ public class Arm {
             currentArmState = armState.INTAKE_OFF_CLOSE_CLAW_LIFT_MAX_HEIGHT_ARM_FRONT;
             setArmState(currentArmState);
         }
-        else if (   currentArmState == armState.ARM_CENTER ||
+        else if (
                     currentArmState == armState.ARM_LEFT ||
                     currentArmState == armState.ARM_RIGHT ||
                     currentArmState == armState.ARM_FRONT||

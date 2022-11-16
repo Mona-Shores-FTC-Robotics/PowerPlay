@@ -24,7 +24,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
-    PipeVision AutoVision = new PipeVision(this, MecDrive);
+    //PipeVision AutoVision = new PipeVision(this, MecDrive);
 
     private final ElapsedTime runtime = new ElapsedTime();
 
@@ -39,7 +39,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
         ServoClaw.init(hardwareMap);
         Lift.init(hardwareMap);
         Gyro.init(hardwareMap);
-        AutoVision.init(hardwareMap);
+       //AutoVision.init(hardwareMap);
 
         Gamepad currentGamepad1 = new Gamepad();
         Gamepad currentGamepad2 = new Gamepad();
@@ -147,7 +147,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             Lift.AdvancedCheckLift(         currentGamepad2.left_trigger, previousGamepad2.left_trigger,
                                             currentGamepad2.right_trigger, previousGamepad2.right_trigger,
                                             currentGamepad2.b,
-                                            currentGamepad2.left_stick_y);
+                                            currentGamepad2.left_stick_y,
+                                            ServoArm);
 
             /** Unused Operator Gamepad Elements:
                 A Button
@@ -195,7 +196,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             //                            currentGamepad1.right_stick_button, previousGamepad1.right_stick_button);
 
             //Automated tasks (driving, turning, strafing, vision strafing, auto deliver)
-            MecDrive.ContinueAutomaticTasks(Gyro, AutoVision, ServoArm, Lift, ServoClaw, ServoIntake);
+            MecDrive.ContinueAutomaticTasks(Gyro, ServoArm, Lift, ServoClaw, ServoIntake);
 
             MecDrive.CheckNoManualDriveControls(currentGamepad1.left_stick_y, currentGamepad1.left_stick_x, currentGamepad1.right_stick_x,
                     currentGamepad1.left_trigger, currentGamepad1.right_trigger);
@@ -213,7 +214,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
             telemetry.addData("Gyro", "Current Angle(%s), Target Angle(%s)", (int) Gyro.getAbsoluteAngle(), MecDrive.pid.m_target);
             telemetry.addData("PID Angle Left to Turn", (int) MecDrive.pid.m_degreesLeftToTurn);
-            //telemetry.addData("Lift Limit Switch State", Lift.limitIsPressed());
+            telemetry.addData("Lift Limit Switch State", Lift.limitIsPressed());
             telemetry.addData("Color", "R %d  G %d  B %d", MecDrive.colorSensor.red(), MecDrive.colorSensor.green(), MecDrive.colorSensor.blue());
             telemetry.addData("Reflected Light", "Alpha %d", MecDrive.colorSensor.alpha());
 
