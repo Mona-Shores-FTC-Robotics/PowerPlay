@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.DisabledClasses;
+package org.firstinspires.ftc.teamcode.OpModes;
+
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,22 +17,20 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
-@Disabled
 @Autonomous(name = "TEST_LINE_FOLLOW")
 public class TEST_LINE_FOLLOW extends LinearOpMode {
 
     int Signal;
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig BConfig = new ButtonConfig(this);
-    AprilTagVision Vision = new AprilTagVision();
     Claw ServoClaw = new Claw();
     Intake ServoIntake = new Intake(ServoClaw, this);
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
+    AprilTagVision Vision = new AprilTagVision();
 
     private final ElapsedTime runtime = new ElapsedTime();
-
 
     Gamepad currentGamepad1 = new Gamepad();
     Gamepad previousGamepad1 = new Gamepad();
@@ -43,14 +42,13 @@ public class TEST_LINE_FOLLOW extends LinearOpMode {
 
         telemetry.addData("Status", "Initializing");
         telemetry.update();
-
+        Vision.init(hardwareMap);
         MecDrive.init(hardwareMap);
         ServoIntake.init(hardwareMap);
         ServoClaw.init(hardwareMap);
         Lift.init(hardwareMap);
         ServoArm.init(hardwareMap);
 
-        Vision.init(hardwareMap);
         BConfig.init();
 
         // Tell the driver that initialization is complete.
@@ -67,7 +65,6 @@ public class TEST_LINE_FOLLOW extends LinearOpMode {
             currentGamepad2 = BConfig.copy(gamepad2);
 
             //Use Webcam to find out Signal using April Tags and save in currentSignal
-            Vision.CheckForAprilTags(this);
 
             // User sets starting location left or right, and confirms selection with a button press
             // LEFT is a multiplier of 1, RIGHT is a multiplier of -1
@@ -102,12 +99,11 @@ public class TEST_LINE_FOLLOW extends LinearOpMode {
             currentGamepad1 = BConfig.copy(gamepad1);
             currentGamepad2 = BConfig.copy(gamepad2);
 
-            telemetry.addData("Signal is ", Signal);
-            telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
-            telemetry.update();
-
             if (currentGamepad1.a && !previousGamepad1.a) {
-                MecDrive.lineFollow(.2, GameConstants.FULL_TILE_DISTANCE_DRIVE, 50, .01, this);
+                MecDrive.lineFollow(.4, GameConstants.FULL_TILE_DISTANCE_DRIVE-QUARTER_TILE_DISTANCE_DRIVE , 2, this);
+            } else if (MecDrive.alreadyLineFollowing)
+            {
+                MecDrive.lineFollow(.4, GameConstants.FULL_TILE_DISTANCE_DRIVE- QUARTER_TILE_DISTANCE_DRIVE, 2, this);
             }
 
         }

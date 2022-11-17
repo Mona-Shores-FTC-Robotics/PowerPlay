@@ -907,14 +907,17 @@ public class DriveTrain {
             }
         }
 
-    public void lineFollow(double speed, double distanceInInches, double targetPath, double Kp, LinearOpMode activeOpMode) {
-        // Assuming alpha values 0-100, with 50 being halfway inbetween, a Kp of .01 would make corrections between .5 and -.5
-        // try Kp = .01;
+    public double line_follow_error;
+    public double percent_line_follow_error;
 
-        if (!alreadyLineFollowing)
-        {
+    public void lineFollow(double speed, double distanceInInches, double Kp, LinearOpMode activeOpMode) {
+        double tile_color = 209;
+        double line_color_green_value = 31;
+        double range = tile_color - line_color_green_value;
+        double line_follow_target = (range / 2) + line_color_green_value;
+        colorTimer.reset();
+        if (!alreadyLineFollowing) {
             alreadyLineFollowing = true;
-
             LFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             RFDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             LBDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -925,14 +928,55 @@ public class DriveTrain {
             LBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            encoderTargetLineFollow = (int) (distanceInInches * COUNTS_PER_INCH);
+            while (activeOpMode.opModeIsActive() &&
+                    (colorSensor.green() > 50) &&
+                    colorTimer.seconds() < .9) {
+
+                // Color is not red or blue
+                //strafe left for .4 seconds to the left, if still no red or blue line then strafe to right
+                if (colorTimer.seconds() < .3) {
+                    turn = 0;
+                    drive = 0;
+                    strafe = .8 * ButtonConfig.startPositionMultiplier;
+                    MecanumDrive();
+                } else if (colorTimer.seconds() > .3) {
+                    turn = 0;
+                    drive = 0;
+                    strafe = -.8 * ButtonConfig.startPositionMultiplier;
+                    MecanumDrive();
+                }
+            }
+            turn = 0;
+            drive = 0;
+            strafe = 0;
+            MecanumDrive();
         }
 
-        if (LFDrive.getCurrentPosition() < encoderTargetLineFollow) {
-            double correction = (targetPath - colorSensor.alpha()) * Kp;
-            setMotorPower(speed + correction, speed - correction, speed + correction, speed - correction);
+        if (activeOpMode.opModeIsActive() && colorSensor.green() < 170) {
+            line_follow_error = line_follow_target - colorSensor.green();
+            percent_line_follow_error = line_follow_error / (range);
+
+            double correction = (percent_line_follow_error * Kp);
+            drive = speed;
+            turn = 0;
+            strafe = correction;
+            MecanumDrive();
+
+            activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+            activeOpMode.telemetry.addData("Reflected Light", "Alpha %d", colorSensor.alpha());
+            activeOpMode.telemetry.addData("line follow error", "%.3f", line_follow_error);
+            activeOpMode.telemetry.addData("line follow error", "%.3f", percent_line_follow_error);
+            activeOpMode.telemetry.addData("Enc Target", encoderTargetLineFollow);
+            activeOpMode.telemetry.addData("Encoders", "LF(%s), RF(%s)", LFDrive.getCurrentPosition(), RFDrive.getCurrentPosition());
+            activeOpMode.telemetry.addData("Encoders", "LB(%s), RB(%s)", LBDrive.getCurrentPosition(), RBDrive.getCurrentPosition());
+            activeOpMode.telemetry.update();
+
         } else {
             alreadyLineFollowing = false;
+            drive = 0;
+            turn = 0;
+            strafe = 0;
+            MecanumDrive();
         }
     }
 }
