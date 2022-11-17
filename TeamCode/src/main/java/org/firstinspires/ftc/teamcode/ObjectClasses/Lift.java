@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.ObjectClasses;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.GROUND_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
@@ -22,7 +21,7 @@ public class Lift {
     final double LIFT_FALL_POWER = 0;
     final double LIFT_RAISE_POWER = .9;
 
-    final int MAX_LIFT_HEIGHT = 3050;
+    final int MAX_LIFT_HEIGHT = 2650;
     final int MIN_LIFT_HEIGHT = 0;
 
     final double BUFFER_HEIGHT = 400; // Buffer on top of crash height to give us room to stop before safe crash height
@@ -34,8 +33,7 @@ public class Lift {
     private LinearOpMode activeOpMode;
     private DigitalChannel limitSwitch1;
     private enum liftJunctionStates { HIGH_CONE_JUNCTION_SCORE_HEIGHT, MEDIUM_CONE_JUNCTION_SCORE_HEIGHT,
-        LOW_CONE_JUNCTION_SCORE_HEIGHT, GROUND_CONE_JUNCTION_SCORE_HEIGHT,
-        CONE_INTAKE_HEIGHT}
+        LOW_CONE_JUNCTION_SCORE_HEIGHT}
 
     private enum liftConeStackStates {   ONE_CONE_INTAKE_HEIGHT, TWO_CONE_STACK_INTAKE_HEIGHT,
         THREE_CONE_STACK_INTAKE_HEIGHT, FOUR_CONE_STACK_INTAKE_HEIGHT,
@@ -59,8 +57,8 @@ public class Lift {
         liftMotor.setPower(0);
 
         //Initialize Lift Stage States
-        currentLiftJunctionState = liftJunctionStates.CONE_INTAKE_HEIGHT;
-        currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
+        currentLiftJunctionState = liftJunctionStates.HIGH_CONE_JUNCTION_SCORE_HEIGHT;
+        currentLiftConeStackState = liftConeStackStates.FIVE_CONE_STACK_INTAKE_HEIGHT;
 
         //Define limit switch
         limitSwitch1 = ahwMap.get(DigitalChannel.class, "limit1");
@@ -179,11 +177,8 @@ public class Lift {
             currentLiftJunctionState = liftJunctionStates.LOW_CONE_JUNCTION_SCORE_HEIGHT;
             StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
         } else if (currentLiftJunctionState == liftJunctionStates.LOW_CONE_JUNCTION_SCORE_HEIGHT) {
-            currentLiftJunctionState = liftJunctionStates.GROUND_CONE_JUNCTION_SCORE_HEIGHT;
-            StartLifting(GROUND_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
-        } else if (currentLiftJunctionState == liftJunctionStates.GROUND_CONE_JUNCTION_SCORE_HEIGHT) {
-            currentLiftJunctionState = liftJunctionStates.CONE_INTAKE_HEIGHT;
-            StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, arm);
+            currentLiftJunctionState = liftJunctionStates.LOW_CONE_JUNCTION_SCORE_HEIGHT;
+            StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
         }
     }
 
@@ -194,12 +189,9 @@ public class Lift {
         } else if (currentLiftJunctionState == liftJunctionStates.LOW_CONE_JUNCTION_SCORE_HEIGHT) {
             currentLiftJunctionState = liftJunctionStates.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT;
             StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
-        } else if (currentLiftJunctionState == liftJunctionStates.GROUND_CONE_JUNCTION_SCORE_HEIGHT) {
-            currentLiftJunctionState = liftJunctionStates.LOW_CONE_JUNCTION_SCORE_HEIGHT;
-            StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
-        } else if (currentLiftJunctionState == liftJunctionStates.CONE_INTAKE_HEIGHT) {
-            currentLiftJunctionState = liftJunctionStates.GROUND_CONE_JUNCTION_SCORE_HEIGHT;
-            StartLifting(GROUND_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
+        }  else if (currentLiftJunctionState == liftJunctionStates.HIGH_CONE_JUNCTION_SCORE_HEIGHT) {
+            currentLiftJunctionState = liftJunctionStates.HIGH_CONE_JUNCTION_SCORE_HEIGHT;
+            StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
         }
     }
 
@@ -216,6 +208,9 @@ public class Lift {
         } else if (currentLiftConeStackState == liftConeStackStates.TWO_CONE_STACK_INTAKE_HEIGHT) {
             currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
             StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, arm);
+        } else if (currentLiftConeStackState == liftConeStackStates.ONE_CONE_INTAKE_HEIGHT) {
+            currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
+            StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, arm);
         }
     }
 
@@ -230,6 +225,9 @@ public class Lift {
             currentLiftConeStackState = liftConeStackStates.FOUR_CONE_STACK_INTAKE_HEIGHT;
             StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, arm);
         } else if (currentLiftConeStackState == liftConeStackStates.FOUR_CONE_STACK_INTAKE_HEIGHT) {
+            currentLiftConeStackState = liftConeStackStates.FIVE_CONE_STACK_INTAKE_HEIGHT;
+            StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, arm);
+        } else if (currentLiftConeStackState == liftConeStackStates.FIVE_CONE_STACK_INTAKE_HEIGHT) {
             currentLiftConeStackState = liftConeStackStates.FIVE_CONE_STACK_INTAKE_HEIGHT;
             StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, arm);
         }
@@ -272,7 +270,7 @@ public class Lift {
             if (limitSwitch1.getState() == false){
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
-               currentLiftJunctionState = liftJunctionStates.GROUND_CONE_JUNCTION_SCORE_HEIGHT;
+               currentLiftJunctionState = liftJunctionStates.LOW_CONE_JUNCTION_SCORE_HEIGHT;
             }
             ManualLift(manualLiftTargetChange, arm);
         }

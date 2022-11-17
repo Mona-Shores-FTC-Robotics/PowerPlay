@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.ObjectClasses;
 
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -8,12 +9,15 @@ public class Claw {
 
     public static final double CLAW_OPEN_POWER = .32;
     public static final double CLAW_CLOSED_POWER = .75;
-    public static final double CLAW_EASY_INTAKE = .63;
+    public static final double CLAW_EASY_INTAKE = .5;
     public Servo claw;
     public enum clawStates {CLAW_OPEN, CLAW_CLOSED, CLAW_EASY_INTAKE}
     public clawStates currentClawState;
 
     public ElapsedTime afterClawOpensDelayPeriod = new ElapsedTime();
+
+
+
 
     public void init(HardwareMap ahwMap) {
         claw = ahwMap.servo.get("claw_servo");
@@ -28,11 +32,9 @@ public class Claw {
         currentClawState = clawStates.CLAW_CLOSED;
     }
 
-    public void setEasyIntake(Arm arm) {
+    public void setEasyIntake() {
         claw.setPosition(CLAW_EASY_INTAKE);
         currentClawState = clawStates.CLAW_EASY_INTAKE;
-        //Center the arm, which also lowers the lift to the cone intake height after short delay if coming from non-center position
-        arm.setArmState(Arm.armState.ARM_CENTER);
     }
 
     public void openClaw() {
@@ -84,7 +86,7 @@ public class Claw {
         //if the claw is open and the delay period has passed,
         //  1) set the claw to easy intake position (which also centers and lowers lift)
         else if (currentClawState == clawStates.CLAW_OPEN && afterClawOpensDelayPeriod.seconds() > 1){
-            setEasyIntake(servoarm);
+            setEasyIntake();
         }
     }
 

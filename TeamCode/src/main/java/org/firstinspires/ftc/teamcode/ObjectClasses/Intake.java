@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.ObjectClasses;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -13,6 +14,14 @@ public class Intake {
     public enum intakeState {INTAKE_ON, INTAKE_OFF}
     public ElapsedTime afterIntakeOnDelayPeriod = new ElapsedTime();
     public Boolean coneSensor;
+    Claw claw;
+    LinearOpMode activeOpMode;
+
+    public Intake(Claw m_claw, LinearOpMode mode) {
+
+        claw = m_claw;
+        activeOpMode = mode;
+    }
 
     public void init(HardwareMap ahwMap) {
         intake1 = ahwMap.servo.get("intake1_servo");
@@ -51,11 +60,13 @@ public class Intake {
     public void CheckIntake(Boolean currentButtonPress, Boolean previousButtonPress) {
         //When you press the button, turn the intake on
         if (currentButtonPress && !previousButtonPress) {
+            claw.setEasyIntake();
             turnIntakeOn();
         }
         //When you release the button, turn the intake off
         else if (!currentButtonPress && previousButtonPress){
             turnIntakeOff();
+            claw.closeClaw();
         }
     }
 

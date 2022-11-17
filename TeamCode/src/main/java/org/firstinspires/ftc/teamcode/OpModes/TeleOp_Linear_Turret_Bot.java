@@ -18,8 +18,9 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
 
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig ButtonConfig = new ButtonConfig(this);
-    Intake ServoIntake = new Intake();
+
     Claw ServoClaw = new Claw();
+    Intake ServoIntake = new Intake(ServoClaw, this);
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
@@ -210,7 +211,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             telemetry.addData("Intake State", ServoIntake.currentIntakeState);
 
             telemetry.addData("Gyro", "Current Angle(%s), Target Angle(%s)", (int) Gyro.getAbsoluteAngle(), MecDrive.pid.m_target);
-            telemetry.addData("PID Angle Left to Turn", (int) MecDrive.pid.m_degreesLeftToTurn);
+            telemetry.addData("PID Percent Error", (int) MecDrive.pid.percent_error);
+            telemetry.addData("PID result", (int) MecDrive.pid.output  );
             telemetry.addData("Lift Limit Switch State", Lift.LimitSwitchIsPressed());
             telemetry.addData("Color", "R %d  G %d  B %d", MecDrive.colorSensor.red(), MecDrive.colorSensor.green(), MecDrive.colorSensor.blue());
             telemetry.addData("Reflected Light", "Alpha %d", MecDrive.colorSensor.alpha());

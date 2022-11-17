@@ -24,14 +24,14 @@ public final class GameConstants {
 
     public static final double CONE_HEIGHT_ENC_VAL = 500;
 
-    public static final double HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 3050;
-    public static final double MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 2250;
-    public static final double LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 1600;
-    public static final double GROUND_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 250;
+    public static final double HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 2150;
+    public static final double MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 1550;
+    public static final double LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 980;
+    //public static final double GROUND_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 250;
 
     public static final double ONE_CONE_INTAKE_HEIGHT_ENC_VAL = 0;
-    public static final double TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 175;
-    public static final double THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 325;
-    public static final double FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 500;
-    public static final double FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 625;
+    public static final double TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 110;
+    public static final double THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 170;
+    public static final double FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 230;
+    public static final double FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 320;
 }

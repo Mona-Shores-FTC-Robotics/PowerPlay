@@ -42,8 +42,8 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig BConfig = new ButtonConfig(this);
     AprilTagVision Vision = new AprilTagVision();
-    Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
+    Intake ServoIntake = new Intake(ServoClaw, this);
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
@@ -114,7 +114,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
         //Drive Forward
         Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
-        MecDrive.startEncoderDrive(MED_SPEED , FULL_TILE_DISTANCE_DRIVE*2+HALF_TILE_DISTANCE_DRIVE);
+        MecDrive.startEncoderDrive(MED_SPEED , FULL_TILE_DISTANCE_DRIVE*2+SIXTEENTH_TILE_DISTANCE_DRIVE);
         while (opModeIsActive() && (MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
@@ -142,7 +142,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         }
 
         //Strafe close to High Pole
-        MecDrive.startStrafeDrive(MED_SPEED, -(HALF_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(MED_SPEED, -(HALF_TILE_DISTANCE_STRAFE-SIXTEENTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
             ServoArm.setArmState(armState.ARM_RIGHT);
         } else ServoArm.setArmState(armState.ARM_LEFT);
@@ -151,10 +151,12 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             Lift.ContinueLifting();
         }
 
+        sleep(250);
+
         //Open claw to drop cone
         ServoClaw.openClaw();
 
-        sleep(100);
+        sleep(250);
 
         //Strafe away from High Pole(
         MecDrive.startStrafeDrive(MED_SPEED, (HALF_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
@@ -203,7 +205,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             }
 
             //close claw for next intake
-            ServoClaw.setEasyIntake(ServoArm);
+            ServoClaw.setEasyIntake();
 
             //move turret to pickup position
             ServoArm.setArmState(armState.ARM_CENTER);

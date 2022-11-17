@@ -11,7 +11,10 @@ public class TurnPIDController2 {
     private double m_kD = 0;
     private double m_kF = 0;
     public double m_target =0;
-    public double m_degreesLeftToTurn;
+    public double degree_error;
+    public double percent_error;
+    public double output;
+    public double motorPower;
 
     public TurnPIDController2(double target, double kP, double kI, double kD, double kF) {
         m_kP = kP;
@@ -19,20 +22,22 @@ public class TurnPIDController2 {
         m_kD = kD;
         m_kF = kF;
 
+
         m_target = target;
-        m_degreesLeftToTurn = target;
-        m_lastDegreesLeftToTurn = target;
+        degree_error    = target;
+        percent_error = target;
 
         timer.reset();
     }
 
     public double update(double currentState) {
-        m_degreesLeftToTurn = m_target - currentState;
-        integralSum += m_degreesLeftToTurn * timer.seconds();
-        double derivative = (m_degreesLeftToTurn - m_lastDegreesLeftToTurn) / timer.seconds();
-        m_lastDegreesLeftToTurn = m_degreesLeftToTurn;
+        degree_error = m_target - currentState;
+        percent_error = .8 * (degree_error/180);
+        integralSum += percent_error * timer.seconds();
+        double derivative = (percent_error - m_lastDegreesLeftToTurn) / timer.seconds();
+        m_lastDegreesLeftToTurn = percent_error;
         timer.reset();
-        double output = (m_degreesLeftToTurn * m_kP) + (derivative*m_kD) + (integralSum*m_kI) + (m_kF);
+        output = (percent_error * m_kP) + (derivative*m_kD) + (integralSum*m_kI) + (m_kF);
         return output;
     }
 

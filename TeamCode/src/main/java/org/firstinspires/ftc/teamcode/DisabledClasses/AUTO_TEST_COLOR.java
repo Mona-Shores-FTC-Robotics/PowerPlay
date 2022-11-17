@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
@@ -23,8 +24,8 @@ public class AUTO_TEST_COLOR extends LinearOpMode {
     DriveTrain MecDrive = new DriveTrain(this);
     AprilTagVision Vision = new AprilTagVision();
     ButtonConfig BConfig = new ButtonConfig(this);
-    Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
+    Intake ServoIntake = new Intake(ServoClaw, this);
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);

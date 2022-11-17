@@ -3,9 +3,12 @@ package org.firstinspires.ftc.teamcode.ObjectClasses;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_CENTER;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_CENTERED_LIFT_DELAY;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_CENTER_INTAKE_ON;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_FRONT_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_FRONT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_LEFT;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_LEFT_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_RIGHT;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_RIGHT_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON;
@@ -21,7 +24,8 @@ public class Arm {
 
     public static final double ARM_CENTER_INTAKE = 0.63;
     public static final double ARM_LEFT_OUTTAKE = .95;
-    public static final double ARM_RIGHT_OUTTAKE = .33;
+    //THIS WAS .33 TODAY IF WE REPROGRAM SERVO
+    public static final double ARM_RIGHT_OUTTAKE = .29;
     public static final double ARM_FRONT_OUTTAKE = 0;
     public static final double ARM_NEAR_FRONT = .15;
 
@@ -40,7 +44,10 @@ public class Arm {
         ARM_CENTER_INTAKE_ON,
         OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON,
         AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION,
-        AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION_WAITING_FOR_LIFT
+        AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION_WAITING_FOR_LIFT,
+        ARM_LEFT_WAITING_FOR_LIFT,
+        ARM_RIGHT_WAITING_FOR_LIFT,
+        ARM_FRONT_WAITING_FOR_LIFT
     }
 
     public Lift lift;
@@ -96,9 +103,9 @@ public class Arm {
         }
         //if no lift controls are being operated, hold the position of the arm by setting the servo to its current position
         else if (currentArmState == ARM_CENTER ||
-                currentArmState == ARM_LEFT ||
-                currentArmState == ARM_RIGHT ||
-                currentArmState == ARM_FRONT) {
+                currentArmState == ARM_LEFT || currentArmState == ARM_LEFT_WAITING_FOR_LIFT ||
+                currentArmState == ARM_RIGHT || currentArmState == ARM_RIGHT_WAITING_FOR_LIFT   ||
+                currentArmState == ARM_FRONT || currentArmState == ARM_FRONT) {
             setArmState(currentArmState);
         }
 
@@ -134,6 +141,7 @@ public class Arm {
         else if (targetState == ARM_CENTERED_LIFT_DELAY &&
                 liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
             currentArmState = ARM_CENTER;
+            arm.setPosition(ARM_CENTER_INTAKE);
             lift.StartLifting(targetLiftPositionAfterArmRotation, this);
         }
 
@@ -146,18 +154,31 @@ public class Arm {
             //Start raising the lift to a safe height that is well above the height for preventing arm rotation
             lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION, this);
             lift.alreadyLifting = true;
+
+            if (targetState==ARM_LEFT) {
+                currentArmState = ARM_LEFT_WAITING_FOR_LIFT;
+            }
+
+            if (targetState==ARM_RIGHT) {
+                currentArmState = ARM_RIGHT_WAITING_FOR_LIFT;
+            }
+
+            if (targetState==ARM_FRONT) {
+                currentArmState = ARM_FRONT_WAITING_FOR_LIFT;
+            }
+
         }
 
         //If 1) target is LEFT/RIGHT/FRONT, and 2) current lift position is above height preventing arm rotation, then rotate to target
-        else if (targetState == ARM_LEFT &&
+        else if ((targetState == ARM_LEFT || targetState == ARM_LEFT_WAITING_FOR_LIFT) &&
                 lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
             arm.setPosition(ARM_LEFT_OUTTAKE);
             currentArmState = ARM_LEFT;
-        } else if (targetState == armState.ARM_RIGHT &&
+        } else if ((targetState == armState.ARM_RIGHT || targetState == ARM_RIGHT_WAITING_FOR_LIFT) &&
                 lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
             arm.setPosition(ARM_RIGHT_OUTTAKE);
             currentArmState = armState.ARM_RIGHT;
-        } else if (targetState == armState.ARM_FRONT &&
+        } else if ((targetState == armState.ARM_FRONT || targetState == ARM_FRONT_WAITING_FOR_LIFT) &&
                 lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
             arm.setPosition(ARM_FRONT_OUTTAKE);
             currentArmState = armState.ARM_FRONT;
@@ -206,7 +227,7 @@ public class Arm {
             currentArmState = ARM_CENTERED_LIFT_DELAY;
 
             //Set the claw to a partially closed position for easy intake of cones
-            claw.setEasyIntake(this);
+            claw.setEasyIntake();
 
             if (targetState == ARM_CENTER_INTAKE_ON) {
                 intake.turnIntakeOn();

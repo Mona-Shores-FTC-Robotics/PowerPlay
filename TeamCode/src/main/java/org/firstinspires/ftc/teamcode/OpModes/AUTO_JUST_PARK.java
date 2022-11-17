@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HE
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -25,8 +26,8 @@ public class AUTO_JUST_PARK extends LinearOpMode {
     DriveTrain MecDrive = new DriveTrain(this);
     AprilTagVision Vision = new AprilTagVision();
     ButtonConfig BConfig = new ButtonConfig(this);
-    Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
+    Intake ServoIntake = new Intake(ServoClaw, this);
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
 
@@ -71,7 +72,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
                     currentGamepad1.dpad_right, previousGamepad1.dpad_right,
                     currentGamepad1.b,          previousGamepad1.b);
 
-            telemetry.addData("Signal", "Signal(%s), Number(%s)", Vision.currentSignal, Vision.currentSignal);
+            telemetry.addData("Signal", "Signal(%s), Number(%s)", Vision.currentSignal, Vision.currentSignalNumber);
             telemetry.addLine(" ");
             telemetry.addLine("Select Starting Position with D-pad");
             telemetry.addData("Current Starting Position ", ButtonConfig.currentStartPosition);
@@ -92,7 +93,7 @@ public class AUTO_JUST_PARK extends LinearOpMode {
 
         //Drive forward 2 tiles plus a little bit more to get into position for deciding where to park
         Lift.StartLifting(CONE_HEIGHT_ENC_VAL, ServoArm);
-        MecDrive.startEncoderDrive(MED_SPEED, FULL_TILE_DISTANCE_DRIVE * 2 + HALF_TILE_DISTANCE_DRIVE);
+        MecDrive.startEncoderDrive(MED_SPEED, FULL_TILE_DISTANCE_DRIVE * 2 + QUARTER_TILE_DISTANCE_DRIVE);
         while (opModeIsActive() && MecDrive.alreadyDriving == true) {
             MecDrive.ContinueDriving();
         }

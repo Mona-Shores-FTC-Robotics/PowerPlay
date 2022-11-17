@@ -22,10 +22,9 @@ public class TEST_LINE_FOLLOW extends LinearOpMode {
     int Signal;
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig BConfig = new ButtonConfig(this);
-
-    Intake ServoIntake = new Intake();
     AprilTagVision Vision = new AprilTagVision();
     Claw ServoClaw = new Claw();
+    Intake ServoIntake = new Intake(ServoClaw, this);
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);

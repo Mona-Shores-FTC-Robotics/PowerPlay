@@ -314,6 +314,7 @@ public class DriveTrain {
     private void RotateClosestRightAngleToLeft(Gyro Gyro) {
         double currentAngle = Gyro.getAbsoluteAngle();
 
+
         if (currentAngle < 0 && currentAngle > -85) {
             turnToPID(0, Gyro);
         }
@@ -816,7 +817,7 @@ public class DriveTrain {
 
     public void turnPID(double degrees, Gyro Gyro) {
         Gyro.resetAngle();
-        double kF = -.5;
+        double kF = -.1;
         LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -824,12 +825,12 @@ public class DriveTrain {
         if (degrees > 0) {
             kF = kF * -1;
         }
-        pid = new TurnPIDController2(degrees, .008, 0, 0, kF);
+        pid = new TurnPIDController2(degrees, 6, 0, 0, kF);
         alreadyPIDTurning = true;
     }
 
     public void ContinuePIDTurning(Gyro Gyro) {
-        if (Math.abs(pid.m_degreesLeftToTurn) > 1) {
+        if (Math.abs(pid.percent_error) > .005) {
             double motorPower = pid.update(Gyro.getAngle());
             setMotorPower(-motorPower, motorPower, -motorPower, motorPower);
         } else {

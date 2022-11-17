@@ -39,8 +39,8 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
     DriveTrain MecDrive = new DriveTrain(this);
     ButtonConfig BConfig = new ButtonConfig(this);
     AprilTagVision Vision = new AprilTagVision();
-    Intake ServoIntake = new Intake();
     Claw ServoClaw = new Claw();
+    Intake ServoIntake = new Intake(ServoClaw, this);
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
@@ -181,7 +181,7 @@ public class AUTO_SCORE_6_AND_PARK extends LinearOpMode {
             }
 
             //close claw to intake position
-            ServoClaw.setEasyIntake(ServoArm);
+            ServoClaw.setEasyIntake();
 
             //move turret to pickup position
             ServoArm.setArmState(armState.ARM_CENTER);

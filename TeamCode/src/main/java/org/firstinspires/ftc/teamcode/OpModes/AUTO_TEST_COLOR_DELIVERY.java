@@ -44,8 +44,9 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
     ButtonConfig BConfig = new ButtonConfig(this);
     AprilTagVision Vision = new AprilTagVision();
 
-    Intake ServoIntake = new Intake();
+
     Claw ServoClaw = new Claw();
+    Intake ServoIntake = new Intake(ServoClaw, this);
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
@@ -151,7 +152,7 @@ public class AUTO_TEST_COLOR_DELIVERY extends LinearOpMode {
             }
 
             //set claw for intake
-            ServoClaw.setEasyIntake(ServoArm);
+            ServoClaw.setEasyIntake();
 
             //move turret to pickup position
             ServoArm.setPosition(ARM_CENTER_INTAKE);
