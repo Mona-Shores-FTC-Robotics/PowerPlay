@@ -1,20 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE_DRIVE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE_STRAFE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THIRTYSECOND_TILE_DISTANCE_DRIVE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -133,7 +127,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         }
 
         //Strafe close to High Pole
-        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_STRAFE+EIGHTH_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
             ServoArm.setArmState(Arm.armState.ARM_RIGHT);
         } else ServoArm.setArmState(Arm.armState.ARM_LEFT);
@@ -144,22 +138,22 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         sleep(300);
 
         Lift.StartLifting(Lift.liftMotor.getCurrentPosition()-400, ServoArm);
-        while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
+        while (opModeIsActive() && (Lift.alreadyLifting)) {
             Lift.ContinueLifting();
         }
 
         //Open claw to drop cone
-        ServoClaw.toggleClaw();
+        ServoClaw.openClaw();
 
         sleep(300);
 
         Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL+100, ServoArm);
-        while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
+        while (opModeIsActive() && (Lift.alreadyLifting)) {
             Lift.ContinueLifting();
         }
 
         //Strafe away from High Pole
-        MecDrive.startStrafeDrive(LOW_SPEED, (QUARTER_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(LOW_SPEED, (QUARTER_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                 MecDrive.ContinueStrafing();
         }
