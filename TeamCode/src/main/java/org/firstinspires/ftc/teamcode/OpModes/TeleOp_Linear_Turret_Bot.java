@@ -123,7 +123,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                     // Turns Intake Off
                     // Closes Claw
                     // Raises lift to safe height for rotation
-                    // Rotates Arm to Front
+                    // Rotates Arm to Front (if B move arm based on start position)
                     // Raises lift to High Pole height
             */
 
@@ -132,7 +132,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                                             currentGamepad2.dpad_right, previousGamepad2.dpad_right,
                                             currentGamepad2.dpad_up, previousGamepad2.dpad_up,
                                             currentGamepad2.left_bumper, previousGamepad2.left_bumper,
-                                            currentGamepad2.right_bumper, previousGamepad2.right_bumper);
+                                            currentGamepad2.right_bumper, previousGamepad2.right_bumper,
+                                            currentGamepad2.a, currentGamepad2.b);
 
             /**
             Left Trigger, lowers lift by one Junction Height Level (Intake, Ground, Low, Medium, High)
@@ -208,7 +209,9 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             telemetry.addData("Lift", "Position(%s), Target(%s)", Lift.liftMotor.getCurrentPosition(), Lift.getLiftTarget());
             telemetry.addData("Arm Position", ServoArm.currentArmState);
             telemetry.addData("Claw Position", ServoClaw.currentClawState);
-            telemetry.addData("Intake State", ServoIntake.currentIntakeState);
+
+            telemetry.addData("side =", ServoArm.autoDeliverSide);
+            telemetry.addData("side =", ServoArm.currentArmState);
 
             telemetry.addData("Gyro", "Current Angle(%s), Target Angle(%s)", (int) Gyro.getAbsoluteAngle(), MecDrive.pid.m_target);
             telemetry.addData("PID Percent Error", (int) MecDrive.pid.percent_error);

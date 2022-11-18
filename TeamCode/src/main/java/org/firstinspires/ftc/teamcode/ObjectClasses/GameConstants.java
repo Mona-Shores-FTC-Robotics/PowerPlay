@@ -23,7 +23,6 @@ public final class GameConstants {
     public static final double SIXTYFOURTH_TILE_DISTANCE_STRAFE  = THIRTYSECOND_TILE_DISTANCE_STRAFE  /2;
 
     public static final double CONE_HEIGHT_ENC_VAL = 500;
-
     public static final double HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 2150;
     public static final double MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 1550;
     public static final double LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 980;

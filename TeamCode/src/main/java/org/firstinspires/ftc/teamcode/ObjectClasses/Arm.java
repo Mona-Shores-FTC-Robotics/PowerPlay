@@ -11,6 +11,8 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_RIGH
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_RIGHT_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION_WAITING_FOR_LIFT;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
@@ -20,12 +22,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.sql.RowId;
+
 public class Arm {
 
-    public static final double ARM_CENTER_INTAKE = 0.63;
-    public static final double ARM_LEFT_OUTTAKE = .95;
+    public static final double ARM_CENTER_INTAKE = .67;
+    public static final double ARM_LEFT_OUTTAKE = 1;
     //THIS WAS .33 TODAY IF WE REPROGRAM SERVO
-    public static final double ARM_RIGHT_OUTTAKE = .29;
+    public static final double ARM_RIGHT_OUTTAKE = .33;
     public static final double ARM_FRONT_OUTTAKE = 0;
     public static final double ARM_NEAR_FRONT = .15;
 
@@ -34,6 +38,8 @@ public class Arm {
 
     //we had this value at 1.2 yesterday, trying .7 to see if still gets arm centered in time
     public static final double SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER = .7;
+
+    public int autoDeliverSide;
 
     public Servo arm;
     public armState currentArmState;
@@ -44,7 +50,9 @@ public class Arm {
         ARM_CENTER_INTAKE_ON,
         OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON,
         AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION,
+        AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION,
         AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION_WAITING_FOR_LIFT,
+        AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION_WAITING_FOR_LIFT,
         ARM_LEFT_WAITING_FOR_LIFT,
         ARM_RIGHT_WAITING_FOR_LIFT,
         ARM_FRONT_WAITING_FOR_LIFT
@@ -87,7 +95,8 @@ public class Arm {
                          Boolean armRightCurrentButton, Boolean armRightPreviousButton,
                          Boolean armFrontCurrentButton, Boolean armFrontPreviousButton,
                          Boolean autoIntakeCurrentButton, Boolean autoIntakePreviousButton,
-                         Boolean autoOuttakeCurrentButton, Boolean autoOuttakePreviousButton) {
+                         Boolean autoOuttakeCurrentButton, Boolean autoOuttakePreviousButton,
+                         Boolean modButton1, Boolean modButton2) {
         if (armLeftCurrentButton && !armLeftPreviousButton) {
             setArmState(ARM_LEFT);
         } else if (armCenterCurrentButton && !armCenterPreviousButton) {
@@ -97,7 +106,15 @@ public class Arm {
         } else if (armFrontCurrentButton && !armFrontPreviousButton) {
             setArmState(ARM_FRONT);
         } else if (autoIntakeCurrentButton && !autoIntakePreviousButton) {
-            setArmState(AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION);
+            if (modButton1) {
+                autoDeliverSide = 1;
+                setArmState(AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION);
+            }else if (modButton2) {
+                autoDeliverSide = 2;
+                setArmState(AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION);
+            } else {
+                setArmState(AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION);
+            }
         } else if (autoOuttakeCurrentButton && !autoOuttakePreviousButton) {
             setArmState(OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON);
         }
@@ -116,6 +133,10 @@ public class Arm {
 
         //waiting for the arm to get above the safe rotate height for this automation
         else if (currentArmState == AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION_WAITING_FOR_LIFT) {
+            setArmState(currentArmState);
+        }
+        //waiting for the arm to get above the safe rotate height for this automation
+        else if (currentArmState == AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION_WAITING_FOR_LIFT) {
             setArmState(currentArmState);
         }
 
@@ -198,6 +219,29 @@ public class Arm {
             arm.setPosition(ARM_FRONT_OUTTAKE);
             currentArmState = armState.ARM_FRONT;
         }
+
+        // Automated TeleOp Operator Control for shutting off intake, closing claw,
+        // lifting arm, and rotating arm to SIDE
+        else if (targetState == AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION) {
+            //Turn intake off
+            intake.turnIntakeOff();
+            claw.closeClaw();
+            lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, this);
+            currentArmState = AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION_WAITING_FOR_LIFT;
+        }
+        // rotate the arm once the lift is high enough
+        else if (targetState == AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION_WAITING_FOR_LIFT &&
+                lift.liftMotor.getCurrentPosition() >= HEIGHT_FOR_PREVENTING_ARM_ROTATION) {
+            if (autoDeliverSide==1){
+                arm.setPosition(ARM_RIGHT_OUTTAKE);
+                currentArmState = ARM_RIGHT;
+            }
+            else if (autoDeliverSide==2){
+                arm.setPosition(ARM_LEFT_OUTTAKE);
+                currentArmState = ARM_LEFT;
+            }
+        }
+
 
         //Automated TeleOp Operator Control for opening claw, centering the arm,
         // closing claw for easy intake,  turning the intake on, and lowering the lift

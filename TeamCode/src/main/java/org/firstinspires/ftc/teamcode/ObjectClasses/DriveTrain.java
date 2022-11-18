@@ -830,7 +830,7 @@ public class DriveTrain {
     }
 
     public void ContinuePIDTurning(Gyro Gyro) {
-        if (Math.abs(pid.percent_error) > .005) {
+        if (Math.abs(pid.percent_error) > .01) {
             double motorPower = pid.update(Gyro.getAngle());
             setMotorPower(-motorPower, motorPower, -motorPower, motorPower);
         } else {
@@ -910,11 +910,8 @@ public class DriveTrain {
     public double line_follow_error;
     public double percent_line_follow_error;
 
-    public void lineFollow(double speed, double distanceInInches, double Kp, LinearOpMode activeOpMode) {
-        double tile_color = 209;
-        double line_color_green_value = 31;
-        double range = tile_color - line_color_green_value;
-        double line_follow_target = (range / 2) + line_color_green_value;
+    public void lineFollow(double speed, LinearOpMode activeOpMode, Gyro gyro) {
+
         colorTimer.reset();
         if (!alreadyLineFollowing) {
             alreadyLineFollowing = true;
@@ -929,20 +926,29 @@ public class DriveTrain {
             RBDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             while (activeOpMode.opModeIsActive() &&
-                    (colorSensor.green() > 50) &&
-                    colorTimer.seconds() < .9) {
+                    (colorSensor.red() < 190 && colorSensor.blue() < 250) &&
+                    colorTimer.seconds() < 1.3) {
+
+                activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+                activeOpMode.telemetry.addData("Reflected Light", "Alpha %d", colorSensor.alpha());
+                activeOpMode.telemetry.addData("line follow error", "%.3f", line_follow_error);
+                activeOpMode.telemetry.addData("line follow error", "%.3f", percent_line_follow_error);
+                activeOpMode.telemetry.addData("Enc Target", encoderTargetLineFollow);
+                activeOpMode.telemetry.addData("Encoders", "LF(%s), RF(%s)", LFDrive.getCurrentPosition(), RFDrive.getCurrentPosition());
+                activeOpMode.telemetry.addData("Encoders", "LB(%s), RB(%s)", LBDrive.getCurrentPosition(), RBDrive.getCurrentPosition());
+                activeOpMode.telemetry.update();
 
                 // Color is not red or blue
                 //strafe left for .4 seconds to the left, if still no red or blue line then strafe to right
-                if (colorTimer.seconds() < .3) {
+                if (colorTimer.seconds() < .5) {
                     turn = 0;
                     drive = 0;
-                    strafe = .8 * ButtonConfig.startPositionMultiplier;
+                    strafe = -speed;
                     MecanumDrive();
-                } else if (colorTimer.seconds() > .3) {
+                } else if (colorTimer.seconds() > .5) {
                     turn = 0;
                     drive = 0;
-                    strafe = -.8 * ButtonConfig.startPositionMultiplier;
+                    strafe = speed;
                     MecanumDrive();
                 }
             }
@@ -952,32 +958,28 @@ public class DriveTrain {
             MecanumDrive();
         }
 
-        if (activeOpMode.opModeIsActive() && colorSensor.green() < 170) {
-            line_follow_error = line_follow_target - colorSensor.green();
-            percent_line_follow_error = line_follow_error / (range);
+        if (activeOpMode.opModeIsActive() && (colorSensor.red() > 200 || colorSensor.blue() > 340)) {
+            //line_follow_error = line_follow_target - colorSensor.green();
+            //percent_line_follow_error = line_follow_error / (range);
 
-            double correction = (percent_line_follow_error * Kp);
+            //double correction = (percent_line_follow_error * Kp);
             drive = speed;
-            turn = 0;
-            strafe = correction;
-            MecanumDrive();
-
-            activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
-            activeOpMode.telemetry.addData("Reflected Light", "Alpha %d", colorSensor.alpha());
-            activeOpMode.telemetry.addData("line follow error", "%.3f", line_follow_error);
-            activeOpMode.telemetry.addData("line follow error", "%.3f", percent_line_follow_error);
-            activeOpMode.telemetry.addData("Enc Target", encoderTargetLineFollow);
-            activeOpMode.telemetry.addData("Encoders", "LF(%s), RF(%s)", LFDrive.getCurrentPosition(), RFDrive.getCurrentPosition());
-            activeOpMode.telemetry.addData("Encoders", "LB(%s), RB(%s)", LBDrive.getCurrentPosition(), RBDrive.getCurrentPosition());
-            activeOpMode.telemetry.update();
 
         } else {
             alreadyLineFollowing = false;
             drive = 0;
-            turn = 0;
-            strafe = 0;
-            MecanumDrive();
         }
+        turn = 0;
+        strafe = 0;
+        MecanumDrive();
+        activeOpMode.telemetry.addData("Color", "R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
+        activeOpMode.telemetry.addData("Reflected Light", "Alpha %d", colorSensor.alpha());
+        activeOpMode.telemetry.addData("line follow error", "%.3f", line_follow_error);
+        activeOpMode.telemetry.addData("line follow error", "%.3f", percent_line_follow_error);
+        activeOpMode.telemetry.addData("Enc Target", encoderTargetLineFollow);
+        activeOpMode.telemetry.addData("Encoders", "LF(%s), RF(%s)", LFDrive.getCurrentPosition(), RFDrive.getCurrentPosition());
+        activeOpMode.telemetry.addData("Encoders", "LB(%s), RB(%s)", LBDrive.getCurrentPosition(), RBDrive.getCurrentPosition());
+        activeOpMode.telemetry.update();
     }
 }
 

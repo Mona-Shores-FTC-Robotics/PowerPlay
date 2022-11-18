@@ -100,11 +100,14 @@ public class TEST_LINE_FOLLOW extends LinearOpMode {
             currentGamepad2 = BConfig.copy(gamepad2);
 
             if (currentGamepad1.a && !previousGamepad1.a) {
-                MecDrive.lineFollow(.4, GameConstants.FULL_TILE_DISTANCE_DRIVE-QUARTER_TILE_DISTANCE_DRIVE , 2, this);
+                MecDrive.lineFollow(.2, this, Gyro);
             } else if (MecDrive.alreadyLineFollowing)
             {
-                MecDrive.lineFollow(.4, GameConstants.FULL_TILE_DISTANCE_DRIVE- QUARTER_TILE_DISTANCE_DRIVE, 2, this);
+                MecDrive.lineFollow(.2, this, Gyro);
             }
+
+
+
 
         }
       }

@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
@@ -92,7 +93,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                     currentGamepad1.dpad_right, previousGamepad1.dpad_right,
                     currentGamepad1.b,          previousGamepad1.b);
 
-            telemetry.addData("Signal", "Signal(%s), Number(%s)", Vision.currentSignal, Vision.currentSignal);
+            telemetry.addData("Signal", "Signal(%s), Number(%s)", Vision.currentSignal, Vision.currentSignalNumber);
             telemetry.addLine(" ");
             telemetry.addLine("Select Starting Position with D-pad");
             telemetry.addData("Current Starting Position ", ButtonConfig.currentStartPosition);
@@ -150,9 +151,8 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             MecDrive.ContinueStrafing();
         }
 
-        sleep(300);
-
-        Lift.StartLifting(Lift.liftMotor.getCurrentPosition()-400, ServoArm);
+        //dunk cone
+        Lift.StartLifting(Lift.liftMotor.getCurrentPosition()-200, ServoArm);
         while (opModeIsActive() && (Lift.alreadyLifting)) {
             Lift.ContinueLifting();
         }
@@ -160,8 +160,13 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         //Open claw to drop cone
         ServoClaw.openClaw();
 
-        sleep(300);
+        //lift before moving
+        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
+        while (opModeIsActive() && (Lift.alreadyLifting)) {
+            Lift.ContinueLifting();
+        }
 
+        //lift before moving
         Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL+100, ServoArm);
         while (opModeIsActive() && (Lift.alreadyLifting)) {
             Lift.ContinueLifting();
@@ -191,7 +196,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
         ServoArm.setArmState(Arm.armState.ARM_CENTER);
         Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
-        MecDrive.startEncoderDrive(.4, -(FULL_TILE_DISTANCE_DRIVE+SIXTEENTH_TILE_DISTANCE_DRIVE));
+        MecDrive.startEncoderDrive(.5, -(FULL_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE));
         while (opModeIsActive() && (MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
@@ -203,7 +208,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         }
 
         //Find the cone stack line
-        MecDrive.ColorStrafe(MED_SPEED, this);
+        MecDrive.lineFollow(LOW_SPEED, this, Gyro);
 
         while (coneStackTracker > 4)
         {
@@ -258,7 +263,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             ServoIntake.turnIntakeOn();
 
             //Drive near cone stack with intake on
-            MecDrive.startEncoderDrive(LOW_SPEED, -(HALF_TILE_DISTANCE_DRIVE));
+            MecDrive.startEncoderDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE));
             while (opModeIsActive() && ( MecDrive.alreadyDriving)) {
                 MecDrive.ContinueDriving();
                 telemetry.addData("Cones:", "Stack(%s)/Delivered(%s)", coneStackTracker, coneDeliveryTracker);
@@ -268,17 +273,11 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 telemetry.update();
             }
 
-            //wait a moment to intake the cone
-            sleep(300);
-
             //turn off intake now that cone is grabbed
             ServoIntake.turnIntakeOff();
 
             //close claw to grab cone
             ServoClaw.closeClaw();
-
-            //wait a moment to secure cone
-            sleep(300);
 
             coneStackTracker = coneStackTracker - 1;
 
@@ -300,7 +299,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             }
 
             //Drive toward middle of field after cone has been lifted off the stack
-            MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE);
+            MecDrive.startEncoderDrive(.4, QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE+SIXTEENTH_TILE_DISTANCE_DRIVE);
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
                 MecDrive.ContinueDriving();
@@ -331,11 +330,23 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 telemetry.update();
             }
 
-            //wait for cone to be released
-            sleep(250);
+            //dunk cone
+            Lift.StartLifting(Lift.liftMotor.getCurrentPosition()-300, ServoArm);
+            while (opModeIsActive() && (Lift.alreadyLifting)) {
+                Lift.ContinueLifting();
+            }
 
             //drop off cone
             ServoClaw.openClaw();
+
+            sleep(100);
+
+            //lift before moving
+            Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
+            while (opModeIsActive() && (Lift.alreadyLifting)) {
+                Lift.ContinueLifting();
+            }
+
             coneDeliveryTracker = coneDeliveryTracker +1;
 
             telemetry.addData("Cones:", "Stack(%s)/Delivered(%s)", coneStackTracker, coneDeliveryTracker);
@@ -343,9 +354,6 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime);
             telemetry.addData("Current Angle", Gyro.getAngle());
             telemetry.update();
-
-            //wait for cone to be released
-            sleep(250);
 
             //strafe away from the LOW pole
             MecDrive.startStrafeDrive(LOW_SPEED,-(QUARTER_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
@@ -359,33 +367,30 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             telemetry.update();
         }
 
+        //turn to 90
+        MecDrive.turnToPID(-90 * ButtonConfig.startPositionMultiplier, Gyro);
+        while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
+            MecDrive.ContinuePIDTurning(Gyro);
+        }
+
         ServoArm.setArmState(armState.ARM_CENTER);
         ServoClaw.setEasyIntake();
         Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, ServoArm);
 
         //Park code
+        //TODO: FIX CODE FOR LEFT AND RIGHT BASED ON LEFT OR RIGHT
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-            MecDrive.startEncoderDrive(LOW_SPEED, (FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
+            MecDrive.startEncoderDrive(.4, -(FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
                                                                 + HALF_TILE_DISTANCE_DRIVE);
         } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
-            MecDrive.startEncoderDrive(LOW_SPEED, HALF_TILE_DISTANCE_DRIVE);
+            MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE);
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-            MecDrive.startEncoderDrive(LOW_SPEED, -(FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
-                                                                -HALF_TILE_DISTANCE_DRIVE);
+            MecDrive.startEncoderDrive(.4, (FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
+                                                                +HALF_TILE_DISTANCE_DRIVE);
         }
         while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
-        }
-
-        MecDrive.turnToPID(0, Gyro);
-        while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
-            MecDrive.ContinuePIDTurning(Gyro);
-        }
-
-        MecDrive.startEncoderDrive(LOW_SPEED, -HALF_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_STRAFE);
-        while (opModeIsActive() && MecDrive.alreadyDriving == true) {
-            MecDrive.ContinueDriving();
         }
 
         telemetry.addData("Cones:", "Stack(%s)/Delivered(%s)", coneStackTracker, coneDeliveryTracker);
