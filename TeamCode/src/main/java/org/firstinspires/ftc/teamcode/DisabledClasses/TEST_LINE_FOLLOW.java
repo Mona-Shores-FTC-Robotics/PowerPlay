@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.OpModes;
-
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
+package org.firstinspires.ftc.teamcode.DisabledClasses;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,11 +11,11 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
 import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
-import org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
+@Disabled
 @Autonomous(name = "TEST_LINE_FOLLOW")
 public class TEST_LINE_FOLLOW extends LinearOpMode {
 

@@ -2,23 +2,23 @@ HIGH PRIORITY - MUST DO THESE BEFORE FRUITPORT:
 COMPLETED: Print Sleeves for Team 20245
 COMPLETED: Print Sleeves for Team 19429
 COMPLETED: Test and tune drive and strafe distances with TEST_DRIVE_AND_STRAFE_DISTANCE_TUNING
-Todo: Test and tune delivery distance with TEST_DELIVERY_DISTANCE_TUNING
-Todo: Test and tune Lift Heights (Junctions and Cone Stack)
+COMPLETED: Test and tune delivery distance with TEST_DELIVERY_DISTANCE_TUNING
+COMPLETED: Test and tune Lift Heights (Junctions and Cone Stack)
 Todo: Tune and finalize autos for Fruitport using the tuned values
-Todo: Confirm only tuned and usable Autos are listed in Driver Station
+COMPLETED: Confirm only tuned and usable Autos are listed in Driver Station
 Todo: Confirm drive teams understand the autos and what they do
 
 MIDDLE PRIORITY - IF WE HAVE TIME BEFORE FRUITPORT
 COMPLETED: Create and Print TeleOp Button Map for Driver and Operator Controls
 COMPLETED: Find/Buy clipboard(s)
 COMPLETED: Print Map of Field to Discuss Strategy with other teams
-Todo: Null checks for disconnected equipment (look at how the limit switch init is done)
 Todo: Test and tune TeleOp Auto_deliver1 and Auto_deliver2 - currently commented out
 Todo: Test and tune TeleOp Auto_drive to pole - CheckAutoAwayFromAllianceSubstation - currently commented out
 Todo: Change Auto finish positions to be smart for LEFT, MIDDLE, RIGHT
 Todo: Tune Turning PID
 
 LOW PRIORITY / AFTER FRUITPORT
+Todo: Null checks for disconnected equipment (look at how the limit switch init is done)
 Todo: Move arm when manually strafing in that direction for certain amount of time
 Todo: Cleanup Telemetry - how do we get the telemtry organized better so it doesn't clear screen
 Todo: Finish and Test TeleOp Vision Strafing Vision - currently commented out

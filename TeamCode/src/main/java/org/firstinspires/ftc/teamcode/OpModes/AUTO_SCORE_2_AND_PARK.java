@@ -4,7 +4,6 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_RIGHT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.MED_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_STRAFE;
@@ -35,7 +34,6 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
-
 
 @Autonomous(name = "AUTO_SCORE_2_AND_PARK")
 public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
@@ -82,7 +80,6 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
             previousGamepad2 = BConfig.copy(currentGamepad2);
             currentGamepad2 = BConfig.copy(gamepad2);
-
 
             //Use Webcam to find out Signal using April Tags
             Vision.CheckForAprilTags(this);

@@ -65,6 +65,8 @@ public class DriveTrain {
     public static final double STARTING_RAMP_VALUE = .03;
     public static final double RAMP_INCREMENT = .02;
 
+    public int TURNING_TIMEOUT_IN_SECONDS = 3;
+
     /* Public OpMode members. */
     public DcMotor LFDrive = null;
     public DcMotor RFDrive = null;
@@ -109,6 +111,8 @@ public class DriveTrain {
     private final ElapsedTime drivePeriod = new ElapsedTime();
     private final ElapsedTime strafePeriod = new ElapsedTime();
     public final ElapsedTime colorTimer = new ElapsedTime();
+    public final ElapsedTime turningTimer = new ElapsedTime();
+
 
 
     public enum autoDeliverStates {
@@ -232,7 +236,7 @@ public class DriveTrain {
     public void CheckAutoAwayFromAllianceSubstation(boolean button, boolean lastButton) {
         if (button && lastButton) {
             //move from alliance substation to scoring position
-            startEncoderDrive(MED_SPEED, HALF_TILE_DISTANCE_DRIVE + FULL_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE);
+            startEncoderDrive(MED_SPEED,  FULL_TILE_DISTANCE_DRIVE*2 + HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE);
         }
     }
 
@@ -285,14 +289,14 @@ public class DriveTrain {
 
     //have this here just in case we have to take vision out of the code so we can still call this method
     public void ContinueAutomaticTasks(Gyro Gyro, Arm ServoArm, Lift Lift, Claw ServoClaw, Intake ServoIntake) {
-        if (alreadyDriving) {
-            ContinueDriving();
-        } else if (alreadyStrafing) {
-            ContinueStrafing();
-        } else if (alreadyTurning) {
+        if (alreadyTurning) {
             ContinueTurning(Gyro);
         } else if (alreadyPIDTurning) {
             ContinuePIDTurning(Gyro);
+        } else if (alreadyDriving) {
+            ContinueDriving();
+        } else if (alreadyStrafing) {
+            ContinueStrafing();
         } else if (autoDeliver1) {
             auto_deliver1(ServoArm, Lift, ServoClaw, ServoIntake);
         } else if (autoDeliver2) {
@@ -825,12 +829,13 @@ public class DriveTrain {
         if (degrees > 0) {
             kF = kF * -1;
         }
-        pid = new TurnPIDController2(degrees, 6, 0, 0, kF);
+        pid = new TurnPIDController2(degrees, 1, 0, 0, kF);
         alreadyPIDTurning = true;
+        turningTimer.reset();
     }
 
     public void ContinuePIDTurning(Gyro Gyro) {
-        if (Math.abs(pid.percent_error) > .01) {
+        if (Math.abs(pid.percentError) > .01 && turningTimer.seconds() < TURNING_TIMEOUT_IN_SECONDS) {
             double motorPower = pid.update(Gyro.getAngle());
             setMotorPower(-motorPower, motorPower, -motorPower, motorPower);
         } else {

@@ -160,7 +160,6 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                 Right Stick (left/right)
                 Left Stick (left/right)
 
-
                 Left Stick Button
                 Right Stick Button
                 touchpad controls
@@ -185,7 +184,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                     Gyro);
 
             //Driver control to move set distance away from alliance substation
-            //MecDrive.CheckAutoAwayFromAllianceSubstation(currentGamepad1.b, previousGamepad1.b);
+            MecDrive.CheckAutoAwayFromAllianceSubstation(currentGamepad1.x, previousGamepad1.x);
 
             //Driver control to use vision to center on pipe by strafing
             //MecDrive.CheckVisionStrafing(currentGamepad1.y, previousGamepad1.y);
@@ -200,6 +199,17 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             MecDrive.CheckNoManualDriveControls(currentGamepad1.left_stick_y, currentGamepad1.left_stick_x, currentGamepad1.right_stick_x,
                     currentGamepad1.left_trigger, currentGamepad1.right_trigger);
 
+            /** Unused Drive Gamepad Elements:
+             A Button
+             Back Button
+             Right Stick (up/down)
+
+             Left Stick Button
+             Right Stick Button
+             touchpad controls
+             */
+
+
             //------------------------------------------------------//
             //------------------TELEMETRY---------------------------//
             //------------------------------------------------------//
@@ -210,15 +220,11 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             telemetry.addData("Arm Position", ServoArm.currentArmState);
             telemetry.addData("Claw Position", ServoClaw.currentClawState);
 
-            telemetry.addData("side =", ServoArm.autoDeliverSide);
-            telemetry.addData("side =", ServoArm.currentArmState);
-
-            telemetry.addData("Gyro", "Current Angle(%s), Target Angle(%s)", (int) Gyro.getAbsoluteAngle(), MecDrive.pid.m_target);
-            telemetry.addData("PID Percent Error", (int) MecDrive.pid.percent_error);
-            telemetry.addData("PID result", (int) MecDrive.pid.output  );
+            telemetry.addData("PID Degree Error", "%.3f", MecDrive.pid.degreeError);
+            telemetry.addData("PID Percent Error", "%.3f", MecDrive.pid.percentError);
+            telemetry.addData("PID Motor Power Output", "%.3f", MecDrive.pid.output);
             telemetry.addData("Lift Limit Switch State", Lift.LimitSwitchIsPressed());
             telemetry.addData("Color", "R %d  G %d  B %d", MecDrive.colorSensor.red(), MecDrive.colorSensor.green(), MecDrive.colorSensor.blue());
-            telemetry.addData("Reflected Light", "Alpha %d", MecDrive.colorSensor.alpha());
 
             telemetry.addData("Encoders", "LF(%s), RF(%s)", MecDrive.LFDrive.getCurrentPosition(), MecDrive.RFDrive.getCurrentPosition());
             telemetry.addData("Encoders", "LB(%s), RB(%s)", MecDrive.LBDrive.getCurrentPosition(), MecDrive.RBDrive.getCurrentPosition());
