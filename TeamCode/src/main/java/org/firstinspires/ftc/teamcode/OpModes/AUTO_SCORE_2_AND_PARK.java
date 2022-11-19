@@ -294,7 +294,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             }
 
             //Drive toward middle of field after cone has been lifted off the stack
-            MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE+.52);
+            MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE+ 1);
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
                 MecDrive.ContinueDriving();
@@ -402,7 +402,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
             MecDrive.startEncoderDrive(.4, (FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
-                                                                +HALF_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE);
+                                                                +HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE);
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
@@ -422,7 +422,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         else {
             if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
                 MecDrive.startEncoderDrive(.4, -(FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
-                        + HALF_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE);
+                        + HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE);
                 while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                     MecDrive.ContinueDriving();
                     Lift.ContinueLifting();
