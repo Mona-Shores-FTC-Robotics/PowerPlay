@@ -133,7 +133,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                                             currentGamepad2.dpad_up, previousGamepad2.dpad_up,
                                             currentGamepad2.left_bumper, previousGamepad2.left_bumper,
                                             currentGamepad2.right_bumper, previousGamepad2.right_bumper,
-                                            currentGamepad2.a, currentGamepad2.b);
+                                            currentGamepad2.b, currentGamepad2.a);
 
             /**
             Left Trigger, lowers lift by one Junction Height Level (Intake, Ground, Low, Medium, High)
@@ -220,9 +220,10 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             telemetry.addData("Arm Position", ServoArm.currentArmState);
             telemetry.addData("Claw Position", ServoClaw.currentClawState);
 
-            telemetry.addData("PID Degree Error", "%.3f", MecDrive.pid.degreeError);
-            telemetry.addData("PID Percent Error", "%.3f", MecDrive.pid.percentError);
+            telemetry.addData("PID Degree Error", "%.3f", MecDrive.pid.degree_error);
+            telemetry.addData("PID Percent Error", "%.3f", MecDrive.pid.percent_error);
             telemetry.addData("PID Motor Power Output", "%.3f", MecDrive.pid.output);
+            telemetry.addData("Kf", "%.3f", MecDrive.pid.m_kF);
             telemetry.addData("Lift Limit Switch State", Lift.LimitSwitchIsPressed());
             telemetry.addData("Color", "R %d  G %d  B %d", MecDrive.colorSensor.red(), MecDrive.colorSensor.green(), MecDrive.colorSensor.blue());
 

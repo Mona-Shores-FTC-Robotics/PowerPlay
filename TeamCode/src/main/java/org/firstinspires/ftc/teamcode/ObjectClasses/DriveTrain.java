@@ -821,21 +821,18 @@ public class DriveTrain {
 
     public void turnPID(double degrees, Gyro Gyro) {
         Gyro.resetAngle();
-        double kF = -.1;
+        double kF = .1;
         LFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RFDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         RBDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        if (degrees > 0) {
-            kF = kF * -1;
-        }
-        pid = new TurnPIDController2(degrees, 1, 0, 0, kF);
+        pid = new TurnPIDController2(degrees, 6, 0, 0, kF);
         alreadyPIDTurning = true;
         turningTimer.reset();
     }
 
     public void ContinuePIDTurning(Gyro Gyro) {
-        if (Math.abs(pid.percentError) > .01 && turningTimer.seconds() < TURNING_TIMEOUT_IN_SECONDS) {
+        if (Math.abs(pid.percent_error) > .01 && turningTimer.seconds() < TURNING_TIMEOUT_IN_SECONDS) {
             double motorPower = pid.update(Gyro.getAngle());
             setMotorPower(-motorPower, motorPower, -motorPower, motorPower);
         } else {

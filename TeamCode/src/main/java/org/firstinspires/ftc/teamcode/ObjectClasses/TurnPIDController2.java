@@ -5,19 +5,18 @@ import static java.lang.Math.signum;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class TurnPIDController2 {
-
+    private double m_lastDegreesLeftToTurn;
+    double integralSum = 0;
     private ElapsedTime timer = new ElapsedTime();
     private double m_kP = 0;
     private double m_kI = 0;
     private double m_kD = 0;
-    private double m_kF = 0;
+    public double m_kF = 0;
     public double m_target =0;
-    public double degreeError;
-    public double percentError;
+    public double degree_error;
+    public double percent_error;
     public double output;
-
-    private double m_lastDegreeError;
-    double integralSum = 0;
+    public double motorPower;
 
     public TurnPIDController2(double target, double kP, double kI, double kD, double kF) {
         m_kP = kP;
@@ -26,24 +25,24 @@ public class TurnPIDController2 {
         m_kF = kF;
 
         m_target = target;
-        degreeError = target;
-        percentError = target;
+        degree_error    = target;
+        percent_error = target;
+
         timer.reset();
     }
 
     public double update(double currentState) {
-        degreeError = m_target - currentState;
-        percentError = .8 * (degreeError/90);
-
-        //integralSum += percent_error * timer.seconds();
-        //double derivative = (percent_error - m_lastDegreeError) / timer.seconds();
-        //m_lastDegreeError = percent_error;
-        //timer.reset();
-
-        //output = (percent_error * m_kP) + (derivative*m_kD) + (integralSum*m_kI) + signum(percent_error)*(m_kF);
-        output = (percentError * m_kP) + signum(percentError)*(m_kF);
+        degree_error = m_target - currentState;
+        percent_error = .8 * (degree_error/180);
+        integralSum += percent_error * timer.seconds();
+        double derivative = (percent_error - m_lastDegreesLeftToTurn) / timer.seconds();
+        m_lastDegreesLeftToTurn = percent_error;
+        timer.reset();
+        output = (percent_error * m_kP) + (derivative*m_kD) + (integralSum*m_kI) + signum(percent_error)*(m_kF);
         return output;
-
     }
 
 }
+
+
+

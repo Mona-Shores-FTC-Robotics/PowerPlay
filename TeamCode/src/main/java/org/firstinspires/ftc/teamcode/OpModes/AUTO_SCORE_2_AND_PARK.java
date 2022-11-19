@@ -140,7 +140,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         }
 
         //Strafe close to High Pole
-        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
             ServoArm.setArmState(Arm.armState.ARM_RIGHT);
         } else ServoArm.setArmState(Arm.armState.ARM_LEFT);
@@ -149,22 +149,19 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         }
 
         //dunk cone
-        Lift.StartLifting(Lift.liftMotor.getCurrentPosition()-200, ServoArm);
+        Lift.StartLifting(Lift.liftMotor.getCurrentPosition()-325, ServoArm);
         while (opModeIsActive() && (Lift.alreadyLifting)) {
             Lift.ContinueLifting();
         }
+
+        sleep(200);
 
         //Open claw to drop cone
         ServoClaw.openClaw();
 
-        //lift before moving
-        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
-        while (opModeIsActive() && (Lift.alreadyLifting)) {
-            Lift.ContinueLifting();
-        }
 
         //lift before moving
-        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL+100, ServoArm);
+        Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
         while (opModeIsActive() && (Lift.alreadyLifting)) {
             Lift.ContinueLifting();
         }
@@ -296,7 +293,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             }
 
             //Drive toward middle of field after cone has been lifted off the stack
-            MecDrive.startEncoderDrive(.4, QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE+SIXTEENTH_TILE_DISTANCE_DRIVE);
+            MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE);
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
                 MecDrive.ContinueDriving();
@@ -316,7 +313,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
             //Strafe to the LOW pole
-            MecDrive.startStrafeDrive(LOW_SPEED,(QUARTER_TILE_DISTANCE_STRAFE+EIGHTH_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
+            MecDrive.startStrafeDrive(LOW_SPEED,(QUARTER_TILE_DISTANCE_STRAFE+SIXTEENTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
             while (opModeIsActive() && (MecDrive.alreadyStrafing)) {
                 MecDrive.ContinueStrafing();
                 Lift.ContinueLifting();
@@ -336,7 +333,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             //drop off cone
             ServoClaw.openClaw();
 
-            sleep(100);
+            sleep(200);
 
             //lift before moving
             Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
@@ -376,19 +373,95 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
 
         //Park code
         //TODO: FIX CODE FOR LEFT AND RIGHT BASED ON LEFT OR RIGHT
+        if (ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.LEFT_SIDE){
+
+
         if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
             MecDrive.startEncoderDrive(.4, -(FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
                                                                 + HALF_TILE_DISTANCE_DRIVE);
+            while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
+                MecDrive.ContinueDriving();
+                Lift.ContinueLifting();
+            }
         } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
-            MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE);
+            MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE + SIXTEENTH_TILE_DISTANCE_DRIVE);
+            while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
+                MecDrive.ContinueDriving();
+                Lift.ContinueLifting();
+            }
+            //turn to 0
+            MecDrive.turnToPID(0, Gyro);
+            while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
+                MecDrive.ContinuePIDTurning(Gyro);
+            }
+            MecDrive.startEncoderDrive(.4, -HALF_TILE_DISTANCE_DRIVE);
+            while (opModeIsActive() && (MecDrive.alreadyDriving)) {
+                MecDrive.ContinueDriving();
+            }
+
         } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
             MecDrive.startEncoderDrive(.4, (FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
-                                                                +HALF_TILE_DISTANCE_DRIVE);
+                                                                +HALF_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE);
+            while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
+                MecDrive.ContinueDriving();
+                Lift.ContinueLifting();
+            }
+            //turn to 0
+            MecDrive.turnToPID(0, Gyro);
+            while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
+                MecDrive.ContinuePIDTurning(Gyro);
+            }
+            MecDrive.startEncoderDrive(.4, -HALF_TILE_DISTANCE_DRIVE);
+            while (opModeIsActive() && (MecDrive.alreadyDriving)) {
+                MecDrive.ContinueDriving();
+            }
         }
-        while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
-            MecDrive.ContinueDriving();
-            Lift.ContinueLifting();
+
         }
+        else {
+            if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
+                MecDrive.startEncoderDrive(.4, -(FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
+                        + HALF_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE);
+                while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
+                    MecDrive.ContinueDriving();
+                    Lift.ContinueLifting();
+                }
+                //turn to 0
+                MecDrive.turnToPID(0, Gyro);
+                while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
+                    MecDrive.ContinuePIDTurning(Gyro);
+                }
+                MecDrive.startEncoderDrive(.4, -HALF_TILE_DISTANCE_DRIVE);
+                while (opModeIsActive() && (MecDrive.alreadyDriving)) {
+                    MecDrive.ContinueDriving();
+                }
+            } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
+                MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE + SIXTEENTH_TILE_DISTANCE_DRIVE);
+                while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
+                    MecDrive.ContinueDriving();
+                    Lift.ContinueLifting();
+                }
+                //turn to 0
+                MecDrive.turnToPID(0, Gyro);
+                while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
+                    MecDrive.ContinuePIDTurning(Gyro);
+                }
+                MecDrive.startEncoderDrive(.4, -HALF_TILE_DISTANCE_DRIVE);
+                while (opModeIsActive() && (MecDrive.alreadyDriving)) {
+                    MecDrive.ContinueDriving();
+                }
+            } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
+                MecDrive.startEncoderDrive(.4, (FULL_TILE_DISTANCE_DRIVE * ButtonConfig.startPositionMultiplier)
+                        +HALF_TILE_DISTANCE_DRIVE);
+                while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
+                    MecDrive.ContinueDriving();
+                    Lift.ContinueLifting();
+                }
+            }
+        }
+
+
+
 
         telemetry.addData("Cones:", "Stack(%s)/Delivered(%s)", coneStackTracker, coneDeliveryTracker);
         telemetry.addData("Current Lift Height", Lift.liftMotor.getCurrentPosition());
