@@ -65,7 +65,7 @@ public class DriveTrain {
     public static final double STARTING_RAMP_VALUE = .03;
     public static final double RAMP_INCREMENT = .02;
 
-    public int TURNING_TIMEOUT_IN_SECONDS = 3;
+    public int TURNING_TIMEOUT_IN_SECONDS = 2;
 
     /* Public OpMode members. */
     public DcMotor LFDrive = null;

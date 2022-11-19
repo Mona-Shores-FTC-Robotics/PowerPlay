@@ -154,11 +154,12 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             Lift.ContinueLifting();
         }
 
-        sleep(200);
 
         //Open claw to drop cone
         ServoClaw.openClaw();
 
+
+        sleep(500);
 
         //lift before moving
         Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
@@ -293,7 +294,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             }
 
             //Drive toward middle of field after cone has been lifted off the stack
-            MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE);
+            MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE+.52);
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
                 MecDrive.ContinueDriving();
