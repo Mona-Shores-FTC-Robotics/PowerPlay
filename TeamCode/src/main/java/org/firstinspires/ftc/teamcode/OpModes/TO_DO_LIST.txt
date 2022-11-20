@@ -17,6 +17,7 @@ Todo: Test and tune TeleOp Auto_drive to pole - CheckAutoAwayFromAllianceSubstat
 Todo: Change Auto finish positions to be smart for LEFT, MIDDLE, RIGHT
 Todo: Tune Turning PID
 
+
 LOW PRIORITY / AFTER FRUITPORT
 Todo: Null checks for disconnected equipment (look at how the limit switch init is done)
 Todo: Move arm when manually strafing in that direction for certain amount of time
