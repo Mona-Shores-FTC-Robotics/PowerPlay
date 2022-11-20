@@ -21,7 +21,7 @@ public class Lift {
     final double LIFT_FALL_POWER = 0;
     final double LIFT_RAISE_POWER = .9;
 
-    final int MAX_LIFT_HEIGHT = 2650;
+    final int MAX_LIFT_HEIGHT = 2300;
     final int MIN_LIFT_HEIGHT = 0;
 
     final double BUFFER_HEIGHT = 400; // Buffer on top of crash height to give us room to stop before safe crash height
@@ -96,6 +96,7 @@ public class Lift {
             //if lift is 1) being lowered, 2) to below the MUST_FALL_HEIGHT, and 3) the arm is centered, then let the lift fall
             if (deltaLift <= 0 && newLiftTarget < MUST_FALL_HEIGHT && arm.currentArmState == Arm.armState.ARM_CENTER) {
                 liftMotor.setPower(LIFT_FALL_POWER);
+
             }
 
             //if lift is being raised, no risk of crashing so give lift power
@@ -267,7 +268,7 @@ public class Lift {
             ContinueLifting();
         } else if (manualLiftTargetChange ==0){
             //check if the limit switch is pressed (false is pressed) and reset encoder if it is
-            if (limitSwitch1.getState() == false){
+            if (limitSwitch1.getState() == false || (liftMotor.getCurrentPosition()<60) && (liftMotor.getTargetPosition() <25)){
                 liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 currentLiftConeStackState = liftConeStackStates.ONE_CONE_INTAKE_HEIGHT;
                currentLiftJunctionState = liftJunctionStates.LOW_CONE_JUNCTION_SCORE_HEIGHT;

@@ -18,6 +18,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CON
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THIRTYSECOND_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 
@@ -132,7 +133,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         }
 
         //Drive in Front of High Pole
-        MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE);
+        MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE + THIRTYSECOND_TILE_DISTANCE_DRIVE);
         Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
         while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
@@ -140,7 +141,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         }
 
         //Strafe close to High Pole
-        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE + SIXTEENTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
             ServoArm.setArmState(Arm.armState.ARM_RIGHT);
         } else ServoArm.setArmState(Arm.armState.ARM_LEFT);
