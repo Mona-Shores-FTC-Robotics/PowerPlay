@@ -104,6 +104,18 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         }
 
        //BEGINNING OF AUTO
+        //13s to score cone on high goal and get to cone stack line
+        //10s to get cone from stack and score on low
+        //3s to park middle
+        //
+        //5pts + 3pts + 20pts = 28pt auto
+        //5 + 5 + 5 = 35pt auto
+        //4*4 + 20 - best auto so far
+
+        //Target: 35pt Auto (1 starting + 3 from stack)
+        //Target: 121 TeleOp (18 from Substation + 10 from stacks)
+        //Target: 25 End Game (5 junctions + 1 beacon)
+
         runtime.reset();
         Gyro.init(hardwareMap);
 
@@ -111,7 +123,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
         telemetry.update();
 
-        //Drive Forward
+        //Drive Forward - 3s (3s)
         Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
         MecDrive.startEncoderDrive(.4, (FULL_TILE_DISTANCE_DRIVE * 2) + EIGHTH_TILE_DISTANCE_STRAFE+SIXTEENTH_TILE_DISTANCE_DRIVE);
         while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
@@ -119,7 +131,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             Lift.ContinueLifting();
         }
 
-        //Rotate
+        //Rotate - 1s (4s)
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE))
         {
             MecDrive.turnToPID(90, Gyro);
@@ -132,7 +144,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             MecDrive.ContinuePIDTurning(Gyro);
         }
 
-        //Drive in Front of High Pole
+        //Drive in Front of High Pole - 2s (6s)
         MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE + THIRTYSECOND_TILE_DISTANCE_DRIVE);
         Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
         while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
@@ -140,7 +152,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             Lift.ContinueLifting();
         }
 
-        //Strafe close to High Pole
+        //Strafe close to High Pole - 3s (9s)
         MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE + SIXTEENTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
             ServoArm.setArmState(Arm.armState.ARM_RIGHT);
@@ -149,33 +161,30 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             MecDrive.ContinueStrafing();
         }
 
-        //dunk cone
+        //dunk cone - 1s (10s)
         Lift.StartLifting(Lift.liftMotor.getCurrentPosition()-325, ServoArm);
         while (opModeIsActive() && (Lift.alreadyLifting)) {
             Lift.ContinueLifting();
         }
 
 
-        //Open claw to drop cone
+        //Open claw and wait a moment to drop cone - .5s (10.5s)
         ServoClaw.openClaw();
-
-
         sleep(500);
 
-        //lift before moving
+        //lift before moving - .5s (11s)
         Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
         while (opModeIsActive() && (Lift.alreadyLifting)) {
             Lift.ContinueLifting();
         }
 
-        //Strafe away from High Pole
+        //Strafe away from High Pole - 1s (12s)
         MecDrive.startStrafeDrive(LOW_SPEED, (QUARTER_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
             MecDrive.ContinueStrafing();
         }
 
-
-        //turn to 90
+        //turn to 90 - 0s (12s)
         MecDrive.turnToPID(-90* ButtonConfig.startPositionMultiplier, Gyro);
         while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
             MecDrive.ContinuePIDTurning(Gyro);
@@ -190,6 +199,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         telemetry.addData("Current Angle", Gyro.getAngle());
         telemetry.update();
 
+        //Drive to the cone stack line - 2s (14s)
         ServoArm.setArmState(Arm.armState.ARM_CENTER);
         Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
         MecDrive.startEncoderDrive(.5, -(FULL_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE));
@@ -203,24 +213,26 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             telemetry.update();
         }
 
-        //Find the cone stack line
+        //Find the cone stack line - 0s (14s)
         MecDrive.lineFollow(LOW_SPEED, this, Gyro);
 
         while (coneStackTracker > 4)
         {
-            //turn to 90
+            //turn to 90 - 0s (14s)
             MecDrive.turnToPID(-90* ButtonConfig.startPositionMultiplier, Gyro);
              while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
                 MecDrive.ContinuePIDTurning(Gyro);
             }
 
+            //turn to 90 - 0s (14s)
             //close claw for next intake
             ServoClaw.setEasyIntake();
 
+            //turn to 90 - 0s (14s)
             //move turret to pickup position
             ServoArm.setArmState(armState.ARM_CENTER);
 
-            //lower lift to correct cone stack intake height
+            //lower lift to correct cone stack intake height - //turn to 90 - 0s (14s)
             switch (coneStackTracker) {
                 case 5: {
                     Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
@@ -243,7 +255,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 }
             }
 
-            //Drive near cone stack while setting lift to correct height
+            //Drive near cone stack while setting lift to correct height - 1s (15s)
             MecDrive.startEncoderDrive(.4, -(QUARTER_TILE_DISTANCE_DRIVE));
             while (opModeIsActive() && (MecDrive.alreadyDriving)) {
                 MecDrive.ContinueDriving();
@@ -255,10 +267,10 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 telemetry.update();
             }
 
-            //turn on intake to grab cone
+            //turn on intake to grab cone - 0s (15s)
             ServoIntake.turnIntakeOn();
 
-            //Drive near cone stack with intake on
+            //Drive near cone stack with intake on - 1s (16s)
             MecDrive.startEncoderDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE));
             while (opModeIsActive() && ( MecDrive.alreadyDriving)) {
                 MecDrive.ContinueDriving();
@@ -269,10 +281,10 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 telemetry.update();
             }
 
-            //turn off intake now that cone is grabbed
+            //turn off intake now that cone is grabbed - 0s (16s)
             ServoIntake.turnIntakeOff();
 
-            //close claw to grab cone
+            //close claw to grab cone -  0s (16s)
             ServoClaw.closeClaw();
 
             coneStackTracker = coneStackTracker - 1;
@@ -283,7 +295,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             telemetry.addData("Current Angle", Gyro.getAngle());
             telemetry.update();
 
-            //raise lift to above five cone starting stack height
+            //raise lift to above five cone starting stack height -  1s (17s)
             Lift.StartLifting(Lift.liftMotor.getCurrentPosition() + CONE_HEIGHT_ENC_VAL, ServoArm);
             while (opModeIsActive() && Lift.alreadyLifting == true) {
                 Lift.ContinueLifting();
@@ -294,7 +306,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 telemetry.update();
             }
 
-            //Drive toward middle of field after cone has been lifted off the stack
+            //Drive toward middle of field after cone has been lifted off the stack -  1s (18s)
             MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE+ 1);
             Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
             while (opModeIsActive() && MecDrive.alreadyDriving == true) {
@@ -302,19 +314,19 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 Lift.ContinueLifting();
             }
 
-            //turn to 90
+            //turn to 90 - 0s (18s)
             MecDrive.turnToPID(-90 * ButtonConfig.startPositionMultiplier, Gyro);
             while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
                 MecDrive.ContinuePIDTurning(Gyro);
             }
 
-            //move turret to deliver position
+            //move turret to deliver position - 0s (18s)
             if(ButtonConfig.startPositionMultiplier == 1){
                 ServoArm.setPosition(ARM_RIGHT_OUTTAKE);}
             else if (ButtonConfig.startPositionMultiplier == -1){
                 ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
-            //Strafe to the LOW pole
+            //Strafe to the LOW pole- 2s (20s)
             MecDrive.startStrafeDrive(LOW_SPEED,(QUARTER_TILE_DISTANCE_STRAFE+SIXTEENTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
             while (opModeIsActive() && (MecDrive.alreadyStrafing)) {
                 MecDrive.ContinueStrafing();
@@ -326,19 +338,18 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 telemetry.update();
             }
 
-            //dunk cone
+            //dunk cone - 1s (21s)
             Lift.StartLifting(Lift.liftMotor.getCurrentPosition()-300, ServoArm);
             while (opModeIsActive() && (Lift.alreadyLifting)) {
                 Lift.ContinueLifting();
             }
 
-            //drop off cone
+            //drop off cone - 0s (21s)
             ServoClaw.openClaw();
-
             sleep(200);
 
-            //lift before moving
-            Lift.StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
+            //lift before moving - 1s (22s)
+            Lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
             while (opModeIsActive() && (Lift.alreadyLifting)) {
                 Lift.ContinueLifting();
             }
@@ -351,7 +362,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             telemetry.addData("Current Angle", Gyro.getAngle());
             telemetry.update();
 
-            //strafe away from the LOW pole
+            //strafe away from the LOW pole - 1s (23s)
             MecDrive.startStrafeDrive(LOW_SPEED,-(QUARTER_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                 MecDrive.ContinueStrafing();
@@ -363,7 +374,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             telemetry.update();
         }
 
-        //turn to 90
+        //turn to 90 - 0s (23s)
         MecDrive.turnToPID(-90 * ButtonConfig.startPositionMultiplier, Gyro);
         while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
             MecDrive.ContinuePIDTurning(Gyro);
@@ -374,7 +385,6 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, ServoArm);
 
         //Park code
-        //TODO: FIX CODE FOR LEFT AND RIGHT BASED ON LEFT OR RIGHT
         if (ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.LEFT_SIDE){
 
 
@@ -385,7 +395,11 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
             }
-        } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
+        }
+
+
+        // Park LEFT SIDE - MIDDLE LOCATION - 4s (27s)
+        else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
             MecDrive.startEncoderDrive(.4, HALF_TILE_DISTANCE_DRIVE + SIXTEENTH_TILE_DISTANCE_DRIVE);
             while (opModeIsActive() && (MecDrive.alreadyDriving || Lift.alreadyLifting)) {
                 MecDrive.ContinueDriving();
