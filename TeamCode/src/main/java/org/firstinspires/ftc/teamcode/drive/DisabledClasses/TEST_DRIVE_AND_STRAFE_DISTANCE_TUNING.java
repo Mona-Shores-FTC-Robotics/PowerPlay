@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.DisabledClasses;
+package org.firstinspires.ftc.teamcode.drive.DisabledClasses;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_STRAFE;

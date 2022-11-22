@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode.DisabledClasses;
+package org.firstinspires.ftc.teamcode.drive.DisabledClasses;
+
+import static org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain.LOW_SPEED;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
@@ -16,46 +18,44 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
 @Disabled
-@Autonomous(name = "TEST_LINE_FOLLOW")
-public class TEST_LINE_FOLLOW extends LinearOpMode {
+@Autonomous(name = "AUTO_TEST_COLOR")
+public class AUTO_TEST_COLOR extends LinearOpMode {
 
-    int Signal;
     DriveTrain MecDrive = new DriveTrain(this);
+    AprilTagVision Vision = new AprilTagVision();
     ButtonConfig BConfig = new ButtonConfig(this);
     Claw ServoClaw = new Claw();
     Intake ServoIntake = new Intake(ServoClaw, this);
     Lift Lift = new Lift(this);
     Arm ServoArm = new Arm(Lift, ServoIntake, ServoClaw, this);
     Gyro Gyro = new Gyro(this);
-    AprilTagVision Vision = new AprilTagVision();
 
-    private final ElapsedTime runtime = new ElapsedTime();
 
     Gamepad currentGamepad1 = new Gamepad();
     Gamepad previousGamepad1 = new Gamepad();
     Gamepad currentGamepad2 = new Gamepad();
     Gamepad previousGamepad2 = new Gamepad();
 
+
     @Override
     public void runOpMode() {
-
         telemetry.addData("Status", "Initializing");
         telemetry.update();
-        Vision.init(hardwareMap);
+
         MecDrive.init(hardwareMap);
+        Vision.init(hardwareMap);
+        Lift.init(hardwareMap);
         ServoIntake.init(hardwareMap);
         ServoClaw.init(hardwareMap);
-        Lift.init(hardwareMap);
-        ServoArm.init(hardwareMap);
-
         BConfig.init();
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-        sleep(1000);
+        sleep(500);
 
         while (!isStarted()) {
+
             //save current and previous gamepad values for one loop
             previousGamepad1 = BConfig.copy(currentGamepad1);
             currentGamepad1 = BConfig.copy(gamepad1);
@@ -64,6 +64,7 @@ public class TEST_LINE_FOLLOW extends LinearOpMode {
             currentGamepad2 = BConfig.copy(gamepad2);
 
             //Use Webcam to find out Signal using April Tags and save in currentSignal
+            Vision.CheckForAprilTags(this);
 
             // User sets starting location left or right, and confirms selection with a button press
             // LEFT is a multiplier of 1, RIGHT is a multiplier of -1
@@ -85,32 +86,24 @@ public class TEST_LINE_FOLLOW extends LinearOpMode {
             sleep(20);
         }
 
-        runtime.reset();
         Gyro.init(hardwareMap);
+        telemetry.addData("Signal is ", Vision.currentSignal);
+        telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
+        telemetry.addData("Status", "Run Time: " + getRuntime());
+        telemetry.update();
 
-        while (opModeIsActive()) {
+        //Strafe until color seen
 
-            //Store the previous loop's gamepad values.
-            previousGamepad1 = BConfig.copy(currentGamepad1);
-            previousGamepad2 = BConfig.copy(currentGamepad2);
-
-            //Store the gamepad values to be used for this iteration of the loop.
-            currentGamepad1 = BConfig.copy(gamepad1);
-            currentGamepad2 = BConfig.copy(gamepad2);
-
-            if (currentGamepad1.a && !previousGamepad1.a) {
-                MecDrive.lineFollow(.2, this, Gyro);
-            } else if (MecDrive.alreadyLineFollowing)
-            {
-                MecDrive.lineFollow(.2, this, Gyro);
-            }
-
-
-
-
+        MecDrive.ColorStrafe(LOW_SPEED, this);
+        while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
+            MecDrive.ContinueStrafing();
         }
-      }
+
+        MecDrive.turnTo(0, Gyro);
+
     }
+}
+
 
 
 

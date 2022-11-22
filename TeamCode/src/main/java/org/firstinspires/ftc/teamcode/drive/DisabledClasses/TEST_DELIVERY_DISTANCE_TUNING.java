@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.DisabledClasses;
+package org.firstinspires.ftc.teamcode.drive.DisabledClasses;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
