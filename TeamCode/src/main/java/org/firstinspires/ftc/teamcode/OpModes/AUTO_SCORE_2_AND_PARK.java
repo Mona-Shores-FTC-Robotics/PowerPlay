@@ -130,7 +130,7 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
         }
-
+        //
         //Rotate - 1s (4s)
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE))
         {
