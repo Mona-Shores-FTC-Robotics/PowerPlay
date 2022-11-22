@@ -1,33 +1,27 @@
-HIGH PRIORITY - MUST DO THESE BEFORE FRUITPORT:
-COMPLETED: Print Sleeves for Team 20245
-COMPLETED: Print Sleeves for Team 19429
-COMPLETED: Test and tune drive and strafe distances with TEST_DRIVE_AND_STRAFE_DISTANCE_TUNING
-COMPLETED: Test and tune delivery distance with TEST_DELIVERY_DISTANCE_TUNING
-COMPLETED: Test and tune Lift Heights (Junctions and Cone Stack)
-Todo: Tune and finalize autos for Fruitport using the tuned values
-COMPLETED: Confirm only tuned and usable Autos are listed in Driver Station
-Todo: Confirm drive teams understand the autos and what they do
+Todo: Drive Team feedback, which buttons worked? which didn't?
 
-MIDDLE PRIORITY - IF WE HAVE TIME BEFORE FRUITPORT
-COMPLETED: Create and Print TeleOp Button Map for Driver and Operator Controls
-COMPLETED: Find/Buy clipboard(s)
-COMPLETED: Print Map of Field to Discuss Strategy with other teams
-Todo: Test and tune TeleOp Auto_deliver1 and Auto_deliver2 - currently commented out
-Todo: Test and tune TeleOp Auto_drive to pole - CheckAutoAwayFromAllianceSubstation - currently commented out
-Todo: Change Auto finish positions to be smart for LEFT, MIDDLE, RIGHT
-Todo: Tune Turning PID
+Todo: Decide focus for Big Rapids
+    Programming - Three cone autonomous routine (need either or both: pole vision / improved drive train accuracy)
+    Programming - Pole vision (front only) (~1-2 practices)
+    Programming+Build - Pole vision (camera servo) (~2-3 practices)
+    Programming+Build - Pole vision (on arm) (~2-3 practices)
+    Programming - Drive train accuracy - Roadrunner (~2-3 practices)
+    Programming - Drive train accuracy - Custom Acceleration/Deceleration (1 practice)
+    Programming - Drive train accuracy - P Tuning Turning (1 practice)
+    Programming+Build - Drive train accuracy - 2/3 Dead Wheels (~3-4 practices)
+    Programming - Automatic arm rotation to direction of long strafe (~1-2 practices)
+    Programming+Build - Cone sensor (1-2 practices)
+    Programming - Change button behavior (1-2 practices)
+    Driver practice - first 10s - fast movement to alliance substation
+    Driver practice - first 10s - quick score on opposite alliance station ground junction
+    Driver practice - 10s-70s alliance station focus - repeated quick score on close high junction
+    Driver practice - 10s-70s cone stack focus
+    Driver practice - 70s-90s circuit offense/defense - scatter cone placements to different poles
+    Driver practice - 90s-120s end game - picking up and placing beacon
+    Driver practice - 90s-120s end game - circuit defense
+    Driver practice - 90s-120s end game - circuit offense
+    Driver practice - pole naming convention
 
-
-LOW PRIORITY / AFTER FRUITPORT
-Todo: Null checks for disconnected equipment (look at how the limit switch init is done)
-Todo: Move arm when manually strafing in that direction for certain amount of time
-Todo: Cleanup Telemetry - how do we get the telemtry organized better so it doesn't clear screen
-Todo: Finish and Test TeleOp Vision Strafing Vision - currently commented out
-Todo: Test Line Following with Test_Line_Follow code
-Todo: Pole Seeking with a button
-Todo: Pole Seeking in Autos
-Todo: MotorEx class functionality
-Todo: Investigate velocity PID for Driving/Strafing
-
+Todo: Cleanup Telemetry - can we organize the telemtry better?
 
 
