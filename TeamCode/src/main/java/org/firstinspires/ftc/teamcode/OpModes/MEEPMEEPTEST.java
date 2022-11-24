@@ -102,7 +102,7 @@ public class MEEPMEEPTEST extends LinearOpMode {
                                     Lift.StartLifting(GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
                                 })
                                 .addTemporalMarker(1, () ->{
-                                    ServoArm.setArmState(Arm.armState.ARM_LEFT);
+                                    ServoArm.setArmState(Arm.armState.ARM_LEFT, null);
                                 })
                                 .waitSeconds(.5)
                                 .addDisplacementMarker(() -> {

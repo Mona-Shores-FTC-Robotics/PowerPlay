@@ -233,18 +233,28 @@ public class DriveTrain {
         }
     }
 
-    public void CheckAutoAwayFromAllianceSubstation(boolean button, boolean lastButton) {
-        if (button && lastButton) {
-            //move from alliance substation to scoring position
-            startEncoderDrive(MED_SPEED,  FULL_TILE_DISTANCE_DRIVE*2 + HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE);
-        }
-    }
 
     public void CheckVisionStrafing(boolean button, boolean lastButton) {
         if (button && lastButton) {
             visionStrafing = true;
         }
     }
+
+    public void CheckAutoTowardAllianceSubstation(boolean button, boolean lastButton) {
+        if (button && lastButton) {
+            //move from alliance substation to scoring position
+            startEncoderDrive(MED_SPEED, -(FULL_TILE_DISTANCE_DRIVE*2 + HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE));
+        }
+    }
+
+    public void CheckAutoFromAllianceStation(boolean button, boolean lastButton) {
+        if (button && lastButton) {
+            //move from alliance substation to scoring position
+            startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE_DRIVE*2 + HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE));
+        }
+    }
+
+
 
     public void CheckSquareTurning(boolean button1, boolean lastButton1, boolean button2, boolean lastButton2, Gyro Gyro) {
         if (button1 && !lastButton1) {

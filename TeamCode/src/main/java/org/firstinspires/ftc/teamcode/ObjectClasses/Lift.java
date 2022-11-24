@@ -127,6 +127,7 @@ public class Lift {
     public void ContinueLifting() {
         //if lift motor is busy, nothing to do
         if (liftMotor.isBusy() == true) {
+
         }
         //if lift has reached target lift motor wont be busy and alreadylifting state can be changed
         //This is helpful if we need to make sure the lift is at its target before moving to the next state
@@ -234,12 +235,12 @@ public class Lift {
         }
     }
 
-    public void CheckLift(          float  stackHeight34CurrentStick, float stackHeight34PreviousStick,
-                                    float  stackHeight52CurrentStick, float stackHeight52PreviousStick,
+    public void CheckLift(          float  stackHeightCurrentYStick, float stackHeightPreviousYStick,
+                                    float  stackHeightCurrentXStick, float stackHeightPreviousXStick,
                                     Boolean mediumJunctionHeightCurrentButton, Boolean mediumJunctionHeightPreviousButton,
                                     Boolean lowJunctionHeightCurrentButton, Boolean lowJunctionHeightPreviousButton,
                                     float manualLiftTargetChange,
-                                    Arm arm) {
+                                    Arm arm, Claw claw, Intake intake) {
 
         if (Math.abs(manualLiftTargetChange) <= .2){
             manualLiftTargetChange = 0;
@@ -251,14 +252,22 @@ public class Lift {
             StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
         } else if (lowJunctionHeightCurrentButton && !lowJunctionHeightPreviousButton) {
             StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
-        } else if (stackHeight34CurrentStick >= .2  && stackHeight34PreviousStick < .2) {
-            arm.setArmState(Arm.armState.ARM_CENTER_INTAKE_ON, THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
-        } else if (stackHeight34CurrentStick <= -.2  && stackHeight34PreviousStick > -.2) {
-            arm.setArmState(Arm.armState.ARM_CENTER_INTAKE_ON, FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
-        } else if (stackHeight52CurrentStick >= .2 && stackHeight52PreviousStick < .2) {
-            arm.setArmState(Arm.armState.ARM_CENTER_INTAKE_ON, TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
-        } else if (stackHeight52CurrentStick <= -.2 && stackHeight52PreviousStick > -.2) {
-            arm.setArmState(Arm.armState.ARM_CENTER_INTAKE_ON, FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        } else if (stackHeightCurrentYStick >= .2  && stackHeightPreviousYStick < .2) {
+            StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, arm);
+            claw.setEasyIntake();
+            intake.turnIntakeOn();
+        } else if (stackHeightCurrentYStick <= -.2  && stackHeightPreviousYStick > -.2) {
+            StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, arm);
+            claw.setEasyIntake();
+            intake.turnIntakeOn();
+        } else if (stackHeightCurrentXStick >= .2 && stackHeightPreviousXStick < .2) {
+            StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, arm);
+            claw.setEasyIntake();
+            intake.turnIntakeOn();
+        } else if (stackHeightCurrentXStick <= -.2 && stackHeightPreviousXStick > -.2) {
+            StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, arm);
+            claw.setEasyIntake();
+            intake.turnIntakeOn();
         } else if (alreadyLifting) {
             ContinueLifting();
         } else if (manualLiftTargetChange ==0){

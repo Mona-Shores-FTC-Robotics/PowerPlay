@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -12,6 +13,10 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 @TeleOp(name = "TeleOp Mode", group = "Turret Bot")
 public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
@@ -29,7 +34,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
     private final ElapsedTime runtime = new ElapsedTime();
 
     public void runOpMode() {
-
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         telemetry.addData("Status", "Initializing Hardware");
         telemetry.update();
 
@@ -144,12 +149,12 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             Left Stick up/down - raise/lower lift, stop when stick is zeroed
             */
 
-            Lift.CheckLift(                 currentGamepad2.right_stick_x, previousGamepad2.right_stick_x,
-                                            currentGamepad2.right_stick_y, previousGamepad2.right_stick_y,
-                                            currentGamepad2.a,  previousGamepad2.a,
-                                            currentGamepad2.b, previousGamepad2.b,
+            Lift.CheckLift(                 currentGamepad2.right_stick_y, previousGamepad2.right_stick_y,
+                                            currentGamepad2.right_stick_x, previousGamepad2.right_stick_x,
+                                            currentGamepad2.b,  previousGamepad2.b,
+                                            currentGamepad2.a, previousGamepad2.a,
                                             currentGamepad2.left_stick_y,
-                                            ServoArm);
+                                            ServoArm, ServoClaw, ServoIntake);
 
             /** Unused Operator Gamepad Elements:
                 A Button
@@ -166,12 +171,6 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                 Right Stick Button
                 touchpad controls
             */
-
-
-            //make a button move height to low
-            //make b button move height to medium
-
-            //right stick for stack heights (this really should be in intake position i think is that awkward for driver)
 
             //can we automate this action with the color sensor to help the driver/operator out?
 
@@ -195,7 +194,9 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                     Gyro);
 
             //Driver control to move set distance away from alliance substation
-            MecDrive.CheckAutoAwayFromAllianceSubstation(currentGamepad1.x, previousGamepad1.x);
+            MecDrive.CheckAutoFromAllianceStation(currentGamepad1.y, previousGamepad1.y);
+
+            MecDrive.CheckAutoTowardAllianceSubstation(currentGamepad1.a, previousGamepad1.a);
 
             //Driver control to use vision to center on pipe by strafing
             //MecDrive.CheckVisionStrafing(currentGamepad1.y, previousGamepad1.y);
@@ -220,13 +221,10 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
              touchpad controls
              */
 
-            //make y button go forward instead of the x button
-            //make a button go backwards from high junction back to intake
-            //get rid of tile distances with the d-pad
-            //fine tune turning isn't really used.
+            //get rid of tile distances with the d-pad?
+            //fine tune turning isn't really used?
 
             //color sensor lineup for conestack button?
-
             //full auto deliver button?
             //vision seek button?
 
@@ -239,7 +237,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             telemetry.addData("Lift", "Position(%s), Target(%s)", Lift.liftMotor.getCurrentPosition(), Lift.getLiftTarget());
             telemetry.addData("Arm Position", ServoArm.currentArmState);
             telemetry.addData("Claw Position", ServoClaw.currentClawState);
-
+            telemetry.addData("X Right stick", gamepad2.right_stick_x);
+            telemetry.addData("Y Right stick", gamepad2.right_stick_y);
             telemetry.addData("PID Degree Error", "%.3f", MecDrive.pid.degree_error);
             telemetry.addData("PID Percent Error", "%.3f", MecDrive.pid.percent_error);
             telemetry.addData("PID Motor Power Output", "%.3f", MecDrive.pid.output);

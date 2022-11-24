@@ -15,6 +15,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.AUTOMATI
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
 
 import androidx.annotation.Nullable;
@@ -84,14 +85,6 @@ public class Arm {
         currentArmState = ARM_CENTER;
     }
 
-    public void init2(HardwareMap ahwMap) {
-        arm = ahwMap.servo.get("turret_servo");
-        //set arm at intake position
-        arm.setPosition(ARM_NEAR_FRONT);
-        currentArmState = armState.ARM_FRONT;
-
-    }
-
     public void CheckArm(Boolean armLeftCurrentButton, Boolean armLeftPreviousButton,
                          Boolean armCenterCurrentButton, Boolean armCenterPreviousButton,
                          Boolean armRightCurrentButton, Boolean armRightPreviousButton,
@@ -103,7 +96,7 @@ public class Arm {
         if (armLeftCurrentButton && !armLeftPreviousButton) {
             setArmState(ARM_LEFT, null  );
         } else if (armCenterCurrentButton && !armCenterPreviousButton) {
-            setArmState(ARM_CENTER_INTAKE_ON, ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
+            setArmState(ARM_CENTER, ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
         } else if (armRightCurrentButton && !armRightPreviousButton) {
             setArmState(ARM_RIGHT, null);
         } else if (armFrontCurrentButton && !armFrontPreviousButton) {
@@ -113,14 +106,14 @@ public class Arm {
         } else if (autoOuttakeCurrentButton && !autoOuttakePreviousButton) {
             setArmState(OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON, null);
         } else if (autoIntakeLeftCurrentButton > .2 && autoIntakeLeftPreviousButton < .2) {
-            autoDeliverSide = 1;
+            autoDeliverSide = 2;
             setArmState(AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION, null );
         }else if (autoIntakeRightCurrentButton > .2 && autoIntakeRightPreviousButton < .2) {
-            autoDeliverSide = 2;
+            autoDeliverSide = 1;
             setArmState(AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION, null);
         }
         //if no lift controls are being operated, hold the position of the arm by setting the servo to its current position
-        else if (currentArmState == ARM_CENTER ||
+        else if (
                 currentArmState == ARM_LEFT || currentArmState == ARM_LEFT_WAITING_FOR_LIFT ||
                 currentArmState == ARM_RIGHT || currentArmState == ARM_RIGHT_WAITING_FOR_LIFT   ||
                 currentArmState == ARM_FRONT || currentArmState == ARM_FRONT) {
@@ -129,7 +122,7 @@ public class Arm {
 
         //if no lift controls are being operated, and the arm just centered, then lower lift to intake position
         else if (currentArmState == ARM_CENTERED_LIFT_DELAY) {
-            setArmState(currentArmState, null);
+            setArmState(currentArmState, targetLiftPositionAfterArmRotation);
         }
 
         //waiting for the arm to get above the safe rotate height for this automation
@@ -141,6 +134,7 @@ public class Arm {
             setArmState(currentArmState, null);
         }
 
+
     }
 
     public void setPosition(double position) {
@@ -149,22 +143,9 @@ public class Arm {
 
     public void setArmState(armState targetState, @Nullable Double targetHeight) {
         //if centering arm from non-center position, center arm and set lift delay state
-        if (targetState == ARM_CENTER && currentArmState != ARM_CENTER) {
+        if ((targetState == ARM_CENTER || targetState == ARM_CENTER_INTAKE_ON) && currentArmState != ARM_CENTER) {
             if (Objects.isNull(targetHeight)) {targetHeight = ONE_CONE_INTAKE_HEIGHT_ENC_VAL;}
             centerArmSetLiftDelay(ARM_CENTER, targetHeight);
-        }
-
-        //if the arm is centered, and target is center, set the position to steady arm
-        else if (targetState == ARM_CENTER && currentArmState == ARM_CENTER) {
-            arm.setPosition(ARM_CENTER_INTAKE);
-        }
-
-        //Lower the lift if the arm is centered and enough time has passed
-        else if (targetState == ARM_CENTERED_LIFT_DELAY &&
-                liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
-            currentArmState = ARM_CENTER;
-            arm.setPosition(ARM_CENTER_INTAKE);
-            lift.StartLifting(targetLiftPositionAfterArmRotation, this);
         }
 
         //If 1) the lift is too low, 2) trying to rotate to non-center, and 3) lift isn't already lifting,
@@ -174,7 +155,7 @@ public class Arm {
                 !lift.alreadyLifting) {
 
             //Start raising the lift to a safe height that is well above the height for preventing arm rotation
-            lift.StartLifting(SAFE_HEIGHT_FOR_ALLOWING_ARM_ROTATION, this);
+            lift.StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, this);
             lift.alreadyLifting = true;
 
             if (targetState==ARM_LEFT) {
@@ -255,6 +236,17 @@ public class Arm {
 
             //this will close the claw to easy intake, turn the intake on, and lower lift
             centerArmSetLiftDelay(ARM_CENTER_INTAKE_ON, ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
+        }
+        //Lower the lift if the arm is centered and enough time has passed
+        else if (targetState == ARM_CENTERED_LIFT_DELAY &&
+                liftTimer.seconds() > SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER) {
+            currentArmState = ARM_CENTER;
+            arm.setPosition(ARM_CENTER_INTAKE);
+            lift.StartLifting(targetLiftPositionAfterArmRotation, this);
+        }
+        else if ((targetState == ARM_CENTER || targetState == ARM_CENTER_INTAKE_ON) && currentArmState == ARM_CENTER) {
+            if (Objects.isNull(targetHeight)) {targetHeight = ONE_CONE_INTAKE_HEIGHT_ENC_VAL;}
+            lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, this);
         }
     }
 
