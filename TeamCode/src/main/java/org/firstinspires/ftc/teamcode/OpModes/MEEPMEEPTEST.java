@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_STRAFE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,13 +15,15 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
+import org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-@Autonomous(name = "AUTO_JUST_PARK")
-public class AUTO_JUST_PARK extends LinearOpMode {
+@Autonomous(name = "MEEPMEEP")
+public class MEEPMEEPTEST extends LinearOpMode {
 
 
     AprilTagVision Vision = new AprilTagVision();
@@ -69,9 +70,9 @@ public class AUTO_JUST_PARK extends LinearOpMode {
 
             // User sets starting location left or right, and confirms selection with a button press
             // LEFT is a multiplier of 1, RIGHT is a multiplier of -1
-            BConfig.ConfigureStartingPosition( currentGamepad1.dpad_left, previousGamepad1.dpad_left,
+            BConfig.ConfigureStartingPosition(currentGamepad1.dpad_left, previousGamepad1.dpad_left,
                     currentGamepad1.dpad_right, previousGamepad1.dpad_right,
-                    currentGamepad1.b,          previousGamepad1.b);
+                    currentGamepad1.b, previousGamepad1.b);
 
             telemetry.addData("Signal", "Signal(%s), Number(%s)", Vision.currentSignal, Vision.currentSignalNumber);
             telemetry.addLine(" ");
@@ -92,39 +93,49 @@ public class AUTO_JUST_PARK extends LinearOpMode {
         telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
 
-        Pose2d startPose = new Pose2d(10,-8, Math.toRadians(90));
-        MecDrive.setPoseEstimate(new Pose2d());
+        Pose2d startPose = new Pose2d(37, -61.5, Math.toRadians(90));
+        MecDrive.setPoseEstimate(startPose);
 
-        Trajectory SignalOne  = MecDrive.trajectoryBuilder(startPose)
-                .forward(FULL_TILE_DISTANCE_DRIVE*2+QUARTER_TILE_DISTANCE_DRIVE)
-                .build();
+        TrajectorySequence trajSeq = MecDrive.trajectorySequenceBuilder(startPose)
+                                .lineTo(new Vector2d(33, -24))
+                                .addTemporalMarker(.1, () -> {
+                                    Lift.StartLifting(GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
+                                })
+                                .addTemporalMarker(1, () ->{
+                                    ServoArm.setArmState(Arm.armState.ARM_LEFT);
+                                })
+                                .waitSeconds(.5)
+                                .addDisplacementMarker(() -> {
+                                    //lower lift
+                                    ServoClaw.openClaw();
+                                    //lift to 5 cone height
+                                })
+                                .splineToSplineHeading(new Pose2d(54, -12, Math.toRadians(180)), Math.toRadians(5))
+                                .addDisplacementMarker(() -> {
+                                    //intakeOn
+                                })
+                                .lineToLinearHeading(new Pose2d(62, -12, Math.toRadians(180)))
+                                .addDisplacementMarker(() -> {
+                                    //raise lift to pickup cone
+                                })
+                                .waitSeconds(.3)
+                                .splineToConstantHeading(new Vector2d(48, -14), Math.toRadians(-45))
+                                .addDisplacementMarker(() -> {
+                                    //lower lift
+                                    //drop cone
+                                    //lift to 4 cone height
+                                })
+                                .waitSeconds(.3)
+                                .splineToConstantHeading(new Vector2d(62, -12), Math.toRadians(-20))
+                                .addDisplacementMarker(() -> {
+                                    //intakeOn
+                                    //raise lift to pickup cone
+                                })
+                                .build();
+        MecDrive.followTrajectorySequence(trajSeq);
 
-
-        //Drive forward 2 tiles plus a little bit more to get into position for deciding where to park
-        Lift.StartLifting(CONE_HEIGHT_ENC_VAL, ServoArm);
-
-
-        //if current Signal is the LEFT april tag then park on robot's left
-        if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-            //Park on left
-            MecDrive.followTrajectory(SignalOne);
-        }
-
-        //if current Signal is the MIDDLE april tag then park in middle
-        else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
-            //Park in middle
-            }
-
-        //if current Signal is the RIGHT april tag then park on robot's right
-        else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-            //Park on right
-            MecDrive.followTrajectory(SignalOne);
-            }
-
-            telemetry.addData("Status", "Run Time: " + getRuntime());
-            telemetry.update();
-            }
-        }
+    }
+}
 
 
 
