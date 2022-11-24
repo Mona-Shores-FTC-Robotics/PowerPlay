@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TI
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE_DRIVE;
 
@@ -129,8 +130,8 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
         //Strafe close to High Pole
         MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_STRAFE+EIGHTH_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
-            ServoArm.setArmState(Arm.armState.ARM_RIGHT);
-        } else ServoArm.setArmState(Arm.armState.ARM_LEFT);
+            ServoArm.setArmState(Arm.armState.ARM_RIGHT,null);
+        } else ServoArm.setArmState(Arm.armState.ARM_LEFT, null);
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
             MecDrive.ContinueStrafing();
         }
@@ -166,7 +167,7 @@ public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 
         //close the claw
         ServoClaw.closeClaw();
-        ServoArm.setArmState(Arm.armState.ARM_CENTER);
+        ServoArm.setArmState(Arm.armState.ARM_CENTER, ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
 
         Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
         //Park after placing cone

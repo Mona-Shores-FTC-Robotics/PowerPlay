@@ -133,7 +133,8 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                                             currentGamepad2.dpad_up, previousGamepad2.dpad_up,
                                             currentGamepad2.left_bumper, previousGamepad2.left_bumper,
                                             currentGamepad2.right_bumper, previousGamepad2.right_bumper,
-                                            currentGamepad2.b, currentGamepad2.a);
+                                            currentGamepad2.left_trigger, previousGamepad2.left_trigger,
+                                            currentGamepad2.right_trigger, previousGamepad2.right_trigger);
 
             /**
             Left Trigger, lowers lift by one Junction Height Level (Intake, Ground, Low, Medium, High)
@@ -143,9 +144,10 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             Left Stick up/down - raise/lower lift, stop when stick is zeroed
             */
 
-            Lift.CheckLift(                 currentGamepad2.left_trigger, previousGamepad2.left_trigger,
-                                            currentGamepad2.right_trigger, previousGamepad2.right_trigger,
-                                            currentGamepad2.b,
+            Lift.CheckLift(                 currentGamepad2.right_stick_x, previousGamepad2.right_stick_x,
+                                            currentGamepad2.right_stick_y, previousGamepad2.right_stick_y,
+                                            currentGamepad2.a,  previousGamepad2.a,
+                                            currentGamepad2.b, previousGamepad2.b,
                                             currentGamepad2.left_stick_y,
                                             ServoArm);
 
@@ -164,6 +166,15 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
                 Right Stick Button
                 touchpad controls
             */
+
+
+            //make a button move height to low
+            //make b button move height to medium
+
+            //right stick for stack heights (this really should be in intake position i think is that awkward for driver)
+
+            //can we automate this action with the color sensor to help the driver/operator out?
+
 
             //------------------------------------------------------//
             //--------------------DRIVER CONTROLS-------------------//
@@ -209,6 +220,15 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
              touchpad controls
              */
 
+            //make y button go forward instead of the x button
+            //make a button go backwards from high junction back to intake
+            //get rid of tile distances with the d-pad
+            //fine tune turning isn't really used.
+
+            //color sensor lineup for conestack button?
+
+            //full auto deliver button?
+            //vision seek button?
 
             //------------------------------------------------------//
             //------------------TELEMETRY---------------------------//

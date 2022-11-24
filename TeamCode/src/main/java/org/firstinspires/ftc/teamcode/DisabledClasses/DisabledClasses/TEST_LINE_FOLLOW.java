@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.DisabledClasses;
+package org.firstinspires.ftc.teamcode.DisabledClasses.DisabledClasses;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;

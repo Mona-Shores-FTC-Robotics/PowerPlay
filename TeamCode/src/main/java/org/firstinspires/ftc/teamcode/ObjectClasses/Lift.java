@@ -234,10 +234,11 @@ public class Lift {
         }
     }
 
-    public void CheckLift(  double  liftStageDownCurrentTrigger, double liftStageDownPreviousTrigger,
-                                    double  liftStageUpCurrentTrigger, double liftStageUpPreviousTrigger,
-                                    Boolean modifierButton,
-                                    double manualLiftTargetChange,
+    public void CheckLift(          float  stackHeight34CurrentStick, float stackHeight34PreviousStick,
+                                    float  stackHeight52CurrentStick, float stackHeight52PreviousStick,
+                                    Boolean mediumJunctionHeightCurrentButton, Boolean mediumJunctionHeightPreviousButton,
+                                    Boolean lowJunctionHeightCurrentButton, Boolean lowJunctionHeightPreviousButton,
+                                    float manualLiftTargetChange,
                                     Arm arm) {
 
         if (Math.abs(manualLiftTargetChange) <= .2){
@@ -246,24 +247,18 @@ public class Lift {
 
         if (manualLiftTargetChange != 0) {
             ManualLift(-manualLiftTargetChange, arm);
-        }  else if (liftStageDownCurrentTrigger >= .2  && liftStageDownPreviousTrigger < .2) {
-            if (!modifierButton) {
-                LowerLiftOneJunctionStage(arm);
-            } else if (modifierButton) {
-                LowerLiftOneConeStackStage(arm);
-            }
-        } else if (liftStageUpCurrentTrigger >= .2 && liftStageUpPreviousTrigger < .2) {
-            if (!modifierButton) {
-                RaiseLiftOneJunctionStage(arm);
-            } else if (modifierButton) {
-                RaiseLiftOneConeStackStage(arm);
-            }
-            /* Consider using this code to just go between the top and the bottom if the staged lifting isn't working well
-            else if (liftStageDownCurrentButton && !liftStageDownPreivousButton) {
-                StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, arm);
-            } else if (liftStageUpCurrentButton && !liftStageUpPreviousButton) {
-                StartLifting(HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
-            */
+        } else if (mediumJunctionHeightCurrentButton && !mediumJunctionHeightPreviousButton) {
+            StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
+        } else if (lowJunctionHeightCurrentButton && !lowJunctionHeightPreviousButton) {
+            StartLifting(LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, arm);
+        } else if (stackHeight34CurrentStick >= .2  && stackHeight34PreviousStick < .2) {
+            arm.setArmState(Arm.armState.ARM_CENTER_INTAKE_ON, THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        } else if (stackHeight34CurrentStick <= -.2  && stackHeight34PreviousStick > -.2) {
+            arm.setArmState(Arm.armState.ARM_CENTER_INTAKE_ON, FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        } else if (stackHeight52CurrentStick >= .2 && stackHeight52PreviousStick < .2) {
+            arm.setArmState(Arm.armState.ARM_CENTER_INTAKE_ON, TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        } else if (stackHeight52CurrentStick <= -.2 && stackHeight52PreviousStick > -.2) {
+            arm.setArmState(Arm.armState.ARM_CENTER_INTAKE_ON, FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
         } else if (alreadyLifting) {
             ContinueLifting();
         } else if (manualLiftTargetChange ==0){

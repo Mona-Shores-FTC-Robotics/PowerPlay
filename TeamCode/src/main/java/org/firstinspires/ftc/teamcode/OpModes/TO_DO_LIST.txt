@@ -3,15 +3,9 @@ Todo: Drive Team feedback, which buttons worked? which didn't?
 Todo: Decide focus for Big Rapids
     Programming - Three cone autonomous routine (need either or both: pole vision / improved drive train accuracy)
     Programming - Pole vision (front only) (~1-2 practices)
-    Programming+Build - Pole vision (camera servo) (~2-3 practices)
-    Programming+Build - Pole vision (on arm) (~2-3 practices)
     Programming - Drive train accuracy - Roadrunner (~2-3 practices)
-    Programming - Drive train accuracy - Custom Acceleration/Deceleration (1 practice)
-    Programming - Drive train accuracy - P Tuning Turning (1 practice)
-    Programming+Build - Drive train accuracy - 2/3 Dead Wheels (~3-4 practices)
-    Programming - Automatic arm rotation to direction of long strafe (~1-2 practices)
-    Programming+Build - Cone sensor (1-2 practices)
     Programming - Change button behavior (1-2 practices)
+    Programming - Automatic arm rotation to direction of long strafe (~1-2 practices)
     Driver practice - first 10s - fast movement to alliance substation
     Driver practice - first 10s - quick score on opposite alliance station ground junction
     Driver practice - 10s-70s alliance station focus - repeated quick score on close high junction

@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.ObjectClasses;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_CENTER;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_CENTERED_LIFT_DELAY;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_CENTER_INTAKE_ON;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_FRONT_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_FRONT;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_FRONT_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_LEFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_LEFT_WAITING_FOR_LIFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_RIGHT;
@@ -17,12 +17,14 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.OPEN_CLA
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
 
+import androidx.annotation.Nullable;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.sql.RowId;
+import java.util.Objects;
 
 public class Arm {
 
@@ -94,50 +96,49 @@ public class Arm {
                          Boolean armCenterCurrentButton, Boolean armCenterPreviousButton,
                          Boolean armRightCurrentButton, Boolean armRightPreviousButton,
                          Boolean armFrontCurrentButton, Boolean armFrontPreviousButton,
-                         Boolean autoIntakeCurrentButton, Boolean autoIntakePreviousButton,
+                         Boolean autoIntakeFrontCurrentButton, Boolean autoIntakeFrontPreviousButton,
                          Boolean autoOuttakeCurrentButton, Boolean autoOuttakePreviousButton,
-                         Boolean modButton1, Boolean modButton2) {
+                         Float autoIntakeLeftCurrentButton, Float autoIntakeLeftPreviousButton,
+                         Float autoIntakeRightCurrentButton, Float autoIntakeRightPreviousButton) {
         if (armLeftCurrentButton && !armLeftPreviousButton) {
-            setArmState(ARM_LEFT);
+            setArmState(ARM_LEFT, null  );
         } else if (armCenterCurrentButton && !armCenterPreviousButton) {
-            setArmState(ARM_CENTER);
+            setArmState(ARM_CENTER_INTAKE_ON, ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
         } else if (armRightCurrentButton && !armRightPreviousButton) {
-            setArmState(ARM_RIGHT);
+            setArmState(ARM_RIGHT, null);
         } else if (armFrontCurrentButton && !armFrontPreviousButton) {
-            setArmState(ARM_FRONT);
-        } else if (autoIntakeCurrentButton && !autoIntakePreviousButton) {
-            if (modButton1) {
-                autoDeliverSide = 1;
-                setArmState(AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION);
-            }else if (modButton2) {
-                autoDeliverSide = 2;
-                setArmState(AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION);
-            } else {
-                setArmState(AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION);
-            }
+            setArmState(ARM_FRONT, null);
+        } else if (autoIntakeFrontCurrentButton && !autoIntakeFrontPreviousButton) {
+            setArmState(AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION, null);
         } else if (autoOuttakeCurrentButton && !autoOuttakePreviousButton) {
-            setArmState(OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON);
+            setArmState(OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON, null);
+        } else if (autoIntakeLeftCurrentButton > .2 && autoIntakeLeftPreviousButton < .2) {
+            autoDeliverSide = 1;
+            setArmState(AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION, null );
+        }else if (autoIntakeRightCurrentButton > .2 && autoIntakeRightPreviousButton < .2) {
+            autoDeliverSide = 2;
+            setArmState(AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION, null);
         }
         //if no lift controls are being operated, hold the position of the arm by setting the servo to its current position
         else if (currentArmState == ARM_CENTER ||
                 currentArmState == ARM_LEFT || currentArmState == ARM_LEFT_WAITING_FOR_LIFT ||
                 currentArmState == ARM_RIGHT || currentArmState == ARM_RIGHT_WAITING_FOR_LIFT   ||
                 currentArmState == ARM_FRONT || currentArmState == ARM_FRONT) {
-            setArmState(currentArmState);
+            setArmState(currentArmState, null);
         }
 
         //if no lift controls are being operated, and the arm just centered, then lower lift to intake position
         else if (currentArmState == ARM_CENTERED_LIFT_DELAY) {
-            setArmState(currentArmState);
+            setArmState(currentArmState, null);
         }
 
         //waiting for the arm to get above the safe rotate height for this automation
         else if (currentArmState == AUTOMATIC_INTAKE_TO_FRONT_DELIVER_POSITION_WAITING_FOR_LIFT) {
-            setArmState(currentArmState);
+            setArmState(currentArmState, null);
         }
         //waiting for the arm to get above the safe rotate height for this automation
         else if (currentArmState == AUTOMATIC_INTAKE_TO_SIDE_DELIVER_POSITION_WAITING_FOR_LIFT) {
-            setArmState(currentArmState);
+            setArmState(currentArmState, null);
         }
 
     }
@@ -146,11 +147,11 @@ public class Arm {
         arm.setPosition(position);
     }
 
-    public void setArmState(armState targetState) {
-//bannanan
+    public void setArmState(armState targetState, @Nullable Double targetHeight) {
         //if centering arm from non-center position, center arm and set lift delay state
         if (targetState == ARM_CENTER && currentArmState != ARM_CENTER) {
-            centerArmSetLiftDelay(ARM_CENTER, ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
+            if (Objects.isNull(targetHeight)) {targetHeight = ONE_CONE_INTAKE_HEIGHT_ENC_VAL;}
+            centerArmSetLiftDelay(ARM_CENTER, targetHeight);
         }
 
         //if the arm is centered, and target is center, set the position to steady arm
