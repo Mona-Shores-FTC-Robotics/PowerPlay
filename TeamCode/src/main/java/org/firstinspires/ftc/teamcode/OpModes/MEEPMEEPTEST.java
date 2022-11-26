@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -93,43 +97,31 @@ public class MEEPMEEPTEST extends LinearOpMode {
         telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
 
-        Pose2d startPose = new Pose2d(37, -61.5, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(38, -60.3, Math.toRadians(90));
         MecDrive.setPoseEstimate(startPose);
 
         TrajectorySequence trajSeq = MecDrive.trajectorySequenceBuilder(startPose)
-                                .lineTo(new Vector2d(33, -24))
-                                .addTemporalMarker(.1, () -> {
+                .lineTo(new Vector2d(37.4, -38.8))
+                .splineToConstantHeading(new Vector2d(24.5, -24.5), Math.toRadians(90))
+                .waitSeconds(4)
+                .lineToSplineHeading(new Pose2d(45, -12, Math.toRadians(180)))
+                .addTemporalMarker(.1, () -> {
                                     Lift.StartLifting(GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
                                 })
                                 .addTemporalMarker(1, () ->{
                                     ServoArm.setArmState(Arm.armState.ARM_LEFT, null);
                                 })
-                                .waitSeconds(.5)
-                                .addDisplacementMarker(() -> {
-                                    //lower lift
+                                .addTemporalMarker(2.4, () ->{
+                                    Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL-300, ServoArm);
+                                })
+                                .addTemporalMarker(2.8, () ->{
                                     ServoClaw.openClaw();
-                                    //lift to 5 cone height
                                 })
-                                .splineToSplineHeading(new Pose2d(54, -12, Math.toRadians(180)), Math.toRadians(5))
-                                .addDisplacementMarker(() -> {
-                                    //intakeOn
+                                .addTemporalMarker(3, () ->{
+                                    Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
                                 })
-                                .lineToLinearHeading(new Pose2d(62, -12, Math.toRadians(180)))
-                                .addDisplacementMarker(() -> {
-                                    //raise lift to pickup cone
-                                })
-                                .waitSeconds(.3)
-                                .splineToConstantHeading(new Vector2d(48, -14), Math.toRadians(-45))
-                                .addDisplacementMarker(() -> {
-                                    //lower lift
-                                    //drop cone
-                                    //lift to 4 cone height
-                                })
-                                .waitSeconds(.3)
-                                .splineToConstantHeading(new Vector2d(62, -12), Math.toRadians(-20))
-                                .addDisplacementMarker(() -> {
-                                    //intakeOn
-                                    //raise lift to pickup cone
+                                .addTemporalMarker(6, () ->{
+                                    ServoArm.setArmState(Arm.armState.ARM_CENTER, null);
                                 })
                                 .build();
         MecDrive.followTrajectorySequence(trajSeq);
