@@ -3,15 +3,14 @@ package org.firstinspires.ftc.teamcode.ObjectClasses;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_CENTER;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_LEFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_RIGHT;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 
-import android.widget.Button;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -25,6 +24,8 @@ public class PowerplayTrajectories {
     Lift Lift;
     public TrajectorySequence trajSeq1;
     public TrajectorySequence trajSeq2;
+    public TrajectorySequence trajSeq3;
+
 
     public PowerplayTrajectories(SampleMecanumDrive drive, Lift lift, Claw claw, Intake intake, Arm arm) {
         MecDrive = drive;
@@ -34,60 +35,120 @@ public class PowerplayTrajectories {
         Arm = arm;
     }
 
-    public Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(-24.5, -24.5);
-    public Vector2d MEDIUM_JUNCTION_W2 = new Vector2d(24.5, -24.5);
-    public Pose2d CONE_STACK_RIGHT = new Pose2d(45, -12, Math.toRadians(180));
-    public Pose2d CONE_STACK_LEFT = new Pose2d(-45, -12, Math.toRadians(0));
+    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, -FULL_TILE_DISTANCE_DRIVE);
+    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-FULL_TILE_DISTANCE_DRIVE, -FULL_TILE_DISTANCE_DRIVE);
 
-    public Pose2d startPose;
-    public Pose2d coneStack;
-    public Vector2d firstJunction;
-    public Arm.armState firstJunctionArm;
-    public double firstJunctionHeight;
-    public Vector2d secondJunction;
-    public Arm.armState secondJunctionArm;
-    public double secondJunctionHeight;
-    public Vector2d thirdJunction;
-    public Arm.armState thirdJunctionArm;
-    public double thirdJunctionHeight;
-    public Vector2d fourthJunction;
-    public Arm.armState fourthJunctionArm;
-    public double fourthJunctionHeight;
-    public Vector2d fifthJunction;
-    public Arm.armState fifthJunctionArm;
-    public double fifthJunctionHeight;
-    public Vector2d sixthJunction;
-    public Arm.armState sixthJunctionArm;
-    public double sixthJunctionHeight;
+    public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
+    public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
+
+    public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, 0);
+    public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-FULL_TILE_DISTANCE_DRIVE, 0);
+
+    public static Pose2d RIGHT_SIDE_LEFT_TILE_D4 = new Pose2d(HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
+    public static Pose2d RIGHT_SIDE_MIDDLE_TILE_D5 = new Pose2d(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
+    public static Pose2d RIGHT_SIDE_RIGHT_TILE_D6 = new Pose2d(HALF_TILE_DISTANCE_DRIVE+(FULL_TILE_DISTANCE_DRIVE*2), -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(180));
+
+    public static Pose2d LEFT_SIDE_LEFT_TILE_D1 = new Pose2d(-(HALF_TILE_DISTANCE_DRIVE+(FULL_TILE_DISTANCE_DRIVE*2)), -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(180));
+    public static Pose2d LEFT_SIDE_MIDDLE_TILE_D2 = new Pose2d( -(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
+    public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
+
+
+    public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(68, -12);
+    public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-68, -12);
+    public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(47.2, -12);
+    public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-47.2, -12);
+    public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(45, -12, Math.toRadians(180));
+    public static Pose2d LEFT_CONE_STACK_LINE = new Pose2d(-45, -12, Math.toRadians(0));
+
+    public static Pose2d startPose;
+    public static Pose2d currentPose;
+    public static Vector2d coneStack;
+    public static Vector2d coneStackEndOfLine;
+    public static Pose2d coneStackLine;
+    public static Vector2d firstJunction;
+    public static double firstJunctionHeight;
+    public static Arm.armState firstJunctionArm;
+    public static Vector2d secondJunction;
+    public static double secondJunctionHeight;
+    public static Vector2d thirdJunction;
+    public static double thirdJunctionHeight;
+    public static Vector2d fourthJunction;
+    public static double fourthJunctionHeight;
+    public static Vector2d fifthJunction;
+    public static double fifthJunctionHeight;
+    public static Vector2d sixthJunction;
+    public static double sixthJunctionHeight;
+    public static Boolean startPosRIGHT = true;
+    public static Pose2d endAutoPosition;
+
+    public static int numberSignal = 1;
 
     public void MakeTrajectories() {
 
-        if (ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE) {
+        if (startPosRIGHT) {
             startPose = new Pose2d(38, -60.3, Math.toRadians(90));
-            coneStack = CONE_STACK_RIGHT;
-            firstJunction = MEDIUM_JUNCTION_W2;
+            coneStackLine = RIGHT_CONE_STACK_LINE;
+            coneStack = RIGHT_CONE_STACK_RIGHT;
+            coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
+            firstJunction = MEDIUM_JUNCTION_Y4;
             firstJunctionArm = ARM_LEFT;
-            firstJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            secondJunction = LOW_JUNCTION_Y5;
+            thirdJunction = LOW_JUNCTION_Y5;
+            fourthJunction = LOW_JUNCTION_Y5;
+            fifthJunction = HIGH_JUNCTION_X4;
+
+            if (numberSignal == 1)
+            {
+                endAutoPosition = RIGHT_SIDE_LEFT_TILE_D4;
+            } else if (numberSignal == 2)
+            {
+                endAutoPosition = RIGHT_SIDE_MIDDLE_TILE_D5;
+            } else if (numberSignal ==3)
+            {
+                endAutoPosition = RIGHT_SIDE_RIGHT_TILE_D6;
+            }
 
         } else
         {
             startPose = new Pose2d(-38, -60.3, Math.toRadians(90));
-            coneStack = CONE_STACK_LEFT;
-            firstJunction = MEDIUM_JUNCTION_Y4;
+            coneStackLine = LEFT_CONE_STACK_LINE;
+            coneStack = LEFT_CONE_STACK_LEFT;
+            coneStackEndOfLine = LEFT_CONE_STACK_END_OF_LINE;
+            firstJunction = MEDIUM_JUNCTION_Y2;
             firstJunctionArm = ARM_RIGHT;
-            firstJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            secondJunction = LOW_JUNCTION_Y1;
+            thirdJunction = LOW_JUNCTION_Y1;
+            fourthJunction = LOW_JUNCTION_Y1;
+            fifthJunction = HIGH_JUNCTION_X2;
+
+            if (numberSignal == 1)
+            {
+                endAutoPosition = LEFT_SIDE_LEFT_TILE_D1;
+            } else if (numberSignal == 2)
+            {
+                endAutoPosition = LEFT_SIDE_MIDDLE_TILE_D2;
+            } else if (numberSignal ==3)
+            {
+                endAutoPosition = LEFT_SIDE_RIGHT_TILE_D3;
+            }
         }
 
-        //First Sequence drives to the Medium Junction, delivers cone, and drives to cone stack line
+
         trajSeq1 = MecDrive.trajectorySequenceBuilder(startPose)
-                .forward(HALF_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE)
-                .splineToConstantHeading(firstJunction, Math.toRadians(90))
-                .waitSeconds(1)
-                .lineToSplineHeading(coneStack)
+                .forward(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE)
+                .build();
+
+        //First Sequence drives to the Medium Junction, delivers cone, and drives to cone stack line
+        trajSeq3 = MecDrive.trajectorySequenceBuilder(startPose)
+                .forward(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE)
+                .strafeTo(firstJunction)
+                .waitSeconds(.200)
+                .lineToSplineHeading(coneStackLine)
                 .addTemporalMarker(.1, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
                 })
                 .addTemporalMarker(1, () -> {
+
                     Arm.setArmState(firstJunctionArm, null);
                 })
                 .addTemporalMarker(2.4, () -> {
@@ -103,5 +164,33 @@ public class PowerplayTrajectories {
                     Arm.setArmState(ARM_CENTER, null);
                 })
                 .build();
+
+        trajSeq2 = MecDrive.trajectorySequenceBuilder(coneStackLine)
+                .addDisplacementMarker(() -> {
+                    //Intake.turnIntakeOn();
+                    Claw.setEasyIntake();
+                    Arm.setArmState(ARM_CENTER, FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+                })
+                .lineTo(coneStack)
+                .waitSeconds(.200)
+                .splineToConstantHeading(secondJunction, Math.toRadians(270))
+                .waitSeconds(.200)
+                .splineToConstantHeading(coneStack, Math.toRadians(0))
+                .waitSeconds(.200)
+                .splineToConstantHeading(thirdJunction, Math.toRadians(270))
+                .waitSeconds(.200)
+                .splineToConstantHeading(coneStack, Math.toRadians(0))
+                .waitSeconds(.200)
+                .splineToConstantHeading(fourthJunction, Math.toRadians(270))
+                .waitSeconds(.200)
+                .splineToConstantHeading(coneStack, Math.toRadians(0))
+                .waitSeconds(.200)
+                .splineToSplineHeading(new Pose2d(fifthJunction, Math.toRadians(135)), Math.toRadians(135))
+                .back(15)
+                .lineToLinearHeading(endAutoPosition)
+                .build();
+
     }
 }
+

@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-@Autonomous(name = "MEEPMEEP")
+@Autonomous(name = "MEEPMEEP_AUTO")
 public class MEEPMEEPTEST extends LinearOpMode {
 
 
@@ -104,11 +104,11 @@ public class MEEPMEEPTEST extends LinearOpMode {
         telemetry.update();
 
         PowerTraj.MakeTrajectories();
-        MecDrive.setPoseEstimate(PowerTraj.startPose);
+        MecDrive.setPoseEstimate(PowerplayTrajectories.startPose);
 
         MecDrive.followTrajectorySequence(PowerTraj.trajSeq1);
         MecDrive.findLine(MecDrive);
-        //MecDrive.followTrajectorySequence(PowerTraj.trajSeq2);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeq2);
 
     }
 }
