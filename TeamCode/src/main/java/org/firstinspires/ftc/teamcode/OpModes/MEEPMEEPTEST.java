@@ -8,6 +8,9 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CON
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -15,6 +18,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.apache.commons.math3.analysis.function.Power;
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
@@ -22,6 +26,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
 import org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
+import org.firstinspires.ftc.teamcode.ObjectClasses.PowerplayTrajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
@@ -45,6 +50,7 @@ public class MEEPMEEPTEST extends LinearOpMode {
     @Override
     public void runOpMode() {
         SampleMecanumDrive MecDrive = new SampleMecanumDrive(hardwareMap);
+        PowerplayTrajectories PowerTraj = new PowerplayTrajectories(MecDrive, Lift, ServoClaw, ServoIntake, ServoArm);
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
@@ -59,7 +65,7 @@ public class MEEPMEEPTEST extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         sleep(500);
-
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         while (!isStarted()) {
 
             //save current and previous gamepad values for one loop
@@ -97,34 +103,12 @@ public class MEEPMEEPTEST extends LinearOpMode {
         telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
 
-        Pose2d startPose = new Pose2d(38, -60.3, Math.toRadians(90));
-        MecDrive.setPoseEstimate(startPose);
+        PowerTraj.MakeTrajectories();
+        MecDrive.setPoseEstimate(PowerTraj.startPose);
 
-        TrajectorySequence trajSeq = MecDrive.trajectorySequenceBuilder(startPose)
-                .lineTo(new Vector2d(37.4, -38.8))
-                .splineToConstantHeading(new Vector2d(24.5, -24.5), Math.toRadians(90))
-                .waitSeconds(4)
-                .lineToSplineHeading(new Pose2d(45, -12, Math.toRadians(180)))
-                .addTemporalMarker(.1, () -> {
-                                    Lift.StartLifting(GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
-                                })
-                                .addTemporalMarker(1, () ->{
-                                    ServoArm.setArmState(Arm.armState.ARM_LEFT, null);
-                                })
-                                .addTemporalMarker(2.4, () ->{
-                                    Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL-300, ServoArm);
-                                })
-                                .addTemporalMarker(2.8, () ->{
-                                    ServoClaw.openClaw();
-                                })
-                                .addTemporalMarker(3, () ->{
-                                    Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
-                                })
-                                .addTemporalMarker(6, () ->{
-                                    ServoArm.setArmState(Arm.armState.ARM_CENTER, null);
-                                })
-                                .build();
-        MecDrive.followTrajectorySequence(trajSeq);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeq1);
+        MecDrive.findLine(MecDrive);
+        //MecDrive.followTrajectorySequence(PowerTraj.trajSeq2);
 
     }
 }

@@ -19,10 +19,10 @@ public class MeepMeepTesting {
     public static final double SIXTYFOURTH_TILE_DISTANCE_DRIVE = THIRTYSECOND_TILE_DISTANCE_DRIVE /2;
 
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(600);
+        MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
-                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width`
                 .setConstraints(40, 30, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(38, -60.3, Math.toRadians(90)))
@@ -30,6 +30,9 @@ public class MeepMeepTesting {
                                 .splineToConstantHeading(new Vector2d(24.5, -24.5), Math.toRadians(90))
                                 .waitSeconds(1)
                                 .lineToSplineHeading(new Pose2d(45, -12, Math.toRadians(180)))
+                                .addDisplacementMarker(() ->{
+
+                                })
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)

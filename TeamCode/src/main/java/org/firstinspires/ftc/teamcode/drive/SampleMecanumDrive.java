@@ -298,25 +298,20 @@ public class SampleMecanumDrive extends MecanumDrive {
     }
 
     public final ElapsedTime colorTimer = new ElapsedTime();
-    public double line_follow_error;
-    public double percent_line_follow_error;
-    public boolean alreadyLineFollowing;
-
-    public void lineFollow(double speed) {
+    public void findLine(SampleMecanumDrive MecDrive) {
         colorTimer.reset();
-        if (!alreadyLineFollowing) {
-            alreadyLineFollowing = true;
-            while ((colorSensor.red() < 190 && colorSensor.blue() < 250) &&
-                    colorTimer.seconds() < 1.3) {
-                // Color is not red or blue
+        // Strafe Left/Right while color is not red or blue
+        //(colorSensor.red() < 190 && colorSensor.blue() < 250) &&
+        while ( colorTimer.seconds() < 1.5) {
+                MecDrive.update();
+                Pose2d poseEstimate = MecDrive.getPoseEstimate();
                 //strafe left for .4 seconds to the left, if still no red or blue line then strafe to right
                 if (colorTimer.seconds() < .5) {
-
+                    setWeightedDrivePower(new Pose2d(0,-.2,0));
                 } else if (colorTimer.seconds() > .5) {
-
+                    setWeightedDrivePower(new Pose2d(0,.2,0));
                 }
             }
-
-        }
+        setWeightedDrivePower(new Pose2d(0,0, 0));
     }
 }
