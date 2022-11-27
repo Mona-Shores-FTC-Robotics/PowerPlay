@@ -147,21 +147,38 @@ public class PowerplayTrajectories {
                 .addTemporalMarker(.1, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
                 })
-                .addTemporalMarker(1, () -> {
-
+                .addTemporalMarker(1.2, () -> {
                     Arm.setArmState(firstJunctionArm, null);
                 })
-                .addTemporalMarker(2.4, () -> {
+                .addTemporalMarker(2.9, () -> {
                     Lift.StartLifting(firstJunctionHeight - 300, Arm);
                 })
-                .addTemporalMarker(2.8, () -> {
+                .addTemporalMarker(3.0, () -> {
                     Claw.openClaw();
                 })
-                .addTemporalMarker(3, () -> {
+                .addTemporalMarker(3.2, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
                 })
-                .addTemporalMarker(4, () -> {
+                .addTemporalMarker(5, () -> {
                     Arm.setArmState(ARM_CENTER, null);
+                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+                    Claw.setEasyIntake();
+                    Intake.turnIntakeOn();
+                })
+                .addTemporalMarker(7.1, () -> {
+                    //Intake.turnIntakeOff();
+                    Claw.closeClaw();
+                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL+200, Arm);
+                })
+                .addTemporalMarker(8.6, () -> {
+                    Lift.StartLifting(secondJunctionHeight, Arm);
+                    Arm.setArmState(ARM_LEFT, secondJunctionHeight);
+                })
+                .addTemporalMarker(9.6, () -> {
+                    Lift.StartLifting(firstJunctionHeight - 300, Arm);
+                })
+                .addTemporalMarker(9.7, () -> {
+                    Claw.openClaw();
                 })
                 .build();
 

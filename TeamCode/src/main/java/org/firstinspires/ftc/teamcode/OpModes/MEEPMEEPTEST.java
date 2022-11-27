@@ -97,6 +97,8 @@ public class MEEPMEEPTEST extends LinearOpMode {
 
             sleep(20);
         }
+        resetRuntime();
+
         Vision.currentSignal = AprilTagVision.Signal.LEFT;
         telemetry.addData("Signal is ", Vision.currentSignal);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
@@ -109,6 +111,11 @@ public class MEEPMEEPTEST extends LinearOpMode {
         MecDrive.followTrajectorySequence(PowerTraj.trajSeq1);
         MecDrive.findLine(MecDrive);
         MecDrive.followTrajectorySequence(PowerTraj.trajSeq2);
+
+        telemetry.addData("Signal is ", Vision.currentSignal);
+        telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
+        telemetry.addData("Status", "Run Time: " + getRuntime());
+        telemetry.update();
 
     }
 }
