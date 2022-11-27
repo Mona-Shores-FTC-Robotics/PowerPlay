@@ -109,7 +109,7 @@ public class MEEPMEEPTEST extends LinearOpMode {
         MecDrive.setPoseEstimate(PowerplayTrajectories.startPose);
 
         MecDrive.followTrajectorySequence(PowerTraj.trajSeq1);
-        MecDrive.findLine(MecDrive);
+        //MecDrive.findLine(MecDrive);
         MecDrive.followTrajectorySequence(PowerTraj.trajSeq2);
 
         telemetry.addData("Signal is ", Vision.currentSignal);
