@@ -74,6 +74,69 @@ public class Lift {
         return liftMotor.getTargetPosition();
     }
 
+    /* New lift code logic
+     */
+    public void MoveLift (float  stackHeightCurrentYStick,
+                          float  stackHeightCurrentXStick,
+                          Boolean mediumJunctionHeightCurrentButton,
+                          Boolean lowJunctionHeightCurrentButton,
+                          float manualLiftTargetChange,
+                          Boolean armLeft,
+                          Boolean armRight,
+                          Boolean armForward,
+                          Boolean armBack,
+                          Boolean autoForward,
+                          Boolean autoIntake,
+                          float autoLeft,
+                          float autoRight,
+                          int liftPosition,
+                          Arm arm, Claw claw, Intake intake){
+
+        /** Sets the target position for the lift
+         */
+
+        if (mediumJunctionHeightCurrentButton){
+            liftMotor.setTargetPosition((int) MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        }
+        else if (lowJunctionHeightCurrentButton || (liftPosition < SAFE_CRASH_HEIGHT && (armForward || armLeft || armRight))){
+            liftMotor.setTargetPosition((int) LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        }
+        else if (manualLiftTargetChange > .2 || autoForward || autoLeft > .2 || autoRight > .2){
+            liftMotor.setTargetPosition((int) HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+        }
+        else if (stackHeightCurrentYStick > .2 && arm.timer == 0){
+            liftMotor.setTargetPosition((int) FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        }
+        else if (stackHeightCurrentXStick < -.2 && arm.timer == 0){
+            liftMotor.setTargetPosition((int) FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        }
+        else if (stackHeightCurrentXStick > .2 && arm.timer == 0){
+            liftMotor.setTargetPosition((int) THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        }
+        else if (stackHeightCurrentXStick < -.2 && arm.timer == 0){
+            liftMotor.setTargetPosition((int) FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        }
+        else if (stackHeightCurrentYStick <  -.2 && arm.timer == 0){
+            liftMotor.setTargetPosition((int) TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        }
+        else if (((arm.timer == 0) || (liftPosition > SAFE_CRASH_HEIGHT + BUFFER_HEIGHT)) && (manualLiftTargetChange < -.5 || armBack || autoIntake)){
+            liftMotor.setTargetPosition(0);
+        }
+        else if (manualLiftTargetChange < -.2 && ((arm.timer == 0) || (liftPosition > SAFE_CRASH_HEIGHT + BUFFER_HEIGHT))){
+            liftMotor.setTargetPosition(Math.round(liftPosition - liftPosition*(-manualLiftTargetChange)));
+        }
+        else{
+            liftMotor.setTargetPosition(liftPosition);
+        }
+
+        /** sets the lift power
+         */
+
+        if (manualLiftTargetChange>.2){
+            liftMotor.setPower(manualLiftTargetChange*LIFT_RAISE_POWER);
+        }
+    }
+
     public void StartLifting(double targetHeightEncVal, Arm arm) {
         if (activeOpMode.opModeIsActive()) {
 

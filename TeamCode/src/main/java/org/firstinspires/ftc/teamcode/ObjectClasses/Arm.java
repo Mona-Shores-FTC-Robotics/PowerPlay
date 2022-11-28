@@ -46,6 +46,8 @@ public class Arm {
 
     public Servo arm;
     public armState currentArmState;
+    public double targetArmPosition;
+
 
     public enum armState {
         ARM_LEFT, ARM_CENTER, ARM_RIGHT, ARM_FRONT,
@@ -66,9 +68,12 @@ public class Arm {
     public Claw claw;
     public ElapsedTime liftTimer = new ElapsedTime();
     public LinearOpMode activeOpMode;
+    public double timer = 0;
 
 
     private double targetLiftPositionAfterArmRotation;
+    public double startTime;
+    public boolean timerActive = false;
 
     public Arm(Lift m_Lift, Intake m_ServoIntake, Claw m_claw, LinearOpMode mode) {
         lift = m_Lift;
@@ -83,6 +88,54 @@ public class Arm {
         //set arm at intake position
         arm.setPosition(ARM_CENTER_INTAKE);
         currentArmState = ARM_CENTER;
+    }
+
+    public void MoveArm(Boolean armLeft,
+                        Boolean armRight,
+                        Boolean armForward,
+                        Boolean armBack,
+                        Boolean autoForward,
+                        Boolean autoIntake,
+                        float autoLeft,
+                        float autoRight,
+                        int liftPosition){
+        /** Set the target arm position variable and timer
+         */
+        if (armForward || autoForward){
+            targetArmPosition = ARM_FRONT_OUTTAKE;
+            timer = SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER;
+        }
+        else if (armRight || autoRight > .2){
+            targetArmPosition = ARM_RIGHT_OUTTAKE;
+            timer = SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER;
+        }
+        else if (armLeft || autoLeft > .2){
+            targetArmPosition = ARM_LEFT_OUTTAKE;
+            timer = SECONDS_TO_CENTER_ARM_BEFORE_LIFT_LOWER;
+        }
+        else if (armBack || autoIntake){
+            targetArmPosition = ARM_CENTER_INTAKE;
+            startTime = activeOpMode.getRuntime();
+        }
+
+        if (targetArmPosition == ARM_CENTER_INTAKE){
+            arm.setPosition(ARM_CENTER_INTAKE);
+        }
+        else if(liftPosition > lift.SAFE_CRASH_HEIGHT){
+            arm.setPosition((targetArmPosition));
+        }
+
+        /* timer code
+         */
+
+        if (timerActive && (activeOpMode.getRuntime() - startTime < 0)){
+            timer = 0;
+            timerActive = false;
+        }
+        else if (timerActive){
+            timer = timer - (activeOpMode.getRuntime()-startTime);
+        }
+
     }
 
     public void CheckArm(Boolean armLeftCurrentButton, Boolean armLeftPreviousButton,

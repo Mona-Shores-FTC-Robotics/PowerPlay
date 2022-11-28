@@ -14,6 +14,7 @@ public class Intake {
     public enum intakeState {INTAKE_ON, INTAKE_OFF}
     public ElapsedTime afterIntakeOnDelayPeriod = new ElapsedTime();
     public Boolean coneSensor;
+    private Boolean delayOn = false;
     Claw claw;
     LinearOpMode activeOpMode;
 
@@ -21,6 +22,29 @@ public class Intake {
 
         claw = m_claw;
         activeOpMode = mode;
+    }
+
+    public void IntakeControl(boolean onButton,
+                              boolean autoIntake,
+                              boolean previousOnButton,
+                              float  stackHeightCurrentYStick,
+                              float  stackHeightCurrentXStick,
+                              Arm arm){
+
+        if  ((previousOnButton && !onButton) || (currentIntakeState == intakeState.INTAKE_ON && onButton)) {
+            intake1.setPosition(.5);
+            intake2.setPosition(.5);
+            currentIntakeState = intakeState.INTAKE_OFF;
+        }
+        else if (onButton || (delayOn && arm.timer == 0 )){
+        intake1.setPosition(1);
+        intake2.setPosition(0);
+        currentIntakeState = intakeState.INTAKE_ON;
+        delayOn = false;
+        }
+        else if (autoIntake || Math.abs(stackHeightCurrentXStick) > .2 || Math.abs(stackHeightCurrentYStick) > .2) {
+            delayOn = true;
+        }
     }
 
     public void init(HardwareMap ahwMap) {
