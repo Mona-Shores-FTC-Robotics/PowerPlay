@@ -18,8 +18,8 @@ public class MeepMeepTesting {
     public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -FULL_TILE_DISTANCE_DRIVE);
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+3), -FULL_TILE_DISTANCE_DRIVE);
 
-    public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -20);
-    public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -20);
+    public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(FULL_TILE_DISTANCE_DRIVE*2, -(FULL_TILE_DISTANCE_DRIVE-3));
+    public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE*2), -(FULL_TILE_DISTANCE_DRIVE-3));
 
     public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, 0);
     public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-FULL_TILE_DISTANCE_DRIVE, 0);
