@@ -58,8 +58,8 @@ public class PowerplayTrajectories {
     public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
 
 
-    public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(68, -12);
-    public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-68, -12);
+    public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(62, -12);
+    public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-62, -12);
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(47.2, -12);
     public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-47.2, -12);
     public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(45, -12, Math.toRadians(180));
@@ -76,7 +76,7 @@ public class PowerplayTrajectories {
     public static Vector2d firstJunction;
     public static double firstJunctionHeight;
     public static double firstJunctionArm;
-    public static Vector2d seocndJunction;
+    public static Vector2d secondJunction;
     public static double secondJunctionHeight;
     public static double secondJunctionArm;
     public static Vector2d thirdJunction;
@@ -152,7 +152,7 @@ public class PowerplayTrajectories {
     public void MakeTrajectories() {
 
         if (startPosRIGHT) {
-            startPose = new Pose2d(38, -60.3, Math.toRadians(90));
+            startPose = new Pose2d(35, -60.3, Math.toRadians(90));
             coneStackLine = RIGHT_CONE_STACK_LINE;
             coneStack = RIGHT_CONE_STACK_RIGHT;
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
@@ -162,7 +162,7 @@ public class PowerplayTrajectories {
             firstJunction = LOW_JUNCTION_Y5;
             firstJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             firstJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            seocndJunction = LOW_JUNCTION_Y5;
+            secondJunction = LOW_JUNCTION_Y5;
             secondJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             secondJunctionArm = Arm.ARM_LEFT_OUTTAKE;
             thirdJunction = LOW_JUNCTION_Y5;
@@ -188,7 +188,7 @@ public class PowerplayTrajectories {
 
         } else
         {
-            startPose = new Pose2d(-38, -60.3, Math.toRadians(90));
+            startPose = new Pose2d(-35, -60.3, Math.toRadians(90));
             coneStackLine = LEFT_CONE_STACK_LINE;
             coneStack = LEFT_CONE_STACK_LEFT;
             coneStackEndOfLine = LEFT_CONE_STACK_END_OF_LINE;
@@ -198,7 +198,7 @@ public class PowerplayTrajectories {
             firstJunction = LOW_JUNCTION_Y1;
             firstJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             firstJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
-            seocndJunction = LOW_JUNCTION_Y1;
+            secondJunction = LOW_JUNCTION_Y1;
             secondJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             secondJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
             thirdJunction = LOW_JUNCTION_Y1;
@@ -225,25 +225,28 @@ public class PowerplayTrajectories {
 
         //First Sequence drives to the Medium Junction, delivers cone, and drives to cone stack line
         trajSeq1 = MecDrive.trajectorySequenceBuilder(startPose)
-                .forward(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE)
-                .strafeTo(startingJunction)
-                .waitSeconds(.200)
-                .lineToSplineHeading(coneStackLine)
-                .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
-                    Lift.StartLifting(startingJunctionHeight, Arm);
-                })
-                .addTemporalMarker(STARTING_CONE_ARM_TIME, () -> {
-                    Arm.setPosition(startingJunctionArm);
-                })
-                .addTemporalMarker(STARTING_CONE_DUNK_TIME, () -> {
-                    Lift.StartLifting(startingJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(STARTING_CONE_DELIVER_TIME, () -> {
-                    Claw.openClaw();
-                })
-                .addTemporalMarker(STARTING_CONE_UNDUNK_TIME, () -> {
-                    Lift.StartLifting(startingJunctionHeight, Arm);
-                })
+                .splineToConstantHeading(startingJunction,Math.toRadians(180))
+                .waitSeconds(.5)
+                .lineToLinearHeading(coneStackLine)
+                .lineTo(coneStack)
+                .waitSeconds(.5)
+                .splineToConstantHeading(firstJunction,Math.toRadians(270))
+                .waitSeconds(.5)
+                .splineToConstantHeading(coneStack, Math.toRadians(0))
+                .waitSeconds(.5)
+                .splineToConstantHeading(secondJunction,Math.toRadians(270))
+                .waitSeconds(.5)
+                .splineToConstantHeading(coneStack, Math.toRadians(0))
+                .waitSeconds(.5)
+                .splineToConstantHeading(thirdJunction,Math.toRadians(270))
+                .waitSeconds(.5)
+                .splineToConstantHeading(coneStack, Math.toRadians(0))
+                .waitSeconds(.5)
+                .splineToConstantHeading(fourthJunction,Math.toRadians(270))
+                .waitSeconds(.5)
+                .lineTo(coneStackEndOfLine)
+                .lineToSplineHeading(endAutoPosition)
+
                 .build();
 
         trajSeq2 = MecDrive.trajectorySequenceBuilder(coneStackLine)
@@ -253,7 +256,7 @@ public class PowerplayTrajectories {
                 .waitSeconds(.200)
                 .splineToConstantHeading(coneStack, Math.toRadians(0))
                 .waitSeconds(.200)
-                .splineToConstantHeading(seocndJunction, Math.toRadians(270))
+                .splineToConstantHeading(secondJunction, Math.toRadians(270))
                 .waitSeconds(.200)
                 .splineToConstantHeading(coneStack, Math.toRadians(0))
                 .waitSeconds(.200)
