@@ -21,8 +21,8 @@ public class MeepMeepTesting {
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
     public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
 
-    public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE+5, -5);
-    public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+5), -5);
+    public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, -5);
+    public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE), -5);
 
     public static Pose2d RIGHT_SIDE_LEFT_TILE_D4 = new Pose2d(HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d RIGHT_SIDE_MIDDLE_TILE_D5 = new Pose2d(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
@@ -32,7 +32,8 @@ public class MeepMeepTesting {
     public static Pose2d LEFT_SIDE_MIDDLE_TILE_D2 = new Pose2d( -(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
 
-
+    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(60, -12,Math.toRadians(180));
+    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-60, -12,Math.toRadians(90));
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -12);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -12);
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(43, -12);
@@ -40,8 +41,10 @@ public class MeepMeepTesting {
     public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(40, -12, Math.toRadians(180));
     public static Pose2d LEFT_CONE_STACK_LINE = new Pose2d(-40, -12, Math.toRadians(0));
 
-    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(60, -12, Math.toRadians(180));
-    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-60, -12, Math.toRadians(0));
+    public static Vector2d RIGHT_LINEUP_TILE_VECTOR = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -12);
+
+    public static Pose2d RIGHT_LINEUP_TILE = new Pose2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -12, Math.toRadians(180));
+    public static Pose2d LEFT_LINEUP_TILE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -12, Math.toRadians(0));
 
     public static Pose2d coneStackPose;
 
@@ -190,39 +193,47 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width`
-                .setConstraints(44, 32, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
+                .setConstraints(40, 30, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
                                 .splineToConstantHeading(startingJunction,Math.toRadians(180))
                                 .waitSeconds(.200)
-                                .lineToLinearHeading(new Pose2d(RIGHT_CONE_STACK_END_OF_LINE, Math.toRadians(180)))
-                                .waitSeconds(.200)
+                                .splineToLinearHeading(RIGHT_LINEUP_TILE, Math.toRadians(0))
                                 .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                                .splineToLinearHeading(RIGHT_CONE_STACK_POSE, Math.toRadians(0))
                                 .waitSeconds(.200)
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(firstJunction, Math.toRadians(135)), Math.toRadians(135))
+                                .splineToConstantHeading(firstJunction, Math.toRadians(90))
                                 .waitSeconds(.200)
                                 .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                                .splineToConstantHeading(coneStackEndOfLine, Math.toRadians(0))
+                                .splineToConstantHeading(coneStack, Math.toRadians(0))
                                 .waitSeconds(.200)
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(secondJunction, Math.toRadians(135)), Math.toRadians(135))
+                                .splineToConstantHeading(secondJunction, Math.toRadians(90))
                                 .waitSeconds(.200)
                                 .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                                .splineToConstantHeading(coneStackEndOfLine, Math.toRadians(0))
+                                .splineToConstantHeading(coneStack, Math.toRadians(0))
                                 .waitSeconds(.200)
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(thirdJunction, Math.toRadians(135)), Math.toRadians(135))
+                                .splineToConstantHeading(thirdJunction, Math.toRadians(90))
                                 .waitSeconds(.200)
                                 .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                                .splineToConstantHeading(coneStackEndOfLine, Math.toRadians(0))
+                                .splineToConstantHeading(coneStack, Math.toRadians(0))
                                 .waitSeconds(.200)
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(fourthJunction, Math.toRadians(135)), Math.toRadians(135))
+                                .splineToConstantHeading(fourthJunction, Math.toRadians(90))
                                 .waitSeconds(.200)
-                                .back(8)
-                                .lineToLinearHeading(endAutoPosition)
+                                .setReversed(true)
+                                .splineToConstantHeading(coneStackEndOfLine, Math.toRadians(0))
+                                .splineToConstantHeading(coneStack, Math.toRadians(0))
+                                .waitSeconds(.200)
+                                .setReversed(false)
+                                .splineToConstantHeading(fifthJunction, Math.toRadians(90))
+                                .waitSeconds(.200)
+                                .splineToLinearHeading(endAutoPosition, Math.toRadians(0))
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
