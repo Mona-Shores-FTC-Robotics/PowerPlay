@@ -15,11 +15,11 @@ public class MeepMeepTesting {
     public static final double THIRTYSECOND_TILE_DISTANCE_DRIVE = SIXTEENTH_TILE_DISTANCE_DRIVE /2;
     public static final double SIXTYFOURTH_TILE_DISTANCE_DRIVE = THIRTYSECOND_TILE_DISTANCE_DRIVE /2;
 
-    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-FULL_TILE_DISTANCE_DRIVE, -FULL_TILE_DISTANCE_DRIVE);
+    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -FULL_TILE_DISTANCE_DRIVE);
+    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+3), -FULL_TILE_DISTANCE_DRIVE);
 
-    public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
-    public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
+    public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -20);
+    public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -20);
 
     public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, 0);
     public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-FULL_TILE_DISTANCE_DRIVE, 0);
@@ -33,8 +33,8 @@ public class MeepMeepTesting {
     public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
 
 
-    public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(68, -12);
-    public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-68, -12);
+    public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -12);
+    public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -12);
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(47.2, -12);
     public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-47.2, -12);
     public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(45, -12, Math.toRadians(180));
@@ -69,53 +69,53 @@ public class MeepMeepTesting {
     public static int numberSignal = 1;
 
     // Lift@Deliver
-    public static double STARTING_CONE_LIFT_TIME = 0;
+    public static double STARTING_CONE_LIFT_TIME = .1;
     // Rotate Arm
-    public static double STARTING_CONE_ARM_TIME = STARTING_CONE_LIFT_TIME + 1.2;
+    public static double STARTING_CONE_ARM_TIME = STARTING_CONE_LIFT_TIME + 1.1;
     // Lift@Dunk
-    public static double STARTING_CONE_DUNK_TIME = STARTING_CONE_ARM_TIME + 1.8;
+    public static double STARTING_CONE_DUNK_TIME = STARTING_CONE_ARM_TIME + 1.1;
     // Open Claw
-    public static double STARTING_CONE_DELIVER_TIME = STARTING_CONE_DUNK_TIME + .3;
+    public static double STARTING_CONE_DELIVER_TIME = STARTING_CONE_DUNK_TIME + .1;
     // Lift@Undunk
-    public static double STARTING_CONE_UNDUNK_TIME = STARTING_CONE_DELIVER_TIME + .2;
+    public static double STARTING_CONE_UNDUNK_TIME = STARTING_CONE_DELIVER_TIME + .1;
 
 
     // Arm Center, Lift@Pickup, Claw Easy, Intake On;
-    public static double FIRST_CONE_APPROACH_TIME = 0;
+    public static double FIRST_CONE_APPROACH_TIME = 4.8;
     // Intake Off, Close Claw, Lift@+200
     public static double FIRST_CONE_GRAB_TIME = FIRST_CONE_APPROACH_TIME + 1.5;
     // Lift@Deliver, Rotate Arm
     public static double FIRST_CONE_DELIVERY_SETUP_TIME = FIRST_CONE_GRAB_TIME + 1.1;
     // Lift@Dunk
-    public static double FIRST_CONE_DUNK_TIME = FIRST_CONE_DELIVERY_SETUP_TIME + 1.1;
+    public static double FIRST_CONE_DUNK_TIME = FIRST_CONE_DELIVERY_SETUP_TIME + 1;
     // Open Claw
     public static double FIRST_CONE_DELIVER_TIME = FIRST_CONE_DUNK_TIME + .2;
     // Lift@Undunk
     public static double FIRST_CONE_UNDUNK_TIME = FIRST_CONE_DELIVER_TIME + .2;
 
 
-    public static double SECOND_CONE_APPROACH_TIME = 4.8;
+    public static double SECOND_CONE_APPROACH_TIME = 8.8;
     public static double SECOND_CONE_GRAB_TIME = SECOND_CONE_APPROACH_TIME + 1.5;
     public static double SECOND_CONE_DELIVERY_SETUP_TIME = SECOND_CONE_GRAB_TIME + 1.1;
     public static double SECOND_CONE_DUNK_TIME = SECOND_CONE_DELIVERY_SETUP_TIME + 1.1;
     public static double SECOND_CONE_DELIVER_TIME = SECOND_CONE_DUNK_TIME + .2;
     public static double SECOND_CONE_UNDUNK_TIME = SECOND_CONE_DELIVER_TIME + .2;
 
-    public static double THIRD_CONE_APPROACH_TIME = 8.7;
+    public static double THIRD_CONE_APPROACH_TIME = 12.8;
     public static double THIRD_CONE_GRAB_TIME = THIRD_CONE_APPROACH_TIME + 1.5;
     public static double THIRD_CONE_DELIVERY_SETUP_TIME = THIRD_CONE_GRAB_TIME + 1.1;
     public static double THIRD_CONE_DUNK_TIME = THIRD_CONE_DELIVERY_SETUP_TIME + 1.1;
     public static double THIRD_CONE_DELIVER_TIME = THIRD_CONE_DUNK_TIME + .2;
     public static double THIRD_CONE_UNDUNK_TIME = THIRD_CONE_DELIVER_TIME + .2;
 
-    public static double FOURTH_CONE_APPROACH_TIME = 12.8;
+    public static double FOURTH_CONE_APPROACH_TIME = 16.8;
     public static double FOURTH_CONE_GRAB_TIME = FOURTH_CONE_APPROACH_TIME + 1.5;
     public static double FOURTH_CONE_DELIVERY_SETUP_TIME = FOURTH_CONE_GRAB_TIME + 1.1;
     public static double FOURTH_CONE_DUNK_TIME = FOURTH_CONE_DELIVERY_SETUP_TIME + 1.1;
     public static double FOURTH_CONE_DELIVER_TIME = FOURTH_CONE_DUNK_TIME + .2;
     public static double FOURTH_CONE_UNDUNK_TIME = FOURTH_CONE_DELIVER_TIME + .2;
 
-    public static double FIFTH_CONE_APPROACH_TIME = 17.1;
+    public static double FIFTH_CONE_APPROACH_TIME = 20.8;
     public static double FIFTH_CONE_GRAB_TIME = FIFTH_CONE_APPROACH_TIME + 1.5;
     public static double FIFTH_CONE_DELIVERY_SETUP_TIME = FIFTH_CONE_GRAB_TIME + 1.1;
     public static double FIFTH_CONE_DUNK_TIME = FIFTH_CONE_DELIVERY_SETUP_TIME + 1.1;
@@ -141,7 +141,7 @@ public class MeepMeepTesting {
 
             fourthJunction = LOW_JUNCTION_Y5;
 
-            fifthJunction = HIGH_JUNCTION_X4;
+            fifthJunction = LOW_JUNCTION_Y5;
 
 
             if (numberSignal == 1)
@@ -193,21 +193,49 @@ public class MeepMeepTesting {
                                 .waitSeconds(.5)
                                 .splineToConstantHeading(firstJunction,Math.toRadians(270))
                                 .waitSeconds(.5)
+                                .setTangent(Math.toRadians(90))
                                 .splineToConstantHeading(coneStack, Math.toRadians(0))
                                 .waitSeconds(.5)
+                                .setTangent(Math.toRadians(180))
                                 .splineToConstantHeading(secondJunction,Math.toRadians(270))
                                 .waitSeconds(.5)
+                                .setTangent(Math.toRadians(90))
                                 .splineToConstantHeading(coneStack, Math.toRadians(0))
                                 .waitSeconds(.5)
+                                .setTangent(Math.toRadians(180))
                                 .splineToConstantHeading(thirdJunction,Math.toRadians(270))
                                 .waitSeconds(.5)
+                                .setTangent(Math.toRadians(90))
                                 .splineToConstantHeading(coneStack, Math.toRadians(0))
                                 .waitSeconds(.5)
+                                .setTangent(Math.toRadians(180))
                                 .splineToConstantHeading(fourthJunction,Math.toRadians(270))
+                                .waitSeconds(.5)
+                                .waitSeconds(.5)
+                                .setTangent(Math.toRadians(90))
+                                .splineToConstantHeading(coneStack, Math.toRadians(0))
+                                .waitSeconds(.5)
+                                .setTangent(Math.toRadians(180))
+                                .splineToConstantHeading(fifthJunction,Math.toRadians(270))
                                 .waitSeconds(.5)
                                 .lineTo(coneStackEndOfLine)
                                 .lineToSplineHeading(endAutoPosition)
                                 .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
+                                    //Lift.StartLifting(startingJunctionHeight, Arm);
+                                })
+                                .addTemporalMarker(STARTING_CONE_ARM_TIME, () -> {
+                                    //Arm.setPosition(startingJunctionArm);
+                                })
+                                .addTemporalMarker(STARTING_CONE_DUNK_TIME, () -> {
+                                    //Lift.StartLifting(startingJunctionHeight - 300, Arm);
+                                })
+                                .addTemporalMarker(STARTING_CONE_DELIVER_TIME, () -> {
+                                    //Claw.openClaw();
+                                })
+                                .addTemporalMarker(STARTING_CONE_UNDUNK_TIME, () -> {
+                                    //Lift.StartLifting(startingJunctionHeight, Arm);
+                                })
+                                .addTemporalMarker(FIRST_CONE_APPROACH_TIME, () -> {
 //                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
 //                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
 //                                    Claw.setEasyIntake();

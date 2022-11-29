@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
+import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_LEFT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_RIGHT_OUTTAKE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState;
@@ -155,8 +156,8 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         //Strafe close to High Pole - 3s (9s)
         MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE + SIXTEENTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
-            ServoArm.setArmState(Arm.armState.ARM_RIGHT, HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
-        } else ServoArm.setArmState(Arm.armState.ARM_LEFT, HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL);
+            ServoArm.setArmState(Arm.armState.ARM_RIGHT, null);
+        } else ServoArm.setArmState(Arm.armState.ARM_LEFT, null);
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
             MecDrive.ContinueStrafing();
         }
@@ -166,7 +167,6 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         while (opModeIsActive() && (Lift.alreadyLifting)) {
             Lift.ContinueLifting();
         }
-
 
         //Open claw and wait a moment to drop cone - .5s (10.5s)
         ServoClaw.openClaw();
@@ -200,7 +200,8 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
         telemetry.update();
 
         //Drive to the cone stack line - 2s (14s)
-        ServoArm.setArmState(Arm.armState.ARM_CENTER, FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+        ServoArm.setPosition(ARM_CENTER_INTAKE);
+        Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
         MecDrive.startEncoderDrive(.5, -(FULL_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE));
         while (opModeIsActive() && (MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
@@ -227,25 +228,27 @@ public class AUTO_SCORE_2_AND_PARK extends LinearOpMode {
             //close claw for next intake
             ServoClaw.setEasyIntake();
 
+            ServoArm.setPosition(ARM_CENTER_INTAKE);
+
             //lower lift to correct cone stack intake height - //turn to 90 - 0s (14s)
             switch (coneStackTracker) {
                 case 5: {
-                    ServoArm.setArmState(armState.ARM_CENTER, FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                     break;
                 }
                 case 4: {
-                    ServoArm.setArmState(armState.ARM_CENTER, FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                     break;
                 }
                 case 3: {
-                    ServoArm.setArmState(armState.ARM_CENTER, THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                 }
                 case 2: {
-                    ServoArm.setArmState(armState.ARM_CENTER, TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                     break;
                 }
                 case 1: {
-                    ServoArm.setArmState(armState.ARM_CENTER, ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
+                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, ServoArm);
                     break;
                 }
             }
