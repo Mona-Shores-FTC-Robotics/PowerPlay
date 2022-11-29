@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -13,8 +14,6 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.DriveTrain;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
-
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 @TeleOp(name = "TeleOp Mode", group = "Turret Bot")
 public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
@@ -189,6 +188,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             //Driver bumper controls for rotating
             MecDrive.CheckSquareTurning(currentGamepad1.left_bumper, previousGamepad1.left_bumper,
                     currentGamepad1.right_bumper, previousGamepad1.right_bumper,
+                    currentGamepad1.b, currentGamepad1.b,
                     Gyro);
 
             //Driver control to move set distance away from alliance substation

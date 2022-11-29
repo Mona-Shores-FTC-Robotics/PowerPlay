@@ -256,14 +256,13 @@ public class DriveTrain {
 
 
 
-    public void CheckSquareTurning(boolean button1, boolean lastButton1, boolean button2, boolean lastButton2, Gyro Gyro) {
+    public void CheckSquareTurning(boolean button1, boolean lastButton1, boolean button2, boolean lastButton2, boolean button3, boolean lastButton3, Gyro Gyro) {
         if (button1 && !lastButton1) {
-            //ROTATE TO THE LEFT TO THE CLOSEST RIGHT ANGLE 0, 90, 180, 270
-            RotateClosestRightAngleToLeft(Gyro);
-
+            turnToPID(90, Gyro);
         } else if (button2 && !lastButton2) {
-            //ROTATE TO THE LEFT TO THE CLOSEST RIGHT ANGLE 0, 90, 180, 270
-            RotateClosestRightAngleToRight(Gyro);
+            turnToPID(-90, Gyro);
+        } else if (button3 && !lastButton3) {
+            turnToPID(0, Gyro);
         }
     }
 
