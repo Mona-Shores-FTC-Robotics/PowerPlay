@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.ObjectClasses;
 
-import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_CENTER;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_FRONT;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_LEFT;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_RIGHT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
@@ -229,24 +225,26 @@ public class PowerplayTrajectories {
                 .waitSeconds(.5)
                 .lineToLinearHeading(coneStackLine)
                 .lineTo(coneStack)
-                .waitSeconds(.5)
+                .waitSeconds(.200)
                 .splineToConstantHeading(firstJunction,Math.toRadians(270))
-                .waitSeconds(.5)
+                .waitSeconds(.200)
                 .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.5)
+                .waitSeconds(.200)
                 .splineToConstantHeading(secondJunction,Math.toRadians(270))
-                .waitSeconds(.5)
+                .waitSeconds(.200)
                 .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.5)
+                .waitSeconds(.200)
                 .splineToConstantHeading(thirdJunction,Math.toRadians(270))
-                .waitSeconds(.5)
+                .waitSeconds(.200)
                 .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.5)
+                .waitSeconds(.200)
                 .splineToConstantHeading(fourthJunction,Math.toRadians(270))
-                .waitSeconds(.5)
-                .lineTo(coneStackEndOfLine)
-                .lineToSplineHeading(endAutoPosition)
-
+                .waitSeconds(.200)
+                .splineToConstantHeading(coneStack, Math.toRadians(0))
+                .waitSeconds(.200)
+                .splineToSplineHeading(new Pose2d(fifthJunction, Math.toRadians(135)), Math.toRadians(135))
+                .back(15)
+                .lineToLinearHeading(endAutoPosition)
                 .build();
 
         trajSeq2 = MecDrive.trajectorySequenceBuilder(coneStackLine)
