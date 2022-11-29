@@ -6,8 +6,6 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-import java.util.Vector;
-
 public class MeepMeepTesting {
     public static final double FULL_TILE_DISTANCE_DRIVE= 23.5;
     public static final double HALF_TILE_DISTANCE_DRIVE = FULL_TILE_DISTANCE_DRIVE /2;
@@ -209,7 +207,29 @@ public class MeepMeepTesting {
                                 .waitSeconds(.5)
                                 .lineTo(coneStackEndOfLine)
                                 .lineToSplineHeading(endAutoPosition)
-
+                                .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
+//                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+//                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
+                                })
+                                .addTemporalMarker(FIRST_CONE_GRAB_TIME, () -> {
+//                                    Intake.turnIntakeOff();
+//                                    Claw.closeClaw();
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
+                                })
+                                .addTemporalMarker(FIRST_CONE_DELIVERY_SETUP_TIME, () -> {
+//                                    Arm.setPosition(firstJunctionArm);
+                                })
+                                .addTemporalMarker(FIRST_CONE_DUNK_TIME, () -> {
+//                                    Lift.StartLifting(firstJunctionHeight - 300, Arm);
+                                })
+                                .addTemporalMarker(FIRST_CONE_DELIVER_TIME, () -> {
+//                                    Claw.openClaw();
+                                })
+                                .addTemporalMarker(FIRST_CONE_UNDUNK_TIME, () -> {
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
+                                })
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
