@@ -48,8 +48,8 @@ public class PowerplayTrajectories {
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
     public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
 
-    public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, 0);
-    public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-FULL_TILE_DISTANCE_DRIVE, 0);
+    public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, -3);
+    public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-FULL_TILE_DISTANCE_DRIVE, -3);
 
     public static Pose2d RIGHT_SIDE_LEFT_TILE_D4 = new Pose2d(HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d RIGHT_SIDE_MIDDLE_TILE_D5 = new Pose2d(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
@@ -59,7 +59,7 @@ public class PowerplayTrajectories {
     public static Pose2d LEFT_SIDE_MIDDLE_TILE_D2 = new Pose2d( -(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
 
-    public static Pose2d RIGHT_LINEUP_TILE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2, -12, Math.toRadians(180));
+    public static Pose2d RIGHT_LINEUP_TILE = new Pose2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE, -12, Math.toRadians(180));
     public static Pose2d LEFT_LINEUP_TILE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE), -12, Math.toRadians(0));
 
     public static Pose2d coneStackPose;
@@ -67,12 +67,15 @@ public class PowerplayTrajectories {
     public static Vector2d RIGHT_LINEUP_TILE_VECTOR = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -12);
 
 
-    public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(62, -12);
-    public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-62, -12);
+    public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -12);
+    public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -12);
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(47.2, -12);
     public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-47.2, -12);
     public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(45, -12, Math.toRadians(180));
     public static Pose2d LEFT_CONE_STACK_LINE = new Pose2d(-45, -12, Math.toRadians(0));
+
+    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(60, -12,Math.toRadians(180));
+    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-60, -12,Math.toRadians(0));
 
     public static Pose2d startPose;
     public static Pose2d currentPose;
@@ -103,21 +106,21 @@ public class PowerplayTrajectories {
     public static int numberSignal = 1;
 
     // Lift@Deliver
-    public static double STARTING_CONE_LIFT_TIME = 0;
+    public static double STARTING_CONE_LIFT_TIME = .1;
     // Rotate Arm
-    public static double STARTING_CONE_ARM_TIME = STARTING_CONE_LIFT_TIME + 1.2;
+    public static double STARTING_CONE_ARM_TIME = 1.11;
     // Lift@Dunk
-    public static double STARTING_CONE_DUNK_TIME = STARTING_CONE_ARM_TIME + 1.8;
+    public static double STARTING_CONE_DUNK_TIME = 2.4;
     // Open Claw
-    public static double STARTING_CONE_DELIVER_TIME = STARTING_CONE_DUNK_TIME + .3;
+    public static double STARTING_CONE_DELIVER_TIME = STARTING_CONE_DUNK_TIME + .1;
     // Lift@Undunk
-    public static double STARTING_CONE_UNDUNK_TIME = STARTING_CONE_DELIVER_TIME + .2;
+    public static double STARTING_CONE_UNDUNK_TIME = STARTING_CONE_DELIVER_TIME + .1;
 
 
     // Arm Center, Lift@Pickup, Claw Easy, Intake On;
-    public static double FIRST_CONE_APPROACH_TIME = 0;
+    public static double FIRST_CONE_APPROACH_TIME = 4.2;
     // Intake Off, Close Claw, Lift@+200
-    public static double FIRST_CONE_GRAB_TIME = FIRST_CONE_APPROACH_TIME + 1.5;
+    public static double FIRST_CONE_GRAB_TIME = 5.62;
     // Lift@Deliver, Rotate Arm
     public static double FIRST_CONE_DELIVERY_SETUP_TIME = FIRST_CONE_GRAB_TIME + 1.1;
     // Lift@Dunk
@@ -128,28 +131,28 @@ public class PowerplayTrajectories {
     public static double FIRST_CONE_UNDUNK_TIME = FIRST_CONE_DELIVER_TIME + .2;
 
 
-    public static double SECOND_CONE_APPROACH_TIME = 4.8;
+    public static double SECOND_CONE_APPROACH_TIME = 8.8;
     public static double SECOND_CONE_GRAB_TIME = SECOND_CONE_APPROACH_TIME + 1.5;
     public static double SECOND_CONE_DELIVERY_SETUP_TIME = SECOND_CONE_GRAB_TIME + 1.1;
     public static double SECOND_CONE_DUNK_TIME = SECOND_CONE_DELIVERY_SETUP_TIME + 1.1;
     public static double SECOND_CONE_DELIVER_TIME = SECOND_CONE_DUNK_TIME + .2;
     public static double SECOND_CONE_UNDUNK_TIME = SECOND_CONE_DELIVER_TIME + .2;
 
-    public static double THIRD_CONE_APPROACH_TIME = 8.7;
+    public static double THIRD_CONE_APPROACH_TIME = 12.8;
     public static double THIRD_CONE_GRAB_TIME = THIRD_CONE_APPROACH_TIME + 1.5;
     public static double THIRD_CONE_DELIVERY_SETUP_TIME = THIRD_CONE_GRAB_TIME + 1.1;
     public static double THIRD_CONE_DUNK_TIME = THIRD_CONE_DELIVERY_SETUP_TIME + 1.1;
     public static double THIRD_CONE_DELIVER_TIME = THIRD_CONE_DUNK_TIME + .2;
     public static double THIRD_CONE_UNDUNK_TIME = THIRD_CONE_DELIVER_TIME + .2;
 
-    public static double FOURTH_CONE_APPROACH_TIME = 12.8;
+    public static double FOURTH_CONE_APPROACH_TIME = 16.8;
     public static double FOURTH_CONE_GRAB_TIME = FOURTH_CONE_APPROACH_TIME + 1.5;
     public static double FOURTH_CONE_DELIVERY_SETUP_TIME = FOURTH_CONE_GRAB_TIME + 1.1;
     public static double FOURTH_CONE_DUNK_TIME = FOURTH_CONE_DELIVERY_SETUP_TIME + 1.1;
     public static double FOURTH_CONE_DELIVER_TIME = FOURTH_CONE_DUNK_TIME + .2;
     public static double FOURTH_CONE_UNDUNK_TIME = FOURTH_CONE_DELIVER_TIME + .2;
 
-    public static double FIFTH_CONE_APPROACH_TIME = 17.1;
+    public static double FIFTH_CONE_APPROACH_TIME = 20.8;
     public static double FIFTH_CONE_GRAB_TIME = FIFTH_CONE_APPROACH_TIME + 1.5;
     public static double FIFTH_CONE_DELIVERY_SETUP_TIME = FIFTH_CONE_GRAB_TIME + 1.1;
     public static double FIFTH_CONE_DUNK_TIME = FIFTH_CONE_DELIVERY_SETUP_TIME + 1.1;
@@ -164,6 +167,7 @@ public class PowerplayTrajectories {
             startPose = new Pose2d(35, -60.3, Math.toRadians(90));
             coneStackLine = RIGHT_CONE_STACK_LINE;
             coneStack = RIGHT_CONE_STACK_RIGHT;
+            coneStackPose = RIGHT_CONE_STACK_POSE;
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
             startingJunction = MEDIUM_JUNCTION_Y4;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
@@ -239,10 +243,24 @@ public class PowerplayTrajectories {
                 .setTangent(Math.toRadians(0))
                 .splineToSplineHeading(RIGHT_LINEUP_TILE, Math.toRadians(0))
                 .splineToSplineHeading(coneStackPose, Math.toRadians(0))
-                .waitSeconds(.200)
+                .waitSeconds(.6)
+                .UNSTABLE_addTemporalMarkerOffset(-.6, () -> {
+                    Intake.turnIntakeOff();
+                    Claw.closeClaw();
+                    Lift.StartLifting(firstJunctionHeight, Arm);
+                })
                 .setReversed(false)
                 .splineToConstantHeading(firstJunction, Math.toRadians(90))
-                .waitSeconds(.200)
+                .waitSeconds(.6)
+                .UNSTABLE_addDisplacementMarkerOffset(-.8, () -> {
+                    Lift.StartLifting(firstJunctionHeight - 300, Arm);
+                })
+                .UNSTABLE_addDisplacementMarkerOffset(-.6, () -> {
+                    Claw.openClaw();
+                })
+                .UNSTABLE_addDisplacementMarkerOffset(-.1, () -> {
+                    Lift.StartLifting(firstJunctionHeight, Arm);
+                })
                 .setReversed(true)
                 .splineToConstantHeading(RIGHT_LINEUP_TILE_VECTOR, Math.toRadians(0))
                 .splineToConstantHeading(coneStack, Math.toRadians(0))
@@ -250,43 +268,31 @@ public class PowerplayTrajectories {
                 .setReversed(false)
                 .splineToConstantHeading(secondJunction, Math.toRadians(90))
                 .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
-                    //Lift.StartLifting(startingJunctionHeight, Arm);
+                    Lift.StartLifting(startingJunctionHeight, Arm);
                 })
                 .addTemporalMarker(STARTING_CONE_ARM_TIME, () -> {
-                    //Arm.setPosition(startingJunctionArm);
+                    Arm.setPosition(startingJunctionArm);
                 })
                 .addTemporalMarker(STARTING_CONE_DUNK_TIME, () -> {
-                    //Lift.StartLifting(startingJunctionHeight - 300, Arm);
+                    Lift.StartLifting(startingJunctionHeight - 300, Arm);
                 })
                 .addTemporalMarker(STARTING_CONE_DELIVER_TIME, () -> {
-                    //Claw.openClaw();
+                    Claw.openClaw();
                 })
                 .addTemporalMarker(STARTING_CONE_UNDUNK_TIME, () -> {
-                    //Lift.StartLifting(startingJunctionHeight, Arm);
+                    Lift.StartLifting(startingJunctionHeight, Arm);
                 })
                 .addTemporalMarker(FIRST_CONE_APPROACH_TIME, () -> {
-//                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-//                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
-//                                    Claw.setEasyIntake();
-//                                    Intake.turnIntakeOn();
+                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+                                    Claw.setEasyIntake();
+                                    Intake.turnIntakeOn();
                 })
-                .addTemporalMarker(FIRST_CONE_GRAB_TIME, () -> {
-//                                    Intake.turnIntakeOff();
-//                                    Claw.closeClaw();
-//                                    Lift.StartLifting(firstJunctionHeight, Arm);
-                })
+
                 .addTemporalMarker(FIRST_CONE_DELIVERY_SETUP_TIME, () -> {
-//                                    Arm.setPosition(firstJunctionArm);
+                                    Arm.setPosition(firstJunctionArm);
                 })
-                .addTemporalMarker(FIRST_CONE_DUNK_TIME, () -> {
-//                                    Lift.StartLifting(firstJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(FIRST_CONE_DELIVER_TIME, () -> {
-//                                    Claw.openClaw();
-                })
-                .addTemporalMarker(FIRST_CONE_UNDUNK_TIME, () -> {
-//                                    Lift.StartLifting(firstJunctionHeight, Arm);
-                })
+
                 .build();
 
         trajSeq2 = MecDrive.trajectorySequenceBuilder(coneStackLine)
