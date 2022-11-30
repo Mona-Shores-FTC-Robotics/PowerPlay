@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CO
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
@@ -40,14 +41,14 @@ public class PowerplayTrajectories {
         Arm = arm;
     }
 
-    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-FULL_TILE_DISTANCE_DRIVE, -FULL_TILE_DISTANCE_DRIVE);
+    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE +3, -FULL_TILE_DISTANCE_DRIVE);
+    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+3), -FULL_TILE_DISTANCE_DRIVE);
 
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
     public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
 
-    public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE, 0);
-    public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-FULL_TILE_DISTANCE_DRIVE, 0);
+    public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -3);
+    public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+3),-3);
 
     public static Pose2d RIGHT_SIDE_LEFT_TILE_D4 = new Pose2d(HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d RIGHT_SIDE_MIDDLE_TILE_D5 = new Pose2d(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
@@ -60,8 +61,8 @@ public class PowerplayTrajectories {
 
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(62, -12);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-62, -12);
-    public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(47.2, -12);
-    public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-47.2, -12);
+    public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -12);
+    public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -12);
     public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(45, -12, Math.toRadians(180));
     public static Pose2d LEFT_CONE_STACK_LINE = new Pose2d(-45, -12, Math.toRadians(0));
 
@@ -159,35 +160,31 @@ public class PowerplayTrajectories {
             startingJunction = MEDIUM_JUNCTION_Y4;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             startingJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            firstJunction = LOW_JUNCTION_Y5;
-            firstJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            firstJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            secondJunction = LOW_JUNCTION_Y5;
-            secondJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            secondJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            thirdJunction = LOW_JUNCTION_Y5;
-            thirdJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            thirdJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            fourthJunction = LOW_JUNCTION_Y5;
-            fourthJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            fourthJunctionArm = Arm.ARM_LEFT_OUTTAKE;
+            firstJunction = HIGH_JUNCTION_X4;
+            firstJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            firstJunctionArm = Arm.ARM_FRONT_OUTTAKE;
+            secondJunction = HIGH_JUNCTION_X4;
+            secondJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            secondJunctionArm = Arm.ARM_FRONT_OUTTAKE;
+            thirdJunction = HIGH_JUNCTION_X4;
+            thirdJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            thirdJunctionArm = Arm.ARM_FRONT_OUTTAKE;
+            fourthJunction = HIGH_JUNCTION_X4;
+            fourthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fourthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             fifthJunction = HIGH_JUNCTION_X4;
-            fifthJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fifthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             fifthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
 
-            if (numberSignal == 1)
-            {
+            if (numberSignal == 1) {
                 endAutoPosition = RIGHT_SIDE_LEFT_TILE_D4;
-            } else if (numberSignal == 2)
-            {
+            } else if (numberSignal == 2) {
                 endAutoPosition = RIGHT_SIDE_MIDDLE_TILE_D5;
-            } else if (numberSignal ==3)
-            {
+            } else if (numberSignal == 3) {
                 endAutoPosition = RIGHT_SIDE_RIGHT_TILE_D6;
             }
 
-        } else
-        {
+        } else {
             startPose = new Pose2d(-35, -60.3, Math.toRadians(90));
             coneStackLine = LEFT_CONE_STACK_LINE;
             coneStack = LEFT_CONE_STACK_LEFT;
@@ -195,202 +192,181 @@ public class PowerplayTrajectories {
             startingJunction = MEDIUM_JUNCTION_Y2;
             startingJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            firstJunction = LOW_JUNCTION_Y1;
-            firstJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            firstJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
-            secondJunction = LOW_JUNCTION_Y1;
-            secondJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            secondJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
-            thirdJunction = LOW_JUNCTION_Y1;
-            thirdJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            thirdJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
-            fourthJunction = LOW_JUNCTION_Y1;
-            fourthJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            fourthJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
+            firstJunction = HIGH_JUNCTION_X2;
+            firstJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            firstJunctionArm = Arm.ARM_FRONT_OUTTAKE;;
+            secondJunction = HIGH_JUNCTION_X2;
+            secondJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            secondJunctionArm = Arm.ARM_FRONT_OUTTAKE;
+            thirdJunction = HIGH_JUNCTION_X2;
+            thirdJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            thirdJunctionArm = Arm.ARM_FRONT_OUTTAKE;
+            fourthJunction = HIGH_JUNCTION_X2;
+            fourthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fourthJunctionArm = Arm.ARM_FRONT_OUTTAKE;;
             fifthJunction = HIGH_JUNCTION_X2;
-            fifthJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            fifthJunctionArm =  Arm.ARM_FRONT_OUTTAKE;
+            fifthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fifthJunctionArm = Arm.ARM_FRONT_OUTTAKE;;
 
-            if (numberSignal == 1)
-            {
+            if (numberSignal == 1) {
                 endAutoPosition = LEFT_SIDE_LEFT_TILE_D1;
-            } else if (numberSignal == 2)
-            {
+            } else if (numberSignal == 2) {
                 endAutoPosition = LEFT_SIDE_MIDDLE_TILE_D2;
-            } else if (numberSignal ==3)
-            {
+            } else if (numberSignal == 3) {
                 endAutoPosition = LEFT_SIDE_RIGHT_TILE_D3;
             }
         }
 
         //First Sequence drives to the Medium Junction, delivers cone, and drives to cone stack line
         trajSeq1 = MecDrive.trajectorySequenceBuilder(startPose)
-                .splineToConstantHeading(startingJunction,Math.toRadians(180))
-                .waitSeconds(.5)
-                .lineToLinearHeading(coneStackLine)
-                .lineTo(coneStack)
-                .waitSeconds(.5)
-                .splineToConstantHeading(firstJunction,Math.toRadians(270))
-                .waitSeconds(.5)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.5)
-                .splineToConstantHeading(secondJunction,Math.toRadians(270))
-                .waitSeconds(.5)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.5)
-                .splineToConstantHeading(thirdJunction,Math.toRadians(270))
-                .waitSeconds(.5)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.5)
-                .splineToConstantHeading(fourthJunction,Math.toRadians(270))
-                .waitSeconds(.5)
-                .lineTo(coneStackEndOfLine)
-                .lineToSplineHeading(endAutoPosition)
 
-                .build();
+                //----STARTING CONE ROBOT MANEUVERS-------//
+                .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
+                    Lift.StartLifting(startingJunctionHeight, Arm);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+                    Arm.setPosition(startingJunctionArm);
+                })
+                .splineToConstantHeading(startingJunction, Math.toRadians(180))
+                .waitSeconds(.300)
+                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
+                    Lift.StartLifting(startingJunctionHeight - 300, Arm);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+                    Claw.openClaw();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    Lift.StartLifting(startingJunctionHeight, Arm);
+                })
 
-        trajSeq2 = MecDrive.trajectorySequenceBuilder(coneStackLine)
-                .lineTo(coneStack)
-                .waitSeconds(.200)
-                .splineToConstantHeading(firstJunction, Math.toRadians(270))
-                .waitSeconds(.200)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.200)
-                .splineToConstantHeading(secondJunction, Math.toRadians(270))
-                .waitSeconds(.200)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.200)
-                .splineToConstantHeading(thirdJunction, Math.toRadians(270))
-                .waitSeconds(.200)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.200)
-                .splineToConstantHeading(fourthJunction, Math.toRadians(270))
-                .waitSeconds(.200)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.200)
-                .splineToSplineHeading(new Pose2d(fifthJunction, Math.toRadians(135)), Math.toRadians(135))
-                .back(15)
-                .lineToLinearHeading(endAutoPosition)
-                .addTemporalMarker(FIRST_CONE_APPROACH_TIME, () -> {
+                //---FIRST CONE ROBOT MANEUVERS-------//
+                .lineToLinearHeading(new Pose2d(coneStackEndOfLine, Math.toRadians(180)))
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                     Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                     Intake.turnIntakeOn();
                 })
-                .addTemporalMarker(FIRST_CONE_GRAB_TIME, () -> {
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Intake.turnIntakeOff();
                     Claw.closeClaw();
                     Lift.StartLifting(firstJunctionHeight, Arm);
                 })
-                .addTemporalMarker(FIRST_CONE_DELIVERY_SETUP_TIME, () -> {
+                .setReversed(false)
+                .splineToSplineHeading(new Pose2d(firstJunction, Math.toRadians(135)), Math.toRadians(135))
+                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
                     Arm.setPosition(firstJunctionArm);
                 })
-                .addTemporalMarker(FIRST_CONE_DUNK_TIME, () -> {
+                .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+                    Claw.openClaw();
                     Lift.StartLifting(firstJunctionHeight - 300, Arm);
                 })
-                .addTemporalMarker(FIRST_CONE_DELIVER_TIME, () -> {
-                    Claw.openClaw();
-                })
-                .addTemporalMarker(FIRST_CONE_UNDUNK_TIME, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
                 })
-                .addTemporalMarker(SECOND_CONE_APPROACH_TIME, () -> {
+
+                //----SECOND CONE ROBOT MANEUVERS-------//
+                .setReversed(true)
+                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                     Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                     Intake.turnIntakeOn();
                 })
-                .addTemporalMarker(SECOND_CONE_GRAB_TIME, () -> {
+                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Intake.turnIntakeOff();
                     Claw.closeClaw();
                     Lift.StartLifting(secondJunctionHeight, Arm);
                 })
-                .addTemporalMarker(SECOND_CONE_DELIVERY_SETUP_TIME, () -> {
+                .setReversed(false)
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
                     Arm.setPosition(secondJunctionArm);
                 })
-                .addTemporalMarker(SECOND_CONE_DUNK_TIME, () -> {
+                .splineToSplineHeading(new Pose2d(secondJunction, Math.toRadians(135)), Math.toRadians(135))
+                .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Lift.StartLifting(secondJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(SECOND_CONE_DELIVER_TIME, () -> {
                     Claw.openClaw();
                 })
-                .addTemporalMarker(SECOND_CONE_UNDUNK_TIME, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Lift.StartLifting(secondJunctionHeight, Arm);
                 })
-                .addTemporalMarker(THIRD_CONE_APPROACH_TIME, () -> {
+
+                //----THIRD CONE ROBOT MANEUVERS-------//
+                .setReversed(true)
+                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                     Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                     Intake.turnIntakeOn();
                 })
-                .addTemporalMarker(THIRD_CONE_GRAB_TIME, () -> {
+                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Intake.turnIntakeOff();
                     Claw.closeClaw();
                     Lift.StartLifting(thirdJunctionHeight, Arm);
                 })
-                .addTemporalMarker(THIRD_CONE_DELIVERY_SETUP_TIME, () -> {
-                    Arm.setPosition(thirdJunctionArm);
+                .setReversed(false)
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+                    Arm.setPosition(secondJunctionArm);
                 })
-                .addTemporalMarker(THIRD_CONE_DUNK_TIME, () -> {
-                    Lift.StartLifting(thirdJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(THIRD_CONE_DELIVER_TIME, () -> {
+                .splineToSplineHeading(new Pose2d(thirdJunction, Math.toRadians(135)), Math.toRadians(135))
+                .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+                    Lift.StartLifting(secondJunctionHeight - 300, Arm);
                     Claw.openClaw();
                 })
-                .addTemporalMarker(THIRD_CONE_UNDUNK_TIME, () -> {
-                    Lift.StartLifting(thirdJunctionHeight, Arm);
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    Lift.StartLifting(secondJunctionHeight, Arm);
                 })
-                .addTemporalMarker(FOURTH_CONE_APPROACH_TIME, () -> {
+
+
+                //----FOURTH CONE ROBOT MANEUVERS-------//
+                .setReversed(true)
+                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                     Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                     Intake.turnIntakeOn();
                 })
-                .addTemporalMarker(FOURTH_CONE_GRAB_TIME, () -> {
+                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Intake.turnIntakeOff();
                     Claw.closeClaw();
                     Lift.StartLifting(fourthJunctionHeight, Arm);
                 })
-                .addTemporalMarker(FOURTH_CONE_DELIVERY_SETUP_TIME, () -> {
+                .setReversed(false)
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
                     Arm.setPosition(fourthJunctionArm);
                 })
-                .addTemporalMarker(FOURTH_CONE_DUNK_TIME, () -> {
+                .splineToSplineHeading(new Pose2d(fourthJunction, Math.toRadians(135)), Math.toRadians(135))
+                .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Lift.StartLifting(fourthJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(FOURTH_CONE_DELIVER_TIME, () -> {
                     Claw.openClaw();
                 })
-                .addTemporalMarker(FOURTH_CONE_UNDUNK_TIME, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Lift.StartLifting(fourthJunctionHeight, Arm);
                 })
-                .addTemporalMarker(FIFTH_CONE_APPROACH_TIME, () -> {
-                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
-                    Claw.setEasyIntake();
-                    Intake.turnIntakeOn();
-                })
-                .addTemporalMarker(FIFTH_CONE_GRAB_TIME, () -> {
-                    Intake.turnIntakeOff();
-                    Claw.closeClaw();
-                    Lift.StartLifting(fifthJunctionHeight, Arm);
-                })
-                .addTemporalMarker(FIFTH_CONE_DELIVERY_SETUP_TIME, () -> {                    ;
-                    Arm.setPosition(fifthJunctionArm);
-                })
-                .addTemporalMarker(FIRST_CONE_DUNK_TIME, () -> {
-                    Lift.StartLifting(fifthJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(FIFTH_CONE_DELIVER_TIME, () -> {
-                    Claw.openClaw();
-                })
-                .addTemporalMarker(FIFTH_CONE_UNDUNK_TIME, () -> {
-                    Lift.StartLifting(fifthJunctionHeight, Arm);
-                })
-                .addTemporalMarker(END_RESET_TIME, () -> {
+
+                //----PARKING-------//
+                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                     Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                 })
+                .back(8)
+                .lineToLinearHeading(endAutoPosition)
+
+
                 .build();
     }
 }

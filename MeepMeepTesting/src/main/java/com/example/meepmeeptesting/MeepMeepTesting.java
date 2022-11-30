@@ -94,21 +94,21 @@ public class MeepMeepTesting {
     public static double FIRST_CONE_UNDUNK_TIME = FIRST_CONE_DELIVER_TIME + .2;
 
 
-    public static double SECOND_CONE_APPROACH_TIME = 8.8;
+    public static double SECOND_CONE_APPROACH_TIME = 10;
     public static double SECOND_CONE_GRAB_TIME = SECOND_CONE_APPROACH_TIME + 1.5;
     public static double SECOND_CONE_DELIVERY_SETUP_TIME = SECOND_CONE_GRAB_TIME + 1.1;
     public static double SECOND_CONE_DUNK_TIME = SECOND_CONE_DELIVERY_SETUP_TIME + 1.1;
     public static double SECOND_CONE_DELIVER_TIME = SECOND_CONE_DUNK_TIME + .2;
     public static double SECOND_CONE_UNDUNK_TIME = SECOND_CONE_DELIVER_TIME + .2;
 
-    public static double THIRD_CONE_APPROACH_TIME = 12.8;
+    public static double THIRD_CONE_APPROACH_TIME = 15.75;
     public static double THIRD_CONE_GRAB_TIME = THIRD_CONE_APPROACH_TIME + 1.5;
     public static double THIRD_CONE_DELIVERY_SETUP_TIME = THIRD_CONE_GRAB_TIME + 1.1;
     public static double THIRD_CONE_DUNK_TIME = THIRD_CONE_DELIVERY_SETUP_TIME + 1.1;
     public static double THIRD_CONE_DELIVER_TIME = THIRD_CONE_DUNK_TIME + .2;
     public static double THIRD_CONE_UNDUNK_TIME = THIRD_CONE_DELIVER_TIME + .2;
 
-    public static double FOURTH_CONE_APPROACH_TIME = 16.8;
+    public static double FOURTH_CONE_APPROACH_TIME = 20.8;
     public static double FOURTH_CONE_GRAB_TIME = FOURTH_CONE_APPROACH_TIME + 1.5;
     public static double FOURTH_CONE_DELIVERY_SETUP_TIME = FOURTH_CONE_GRAB_TIME + 1.1;
     public static double FOURTH_CONE_DUNK_TIME = FOURTH_CONE_DELIVERY_SETUP_TIME + 1.1;
@@ -133,15 +133,15 @@ public class MeepMeepTesting {
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
             startingJunction = MEDIUM_JUNCTION_Y4;
 
-            firstJunction = LOW_JUNCTION_Y5;
+            firstJunction = HIGH_JUNCTION_X4;
 
-            secondJunction = LOW_JUNCTION_Y5;
+            secondJunction = HIGH_JUNCTION_X4;
 
-            thirdJunction = LOW_JUNCTION_Y5;
+            thirdJunction = HIGH_JUNCTION_X4;
 
-            fourthJunction = LOW_JUNCTION_Y5;
+            fourthJunction = HIGH_JUNCTION_X4;
 
-            fifthJunction = LOW_JUNCTION_Y5;
+            fifthJunction = HIGH_JUNCTION_X4;
 
 
             if (numberSignal == 1)
@@ -187,39 +187,38 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
                                 .splineToConstantHeading(startingJunction,Math.toRadians(180))
-                                .waitSeconds(.5)
-                                .lineToLinearHeading(coneStackLine)
-                                .lineTo(coneStack)
-                                .waitSeconds(.5)
-                                .splineToConstantHeading(firstJunction,Math.toRadians(270))
-                                .waitSeconds(.5)
-                                .setTangent(Math.toRadians(90))
-                                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                                .waitSeconds(.5)
-                                .setTangent(Math.toRadians(180))
-                                .splineToConstantHeading(secondJunction,Math.toRadians(270))
-                                .waitSeconds(.5)
-                                .setTangent(Math.toRadians(90))
-                                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                                .waitSeconds(.5)
-                                .setTangent(Math.toRadians(180))
-                                .splineToConstantHeading(thirdJunction,Math.toRadians(270))
-                                .waitSeconds(.5)
-                                .setTangent(Math.toRadians(90))
-                                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                                .waitSeconds(.5)
-                                .setTangent(Math.toRadians(180))
-                                .splineToConstantHeading(fourthJunction,Math.toRadians(270))
-                                .waitSeconds(.5)
-                                .waitSeconds(.5)
-                                .setTangent(Math.toRadians(90))
-                                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                                .waitSeconds(.5)
-                                .setTangent(Math.toRadians(180))
-                                .splineToConstantHeading(fifthJunction,Math.toRadians(270))
-                                .waitSeconds(.5)
-                                .lineTo(coneStackEndOfLine)
-                                .lineToSplineHeading(endAutoPosition)
+                                .waitSeconds(.200)
+                                .lineToLinearHeading(new Pose2d(RIGHT_CONE_STACK_END_OF_LINE, Math.toRadians(180)))
+                                .waitSeconds(.200)
+                                .setReversed(true)
+                                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                                .waitSeconds(.200)
+                                .setReversed(false)
+                                .splineToSplineHeading(new Pose2d(firstJunction, Math.toRadians(135)), Math.toRadians(135))
+                                .waitSeconds(.200)
+                                .setReversed(true)
+                                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                                .waitSeconds(.200)
+                                .setReversed(false)
+                                .splineToSplineHeading(new Pose2d(secondJunction, Math.toRadians(135)), Math.toRadians(135))
+                                .waitSeconds(.200)
+                                .setReversed(true)
+                                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                                .waitSeconds(.200)
+                                .setReversed(false)
+                                .splineToSplineHeading(new Pose2d(thirdJunction, Math.toRadians(135)), Math.toRadians(135))
+                                .waitSeconds(.200)
+                                .setReversed(true)
+                                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                                .waitSeconds(.200)
+                                .setReversed(false)
+                                .splineToSplineHeading(new Pose2d(fourthJunction, Math.toRadians(135)), Math.toRadians(135))
+                                .waitSeconds(.200)
+                                .setReversed(true)
+                                .splineToSplineHeading(new Pose2d(coneStack, Math.toRadians(180)), Math.toRadians(0))
+                                 .waitSeconds(.200)
+                                .back(8)
+                                .lineToLinearHeading(endAutoPosition)
                                 .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
                                     //Lift.StartLifting(startingJunctionHeight, Arm);
                                 })
