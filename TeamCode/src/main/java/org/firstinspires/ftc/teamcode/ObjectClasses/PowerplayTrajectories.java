@@ -8,9 +8,11 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CO
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 
@@ -56,6 +58,13 @@ public class PowerplayTrajectories {
     public static Pose2d LEFT_SIDE_LEFT_TILE_D1 = new Pose2d(-(HALF_TILE_DISTANCE_DRIVE+(FULL_TILE_DISTANCE_DRIVE*2)), -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(180));
     public static Pose2d LEFT_SIDE_MIDDLE_TILE_D2 = new Pose2d( -(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
+
+    public static Pose2d RIGHT_LINEUP_TILE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2, -12, Math.toRadians(180));
+    public static Pose2d LEFT_LINEUP_TILE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE), -12, Math.toRadians(0));
+
+    public static Pose2d coneStackPose;
+
+    public static Vector2d RIGHT_LINEUP_TILE_VECTOR = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -12);
 
 
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(62, -12);
@@ -159,21 +168,21 @@ public class PowerplayTrajectories {
             startingJunction = MEDIUM_JUNCTION_Y4;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             startingJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            firstJunction = LOW_JUNCTION_Y5;
-            firstJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            firstJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            secondJunction = LOW_JUNCTION_Y5;
-            secondJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            secondJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            thirdJunction = LOW_JUNCTION_Y5;
-            thirdJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            thirdJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            fourthJunction = LOW_JUNCTION_Y5;
-            fourthJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            fourthJunctionArm = Arm.ARM_LEFT_OUTTAKE;
+            firstJunction = HIGH_JUNCTION_X4;
+            firstJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            firstJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
+            secondJunction = HIGH_JUNCTION_X4;
+            secondJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            secondJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
+            thirdJunction = HIGH_JUNCTION_X4;
+            thirdJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            thirdJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
+            fourthJunction = HIGH_JUNCTION_X4;
+            fourthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fourthJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
             fifthJunction = HIGH_JUNCTION_X4;
-            fifthJunctionHeight = LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            fifthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
+            fifthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fifthJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
 
             if (numberSignal == 1)
             {
@@ -226,27 +235,58 @@ public class PowerplayTrajectories {
         //First Sequence drives to the Medium Junction, delivers cone, and drives to cone stack line
         trajSeq1 = MecDrive.trajectorySequenceBuilder(startPose)
                 .splineToConstantHeading(startingJunction,Math.toRadians(180))
-                .waitSeconds(.5)
-                .lineToLinearHeading(coneStackLine)
-                .lineTo(coneStack)
-                .waitSeconds(.5)
-                .splineToConstantHeading(firstJunction,Math.toRadians(270))
-                .waitSeconds(.5)
+                .waitSeconds(.200)
+                .setTangent(Math.toRadians(0))
+                .splineToSplineHeading(RIGHT_LINEUP_TILE, Math.toRadians(0))
+                .splineToSplineHeading(coneStackPose, Math.toRadians(0))
+                .waitSeconds(.200)
+                .setReversed(false)
+                .splineToConstantHeading(firstJunction, Math.toRadians(90))
+                .waitSeconds(.200)
+                .setReversed(true)
+                .splineToConstantHeading(RIGHT_LINEUP_TILE_VECTOR, Math.toRadians(0))
                 .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.5)
-                .splineToConstantHeading(secondJunction,Math.toRadians(270))
-                .waitSeconds(.5)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.5)
-                .splineToConstantHeading(thirdJunction,Math.toRadians(270))
-                .waitSeconds(.5)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.5)
-                .splineToConstantHeading(fourthJunction,Math.toRadians(270))
-                .waitSeconds(.5)
-                .lineTo(coneStackEndOfLine)
-                .lineToSplineHeading(endAutoPosition)
-
+                .waitSeconds(.200)
+                .setReversed(false)
+                .splineToConstantHeading(secondJunction, Math.toRadians(90))
+                .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
+                    //Lift.StartLifting(startingJunctionHeight, Arm);
+                })
+                .addTemporalMarker(STARTING_CONE_ARM_TIME, () -> {
+                    //Arm.setPosition(startingJunctionArm);
+                })
+                .addTemporalMarker(STARTING_CONE_DUNK_TIME, () -> {
+                    //Lift.StartLifting(startingJunctionHeight - 300, Arm);
+                })
+                .addTemporalMarker(STARTING_CONE_DELIVER_TIME, () -> {
+                    //Claw.openClaw();
+                })
+                .addTemporalMarker(STARTING_CONE_UNDUNK_TIME, () -> {
+                    //Lift.StartLifting(startingJunctionHeight, Arm);
+                })
+                .addTemporalMarker(FIRST_CONE_APPROACH_TIME, () -> {
+//                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+//                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
+                })
+                .addTemporalMarker(FIRST_CONE_GRAB_TIME, () -> {
+//                                    Intake.turnIntakeOff();
+//                                    Claw.closeClaw();
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
+                })
+                .addTemporalMarker(FIRST_CONE_DELIVERY_SETUP_TIME, () -> {
+//                                    Arm.setPosition(firstJunctionArm);
+                })
+                .addTemporalMarker(FIRST_CONE_DUNK_TIME, () -> {
+//                                    Lift.StartLifting(firstJunctionHeight - 300, Arm);
+                })
+                .addTemporalMarker(FIRST_CONE_DELIVER_TIME, () -> {
+//                                    Claw.openClaw();
+                })
+                .addTemporalMarker(FIRST_CONE_UNDUNK_TIME, () -> {
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
+                })
                 .build();
 
         trajSeq2 = MecDrive.trajectorySequenceBuilder(coneStackLine)

@@ -32,7 +32,8 @@ public class MeepMeepTesting {
     public static Pose2d LEFT_SIDE_MIDDLE_TILE_D2 = new Pose2d( -(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
 
-
+    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(60, -12,Math.toRadians(180));
+    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-60, -12,Math.toRadians(0));
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -12);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -12);
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(47.2, -12);
@@ -80,9 +81,9 @@ public class MeepMeepTesting {
     // Lift@Deliver
     public static double STARTING_CONE_LIFT_TIME = .1;
     // Rotate Arm
-    public static double STARTING_CONE_ARM_TIME = STARTING_CONE_LIFT_TIME + 1.1;
+    public static double STARTING_CONE_ARM_TIME = 1.11;
     // Lift@Dunk
-    public static double STARTING_CONE_DUNK_TIME = STARTING_CONE_ARM_TIME + 1.1;
+    public static double STARTING_CONE_DUNK_TIME = 2.4;
     // Open Claw
     public static double STARTING_CONE_DELIVER_TIME = STARTING_CONE_DUNK_TIME + .1;
     // Lift@Undunk
@@ -90,9 +91,9 @@ public class MeepMeepTesting {
 
 
     // Arm Center, Lift@Pickup, Claw Easy, Intake On;
-    public static double FIRST_CONE_APPROACH_TIME = 4.8;
+    public static double FIRST_CONE_APPROACH_TIME = 4.75;
     // Intake Off, Close Claw, Lift@+200
-    public static double FIRST_CONE_GRAB_TIME = FIRST_CONE_APPROACH_TIME + 1.5;
+    public static double FIRST_CONE_GRAB_TIME = 5.62;
     // Lift@Deliver, Rotate Arm
     public static double FIRST_CONE_DELIVERY_SETUP_TIME = FIRST_CONE_GRAB_TIME + 1.1;
     // Lift@Dunk
@@ -143,15 +144,15 @@ public class MeepMeepTesting {
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
             startingJunction = MEDIUM_JUNCTION_Y4;
 
-            firstJunction = LOW_JUNCTION_Y5;
+            firstJunction = HIGH_JUNCTION_X4;
 
-            secondJunction = LOW_JUNCTION_Y5;
+            secondJunction = HIGH_JUNCTION_X4;
 
-            thirdJunction = LOW_JUNCTION_Y5;
+            thirdJunction = HIGH_JUNCTION_X4;
 
-            fourthJunction = LOW_JUNCTION_Y5;
+            fourthJunction = HIGH_JUNCTION_X4;
 
-            fifthJunction = LOW_JUNCTION_Y5;
+            fifthJunction = HIGH_JUNCTION_X4;
 
 
             if (numberSignal == 1)
