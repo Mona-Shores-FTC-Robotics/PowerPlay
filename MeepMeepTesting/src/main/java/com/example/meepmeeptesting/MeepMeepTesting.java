@@ -138,6 +138,7 @@ public class MeepMeepTesting {
         if (startPosRIGHT) {
             startPose = new Pose2d(38, -60.3, Math.toRadians(90));
             coneStackLine = RIGHT_CONE_STACK_LINE;
+            coneStackPose = RIGHT_CONE_STACK_POSE;
             coneStack = RIGHT_CONE_STACK_RIGHT;
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
             startingJunction = MEDIUM_JUNCTION_Y4;
