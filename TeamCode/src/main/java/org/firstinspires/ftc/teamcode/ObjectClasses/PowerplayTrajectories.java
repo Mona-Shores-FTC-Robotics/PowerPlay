@@ -160,6 +160,7 @@ public class PowerplayTrajectories {
     public static double FIFTH_CONE_UNDUNK_TIME = FIFTH_CONE_DELIVER_TIME + .2;
 
     public static double END_RESET_TIME = 24;
+    public static Pose2d lineUpPose;
 
     public void MakeTrajectories() {
 
@@ -168,6 +169,7 @@ public class PowerplayTrajectories {
             coneStackLine = RIGHT_CONE_STACK_LINE;
             coneStack = RIGHT_CONE_STACK_RIGHT;
             coneStackPose = RIGHT_CONE_STACK_POSE;
+            lineUpPose = RIGHT_LINEUP_TILE;
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
             startingJunction = MEDIUM_JUNCTION_Y4;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
@@ -204,6 +206,7 @@ public class PowerplayTrajectories {
             startPose = new Pose2d(-35, -60.3, Math.toRadians(90));
             coneStackLine = LEFT_CONE_STACK_LINE;
             coneStack = LEFT_CONE_STACK_LEFT;
+            lineUpPose = LEFT_LINEUP_TILE;
             coneStackEndOfLine = LEFT_CONE_STACK_END_OF_LINE;
             startingJunction = MEDIUM_JUNCTION_Y2;
             startingJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
@@ -241,203 +244,22 @@ public class PowerplayTrajectories {
                 .splineToConstantHeading(startingJunction,Math.toRadians(180))
                 .waitSeconds(.200)
                 .setTangent(Math.toRadians(0))
-                .splineToSplineHeading(RIGHT_LINEUP_TILE, Math.toRadians(0))
+                .splineToSplineHeading(lineUpPose, Math.toRadians(0))
                 .splineToSplineHeading(coneStackPose, Math.toRadians(0))
-                .waitSeconds(.6)
-                .UNSTABLE_addTemporalMarkerOffset(-.6, () -> {
-                    Intake.turnIntakeOff();
-                    Claw.closeClaw();
-                    Lift.StartLifting(firstJunctionHeight, Arm);
-                })
+                .waitSeconds(.200)
                 .setReversed(false)
                 .splineToConstantHeading(firstJunction, Math.toRadians(90))
-                .waitSeconds(.6)
-                .UNSTABLE_addDisplacementMarkerOffset(-.8, () -> {
-                    Lift.StartLifting(firstJunctionHeight - 300, Arm);
-                })
-                .UNSTABLE_addDisplacementMarkerOffset(-.6, () -> {
-                    Claw.openClaw();
-                })
-                .UNSTABLE_addDisplacementMarkerOffset(-.1, () -> {
-                    Lift.StartLifting(firstJunctionHeight, Arm);
-                })
+                .waitSeconds(.200)
                 .setReversed(true)
-                .splineToConstantHeading(RIGHT_LINEUP_TILE_VECTOR, Math.toRadians(0))
+                .setTangent(Math.toRadians(270))
+                .splineToConstantHeading(coneStackEndOfLine, Math.toRadians(0))
                 .splineToConstantHeading(coneStack, Math.toRadians(0))
                 .waitSeconds(.200)
                 .setReversed(false)
                 .splineToConstantHeading(secondJunction, Math.toRadians(90))
-                .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
-                    Lift.StartLifting(startingJunctionHeight, Arm);
-                })
-                .addTemporalMarker(STARTING_CONE_ARM_TIME, () -> {
-                    Arm.setPosition(startingJunctionArm);
-                })
-                .addTemporalMarker(STARTING_CONE_DUNK_TIME, () -> {
-                    Lift.StartLifting(startingJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(STARTING_CONE_DELIVER_TIME, () -> {
-                    Claw.openClaw();
-                })
-                .addTemporalMarker(STARTING_CONE_UNDUNK_TIME, () -> {
-                    Lift.StartLifting(startingJunctionHeight, Arm);
-                })
-                .addTemporalMarker(FIRST_CONE_APPROACH_TIME, () -> {
-                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
-                                    Claw.setEasyIntake();
-                                    Intake.turnIntakeOn();
-                })
-
-                .addTemporalMarker(FIRST_CONE_DELIVERY_SETUP_TIME, () -> {
-                                    Arm.setPosition(firstJunctionArm);
-                })
-
                 .build();
 
-        trajSeq2 = MecDrive.trajectorySequenceBuilder(coneStackLine)
-                .lineTo(coneStack)
-                .waitSeconds(.200)
-                .splineToConstantHeading(firstJunction, Math.toRadians(270))
-                .waitSeconds(.200)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.200)
-                .splineToConstantHeading(secondJunction, Math.toRadians(270))
-                .waitSeconds(.200)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.200)
-                .splineToConstantHeading(thirdJunction, Math.toRadians(270))
-                .waitSeconds(.200)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.200)
-                .splineToConstantHeading(fourthJunction, Math.toRadians(270))
-                .waitSeconds(.200)
-                .splineToConstantHeading(coneStack, Math.toRadians(0))
-                .waitSeconds(.200)
-                .splineToSplineHeading(new Pose2d(fifthJunction, Math.toRadians(135)), Math.toRadians(135))
-                .back(15)
-                .lineToLinearHeading(endAutoPosition)
-                .addTemporalMarker(FIRST_CONE_APPROACH_TIME, () -> {
-                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
-                    Claw.setEasyIntake();
-                    Intake.turnIntakeOn();
-                })
-                .addTemporalMarker(FIRST_CONE_GRAB_TIME, () -> {
-                    Intake.turnIntakeOff();
-                    Claw.closeClaw();
-                    Lift.StartLifting(firstJunctionHeight, Arm);
-                })
-                .addTemporalMarker(FIRST_CONE_DELIVERY_SETUP_TIME, () -> {
-                    Arm.setPosition(firstJunctionArm);
-                })
-                .addTemporalMarker(FIRST_CONE_DUNK_TIME, () -> {
-                    Lift.StartLifting(firstJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(FIRST_CONE_DELIVER_TIME, () -> {
-                    Claw.openClaw();
-                })
-                .addTemporalMarker(FIRST_CONE_UNDUNK_TIME, () -> {
-                    Lift.StartLifting(firstJunctionHeight, Arm);
-                })
-                .addTemporalMarker(SECOND_CONE_APPROACH_TIME, () -> {
-                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                    Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
-                    Claw.setEasyIntake();
-                    Intake.turnIntakeOn();
-                })
-                .addTemporalMarker(SECOND_CONE_GRAB_TIME, () -> {
-                    Intake.turnIntakeOff();
-                    Claw.closeClaw();
-                    Lift.StartLifting(secondJunctionHeight, Arm);
-                })
-                .addTemporalMarker(SECOND_CONE_DELIVERY_SETUP_TIME, () -> {
-                    Arm.setPosition(secondJunctionArm);
-                })
-                .addTemporalMarker(SECOND_CONE_DUNK_TIME, () -> {
-                    Lift.StartLifting(secondJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(SECOND_CONE_DELIVER_TIME, () -> {
-                    Claw.openClaw();
-                })
-                .addTemporalMarker(SECOND_CONE_UNDUNK_TIME, () -> {
-                    Lift.StartLifting(secondJunctionHeight, Arm);
-                })
-                .addTemporalMarker(THIRD_CONE_APPROACH_TIME, () -> {
-                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                    Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
-                    Claw.setEasyIntake();
-                    Intake.turnIntakeOn();
-                })
-                .addTemporalMarker(THIRD_CONE_GRAB_TIME, () -> {
-                    Intake.turnIntakeOff();
-                    Claw.closeClaw();
-                    Lift.StartLifting(thirdJunctionHeight, Arm);
-                })
-                .addTemporalMarker(THIRD_CONE_DELIVERY_SETUP_TIME, () -> {
-                    Arm.setPosition(thirdJunctionArm);
-                })
-                .addTemporalMarker(THIRD_CONE_DUNK_TIME, () -> {
-                    Lift.StartLifting(thirdJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(THIRD_CONE_DELIVER_TIME, () -> {
-                    Claw.openClaw();
-                })
-                .addTemporalMarker(THIRD_CONE_UNDUNK_TIME, () -> {
-                    Lift.StartLifting(thirdJunctionHeight, Arm);
-                })
-                .addTemporalMarker(FOURTH_CONE_APPROACH_TIME, () -> {
-                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                    Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
-                    Claw.setEasyIntake();
-                    Intake.turnIntakeOn();
-                })
-                .addTemporalMarker(FOURTH_CONE_GRAB_TIME, () -> {
-                    Intake.turnIntakeOff();
-                    Claw.closeClaw();
-                    Lift.StartLifting(fourthJunctionHeight, Arm);
-                })
-                .addTemporalMarker(FOURTH_CONE_DELIVERY_SETUP_TIME, () -> {
-                    Arm.setPosition(fourthJunctionArm);
-                })
-                .addTemporalMarker(FOURTH_CONE_DUNK_TIME, () -> {
-                    Lift.StartLifting(fourthJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(FOURTH_CONE_DELIVER_TIME, () -> {
-                    Claw.openClaw();
-                })
-                .addTemporalMarker(FOURTH_CONE_UNDUNK_TIME, () -> {
-                    Lift.StartLifting(fourthJunctionHeight, Arm);
-                })
-                .addTemporalMarker(FIFTH_CONE_APPROACH_TIME, () -> {
-                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
-                    Claw.setEasyIntake();
-                    Intake.turnIntakeOn();
-                })
-                .addTemporalMarker(FIFTH_CONE_GRAB_TIME, () -> {
-                    Intake.turnIntakeOff();
-                    Claw.closeClaw();
-                    Lift.StartLifting(fifthJunctionHeight, Arm);
-                })
-                .addTemporalMarker(FIFTH_CONE_DELIVERY_SETUP_TIME, () -> {                    ;
-                    Arm.setPosition(fifthJunctionArm);
-                })
-                .addTemporalMarker(FIRST_CONE_DUNK_TIME, () -> {
-                    Lift.StartLifting(fifthJunctionHeight - 300, Arm);
-                })
-                .addTemporalMarker(FIFTH_CONE_DELIVER_TIME, () -> {
-                    Claw.openClaw();
-                })
-                .addTemporalMarker(FIFTH_CONE_UNDUNK_TIME, () -> {
-                    Lift.StartLifting(fifthJunctionHeight, Arm);
-                })
-                .addTemporalMarker(END_RESET_TIME, () -> {
-                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
-                    Claw.setEasyIntake();
-                })
-                .build();
+
     }
 }
 
