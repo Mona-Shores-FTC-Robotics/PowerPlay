@@ -258,9 +258,9 @@ public class DriveTrain {
 
     public void CheckSquareTurning(boolean button1, boolean lastButton1, boolean button2, boolean lastButton2, boolean button3, boolean lastButton3, Gyro Gyro) {
         if (button1 && !lastButton1) {
-            turnToPID(90, Gyro);
-        } else if (button2 && !lastButton2) {
             turnToPID(-90, Gyro);
+        } else if (button2 && !lastButton2) {
+            turnToPID(90, Gyro);
         } else if (button3 && !lastButton3) {
             turnToPID(0, Gyro);
         }

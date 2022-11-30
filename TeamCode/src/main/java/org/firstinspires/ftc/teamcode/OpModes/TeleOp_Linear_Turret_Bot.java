@@ -188,7 +188,7 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             //Driver bumper controls for rotating
             MecDrive.CheckSquareTurning(currentGamepad1.left_bumper, previousGamepad1.left_bumper,
                     currentGamepad1.right_bumper, previousGamepad1.right_bumper,
-                    currentGamepad1.b, currentGamepad1.b,
+                    currentGamepad1.b, previousGamepad1.b,
                     Gyro);
 
             //Driver control to move set distance away from alliance substation
