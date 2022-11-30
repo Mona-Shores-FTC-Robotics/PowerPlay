@@ -40,6 +40,15 @@ public class MeepMeepTesting {
     public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(45, -12, Math.toRadians(180));
     public static Pose2d LEFT_CONE_STACK_LINE = new Pose2d(-45, -12, Math.toRadians(0));
 
+
+    public static Vector2d RIGHT_LINEUP_TILE_VECTOR = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -12);
+
+    public static Pose2d RIGHT_LINEUP_TILE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2, -12, Math.toRadians(180));
+    public static Pose2d LEFT_LINEUP_TILE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE), -12, Math.toRadians(0));
+
+    public static Pose2d coneStackPose;
+
+
     public static Pose2d startPose;
     public static Pose2d currentPose;
     public static Vector2d coneStack;
