@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-@Autonomous(name = "MEEPMEEP_AUTO")
+@Autonomous(name = "AUTO_SCORE_5_AND_PARK - RUN ME")
 public class MEEPMEEPTEST extends LinearOpMode {
 
 
@@ -50,7 +50,7 @@ public class MEEPMEEPTEST extends LinearOpMode {
     @Override
     public void runOpMode() {
         SampleMecanumDrive MecDrive = new SampleMecanumDrive(hardwareMap);
-        PowerplayTrajectories PowerTraj = new PowerplayTrajectories(MecDrive, Lift, ServoClaw, ServoIntake, ServoArm);
+        PowerplayTrajectories PowerTraj = new PowerplayTrajectories(MecDrive, Lift, ServoClaw, ServoIntake, ServoArm, Vision);
         telemetry.addData("Status", "Initializing");
         telemetry.update();
 
@@ -99,7 +99,6 @@ public class MEEPMEEPTEST extends LinearOpMode {
         }
         resetRuntime();
 
-        Vision.currentSignal = AprilTagVision.Signal.LEFT;
         telemetry.addData("Signal is ", Vision.currentSignal);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
         telemetry.addData("Status", "Run Time: " + getRuntime());
