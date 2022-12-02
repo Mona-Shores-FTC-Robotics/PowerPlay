@@ -241,22 +241,51 @@ public class PowerplayTrajectories {
 
         //First Sequence drives to the Medium Junction, delivers cone, and drives to cone stack line
         trajSeq1 = MecDrive.trajectorySequenceBuilder(startPose)
+                .addTemporalMarker(STARTING_CONE_LIFT_TIME, () ->{
+                    Lift.StartLifting(startingJunctionHeight, Arm);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+                    Arm.setPosition(startingJunctionArm);
+                })
+                    // deliver to medium junction
                 .splineToConstantHeading(startingJunction,Math.toRadians(180))
+                    // ---------move arm+lift to medium junction height------------
                 .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+                    Lift.StartLifting(startingJunctionHeight - 325, Arm);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
+                    Claw.openClaw();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0, () ->{
+                    Lift.StartLifting(startingJunctionHeight, Arm);
+                })
                 .setTangent(Math.toRadians(0))
+                    //dive near cone stack line
                 .splineToSplineHeading(lineUpPose, Math.toRadians(0))
+                    //drive to cone stack
                 .splineToSplineHeading(coneStackPose, Math.toRadians(0))
+                    // --------Lift to 5 cone stack+intake----------
                 .waitSeconds(.200)
+                    // drive backwards
                 .setReversed(false)
+                    // deliver to high junction
                 .splineToConstantHeading(firstJunction, Math.toRadians(90))
+                    // --------move arm+lift to high junction--------
                 .waitSeconds(.200)
+                    // drive backwards
                 .setReversed(true)
                 .setTangent(Math.toRadians(270))
+                    //drive to end of cone stack line
                 .splineToConstantHeading(coneStackEndOfLine, Math.toRadians(0))
+                    //go to cone stack
                 .splineToConstantHeading(coneStack, Math.toRadians(0))
+                    //// --------Lift to 5 cone stack+intake-----------
                 .waitSeconds(.200)
                 .setReversed(false)
+                    // deliver to high junction again
                 .splineToConstantHeading(secondJunction, Math.toRadians(90))
+                // --------move arm+lift to high junction--------
                 .build();
 
 
