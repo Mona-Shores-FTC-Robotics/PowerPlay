@@ -253,7 +253,7 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
                     Lift.StartLifting(startingJunctionHeight - 325, Arm);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
+               .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
                     Claw.openClaw();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {

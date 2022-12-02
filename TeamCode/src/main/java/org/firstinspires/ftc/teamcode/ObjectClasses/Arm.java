@@ -230,11 +230,11 @@ public class Arm {
         else if (targetState == OPEN_CLAW_CENTER_ARM_LOWER_LIFT_INTAKE_ON) {
             //Open the claw to release the cone
             claw.openClaw();
+            activeOpMode.sleep(200);
 
             lift.StartLifting(lift.liftMotor.getCurrentPosition()+300, this);
 
             // small delay before rotating
-            activeOpMode.sleep(200);
 
             //this will close the claw to easy intake, turn the intake on, and lower lift
             centerArmSetLiftDelay(ARM_CENTER_INTAKE_ON, ONE_CONE_INTAKE_HEIGHT_ENC_VAL);
