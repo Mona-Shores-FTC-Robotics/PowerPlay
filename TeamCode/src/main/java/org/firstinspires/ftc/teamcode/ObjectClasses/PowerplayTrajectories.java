@@ -61,7 +61,7 @@ public class PowerplayTrajectories {
     public static Pose2d RIGHT_SIDE_MIDDLE_TILE_D5 = new Pose2d(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE, -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d RIGHT_SIDE_RIGHT_TILE_D6 = new Pose2d(HALF_TILE_DISTANCE_DRIVE+(FULL_TILE_DISTANCE_DRIVE*2), -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(180));
 
-    public static Pose2d LEFT_SIDE_LEFT_TILE_D1 = new Pose2d(-1*(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE*2), -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(180));
+    public static Pose2d LEFT_SIDE_LEFT_TILE_D1 = new Pose2d(-1*(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE*2), -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(0));
     public static Pose2d LEFT_SIDE_MIDDLE_TILE_D2 = new Pose2d( -1*(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE), -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -1*HALF_TILE_DISTANCE_DRIVE, -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
 
@@ -164,7 +164,7 @@ public class PowerplayTrajectories {
     public static double firstJunctionHeading;
 
     public static Vector2d RIGHT_STRAFE_TILE = new Vector2d (FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -(HALF_TILE_DISTANCE_DRIVE));
-    public static Vector2d LEFT_STRAFE_TILE = new Vector2d (-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -(HALF_TILE_DISTANCE_DRIVE));
+    public static Vector2d LEFT_STRAFE_TILE = new Vector2d (-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -(HALF_TILE_DISTANCE_DRIVE+1));
     public static Vector2d strafeTile;
 
     public void MakeTrajectories() {
@@ -175,7 +175,6 @@ public class PowerplayTrajectories {
             coneStackPose = RIGHT_CONE_STACK_POSE;
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
             strafeTile = RIGHT_STRAFE_TILE;
-
 
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
@@ -215,7 +214,7 @@ public class PowerplayTrajectories {
             coneStackPose = LEFT_CONE_STACK_POSE;
             coneStackHeading = Math.toRadians(180);
             startingJunctionTangent = Math.toRadians(0);
-            firstJunctionHeading = Math.toRadians(55);
+            firstJunctionHeading = Math.toRadians(45);
             strafeTile = LEFT_STRAFE_TILE;
 
             startingJunction = MEDIUM_JUNCTION_Y2;
