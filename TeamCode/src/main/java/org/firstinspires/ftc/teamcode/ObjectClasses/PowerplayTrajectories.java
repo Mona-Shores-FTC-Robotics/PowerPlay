@@ -4,14 +4,17 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_CENT
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_FRONT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_LEFT;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.Arm.armState.ARM_RIGHT;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_STRAFE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 
@@ -43,16 +46,16 @@ public class PowerplayTrajectories {
         Vision = vision;
     }
 
-    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE +2.5, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+2.1), -(FULL_TILE_DISTANCE_DRIVE+3));
+    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE+1, -FULL_TILE_DISTANCE_DRIVE);
+    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+1), -(FULL_TILE_DISTANCE_DRIVE+3));
 
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
     public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
 
-    public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE+2, 0 );
-    public static Vector2d HIGH_JUNCTION_X4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -1);
-    public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+2),-1);
-    public static Vector2d HIGH_JUNCTION_X2_WITH_CONE = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+1.5), -1.5);
+    public static Vector2d HIGH_JUNCTION_X4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE+1.5, -1.5 );
+    public static Vector2d HIGH_JUNCTION_X4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+2.5, -2.5);
+    public static Vector2d HIGH_JUNCTION_X2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+1.5),-1.5);
+    public static Vector2d HIGH_JUNCTION_X2_WITH_CONE = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+2.5), -2.5);
 
     public static Pose2d RIGHT_SIDE_LEFT_TILE_D4 = new Pose2d(HALF_TILE_DISTANCE_DRIVE, -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d RIGHT_SIDE_MIDDLE_TILE_D5 = new Pose2d(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE, -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
@@ -65,8 +68,8 @@ public class PowerplayTrajectories {
 
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -9);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -9);
-    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(60, -9, Math.toRadians(180));
-    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-60, -9, Math.toRadians(0));
+    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2+HALF_TILE_DISTANCE_DRIVE, -10, Math.toRadians(180));
+    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE*2+HALF_TILE_DISTANCE_DRIVE), -10, Math.toRadians(0));
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -10);
     public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -10);
     public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(45, -9, Math.toRadians(180));
@@ -160,18 +163,23 @@ public class PowerplayTrajectories {
     public static double coneStackHeading;
     public static double firstJunctionHeading;
 
+    public static Vector2d RIGHT_STRAFE_TILE = new Vector2d (FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -(HALF_TILE_DISTANCE_DRIVE));
+    public static Vector2d LEFT_STRAFE_TILE = new Vector2d (-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -(HALF_TILE_DISTANCE_DRIVE));
+    public static Vector2d strafeTile;
+
     public void MakeTrajectories() {
 
         if (ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE) {
-            startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -60.3, Math.toRadians(90));
+            startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -62, Math.toRadians(90));
             coneStackLine = RIGHT_CONE_STACK_LINE;
             coneStackPose = RIGHT_CONE_STACK_POSE;
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
+            strafeTile = RIGHT_STRAFE_TILE;
 
 
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
-            firstJunctionHeading = Math.toRadians(130);
+            firstJunctionHeading = Math.toRadians(135);
 
             startingJunction = MEDIUM_JUNCTION_Y4;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
@@ -201,13 +209,14 @@ public class PowerplayTrajectories {
             }
 
         } else {
-            startPose = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -60.3, Math.toRadians(90));
+            startPose = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_STRAFE), -62, Math.toRadians(90));
             coneStackLine = LEFT_CONE_STACK_LINE;
             coneStackEndOfLine = LEFT_CONE_STACK_END_OF_LINE;
             coneStackPose = LEFT_CONE_STACK_POSE;
             coneStackHeading = Math.toRadians(180);
             startingJunctionTangent = Math.toRadians(0);
             firstJunctionHeading = Math.toRadians(55);
+            strafeTile = LEFT_STRAFE_TILE;
 
             startingJunction = MEDIUM_JUNCTION_Y2;
             startingJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
@@ -261,6 +270,7 @@ public class PowerplayTrajectories {
                 })
 
                 //---FIRST CONE ROBOT MANEUVERS-------//
+                .strafeTo(strafeTile)
                 .lineToLinearHeading(new Pose2d(coneStackEndOfLine, startingJunctionTangent))
                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
@@ -352,37 +362,6 @@ public class PowerplayTrajectories {
                 })
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Lift.StartLifting(thirdJunctionHeight, Arm);
-                })
-//bannan
-                //----FOURTH CONE ROBOT MANEUVERS-------//
-                .setReversed(true)
-                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
-                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                    Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
-                    Claw.setEasyIntake();
-                    Intake.turnIntakeOn();
-                })
-                .splineToSplineHeading(coneStackPose, coneStackHeading)
-                .waitSeconds(.200)
-                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
-                    Intake.turnIntakeOff();
-                    Claw.closeClaw();
-                    Lift.StartLifting(fourthJunctionHeight, Arm);
-                })
-                .setReversed(false)
-                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
-                    Arm.setPosition(fourthJunctionArm);
-                })
-                .splineToSplineHeading(new Pose2d(fourthJunction, firstJunctionHeading), firstJunctionHeading)
-                .waitSeconds(.400)
-                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
-                    Lift.StartLifting(fourthJunctionHeight - 325, Arm);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
-                    Claw.openClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    Lift.StartLifting(fourthJunctionHeight, Arm);
                 })
 
                 //----PARKING-------//

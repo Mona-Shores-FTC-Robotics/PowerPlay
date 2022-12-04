@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-@Autonomous(name = "AUTO_SCORE_5_AND_PARK - RUN ME")
+@Autonomous(name = "AUTO_SCORE_4_AND_PARK - RUN ME")
 public class MEEPMEEPTEST extends LinearOpMode {
 
 
