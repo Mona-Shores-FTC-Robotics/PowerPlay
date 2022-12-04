@@ -6,8 +6,8 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-//6 Medium
-public class MeepMeepTesting {
+//5 high 1 medium
+public class MeepMeepTesting3 {
 
     public static final double FULL_TILE_DISTANCE_DRIVE= 23.5;
     public static final double HALF_TILE_DISTANCE_DRIVE = FULL_TILE_DISTANCE_DRIVE /2;
@@ -30,11 +30,8 @@ public class MeepMeepTesting {
     public static final double FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 320;
 
 
-    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 5.5, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+6, -1*(FULL_TILE_DISTANCE_DRIVE-6));
-
-    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 5.5), -(FULL_TILE_DISTANCE_DRIVE));
-    public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+6), -1*(FULL_TILE_DISTANCE_DRIVE-6));
+    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE +2.5, -FULL_TILE_DISTANCE_DRIVE);
+    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE+2.1), -(FULL_TILE_DISTANCE_DRIVE));
 
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
     public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
@@ -56,7 +53,7 @@ public class MeepMeepTesting {
 
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -HALF_TILE_DISTANCE_DRIVE);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -HALF_TILE_DISTANCE_DRIVE);
-    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2+HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(180));
+    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(60, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(180));
     public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-60, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(0));
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE);
     public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE);
@@ -172,38 +169,37 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(1200);
 
-        currentStartPosition = StartingPosition.RIGHT_SIDE;
+        currentStartPosition = StartingPosition.LEFT_SIDE;
         currentSignal = Signal.LEFT;
 
         if (currentStartPosition == StartingPosition.RIGHT_SIDE) {
-            startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE, -62, Math.toRadians(90));
+            startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -60.3, Math.toRadians(90));
             coneStackLine = RIGHT_CONE_STACK_LINE;
             coneStackPose = RIGHT_CONE_STACK_POSE;
-            coneStack = RIGHT_CONE_STACK_MIDDLE_OF_LINE;
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
             coneStackMiddleOfLine = RIGHT_CONE_STACK_MIDDLE_OF_LINE;
 
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
-            firstJunctionHeading = Math.toRadians(225);
+            firstJunctionHeading = Math.toRadians(135);
 
             startingJunction = MEDIUM_JUNCTION_Y4;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
-            firstJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            firstJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            firstJunction = HIGH_JUNCTION_X4;
+            firstJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
-            secondJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            secondJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            secondJunction = HIGH_JUNCTION_X4_WITH_CONE;
+            secondJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
-            thirdJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            thirdJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            thirdJunction = HIGH_JUNCTION_X4_WITH_CONE;
+            thirdJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
-            fourthJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            fourthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fourthJunction = HIGH_JUNCTION_X4_WITH_CONE;
+            fourthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
-            fifthJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            fifthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fifthJunction = HIGH_JUNCTION_X4_WITH_CONE;
+            fifthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
             //startingJunctionArm = Arm.ARM_LEFT_OUTTAKE;
             //firstJunctionArm = Arm.ARM_FRONT_OUTTAKE;
@@ -221,32 +217,32 @@ public class MeepMeepTesting {
             }
 
         } else {
-            startPose = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -62, Math.toRadians(90));
+            startPose = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -60.3, Math.toRadians(90));
             coneStackLine = LEFT_CONE_STACK_LINE;
             coneStackEndOfLine = LEFT_CONE_STACK_END_OF_LINE;
             coneStackMiddleOfLine = LEFT_CONE_STACK_MIDDLE_OF_LINE;
             coneStackPose = LEFT_CONE_STACK_POSE;
             coneStackHeading = Math.toRadians(180);
             startingJunctionTangent = Math.toRadians(0);
-            firstJunctionHeading = Math.toRadians(315);
+            firstJunctionHeading = Math.toRadians(45);
 
             startingJunction = MEDIUM_JUNCTION_Y2;
 
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-            firstJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
-            firstJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            firstJunction = HIGH_JUNCTION_X2;
+            firstJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
-            secondJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
-            secondJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            secondJunction = HIGH_JUNCTION_X2_WITH_CONE;
+            secondJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
-            thirdJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
-            thirdJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            thirdJunction = HIGH_JUNCTION_X2_WITH_CONE;
+            thirdJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
-            fourthJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
-            fourthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fourthJunction = HIGH_JUNCTION_X2_WITH_CONE;
+            fourthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
-            fifthJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
-            fifthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fifthJunction = HIGH_JUNCTION_X2_WITH_CONE;
+            fifthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 
 //            startingJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
 //            firstJunctionArm = Arm.ARM_FRONT_OUTTAKE;
@@ -266,11 +262,10 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width`
-                .setDimensions(15, 15.125)
-                .setConstraints(50, 50, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
+                .setDimensions(16, 16)
+                .setConstraints(45, 45, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-
                                 //----STARTING CONE ROBOT MANEUVERS-------//
                                 .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
 //                                    Lift.StartLifting(startingJunctionHeight, Arm);
@@ -283,14 +278,17 @@ public class MeepMeepTesting {
                                 .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
 //                                    Lift.StartLifting(startingJunctionHeight - 325, Arm);
                                 })
-                                .UNSTABLE_addTemporalMarkerOffset(-.25, () -> {
+                                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
 //                                    Claw.openClaw();
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
 //                                    Lift.StartLifting(startingJunctionHeight, Arm);
                                 })
+                                .lineToLinearHeading(new Pose2d(coneStackEndOfLine, startingJunctionTangent))
+                                .lineToLinearHeading(new Pose2d(coneStackMiddleOfLine, startingJunctionTangent))
 
-
+                                //sense the line with the color sensor
+                                .waitSeconds(1.5)
                                 //---FIRST CONE ROBOT MANEUVERS-------//
 
                                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
@@ -299,8 +297,7 @@ public class MeepMeepTesting {
 //                                    Claw.setEasyIntake();
 //                                    Intake.turnIntakeOn();
                                 })
-                                .setReversed(false)
-                                .setTangent(Math.toRadians(80))
+                                .setReversed(true)
                                 .splineToSplineHeading(coneStackPose, coneStackHeading)
                                 .waitSeconds(.200)
                                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {

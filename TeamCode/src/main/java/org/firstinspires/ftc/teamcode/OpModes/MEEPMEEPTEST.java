@@ -1,40 +1,23 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.CONE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.LOW_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.roadrunner.drive.MecanumDrive;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.apache.commons.math3.analysis.function.Power;
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Claw;
-import org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 import org.firstinspires.ftc.teamcode.ObjectClasses.PowerplayTrajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-@Autonomous(name = "AUTO_SCORE_5_AND_PARK - RUN ME")
+@Autonomous(name = "AUTO_SCORE_6MED_AND_PARK - RUN ME")
 public class MEEPMEEPTEST extends LinearOpMode {
-
-
     AprilTagVision Vision = new AprilTagVision();
     ButtonConfig BConfig = new ButtonConfig(this);
     Claw ServoClaw = new Claw();
@@ -107,15 +90,22 @@ public class MEEPMEEPTEST extends LinearOpMode {
         PowerTraj.MakeTrajectories();
         MecDrive.setPoseEstimate(PowerplayTrajectories.startPose);
 
-        MecDrive.followTrajectorySequence(PowerTraj.trajSeq1);
-        //MecDrive.findLine(MecDrive);
-        //MecDrive.followTrajectorySequence(PowerTraj.trajSeq2);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed1);
+        MecDrive.findLine(MecDrive);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed2);
+        MecDrive.findLine(MecDrive);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed3);
+        MecDrive.findLine(MecDrive);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed4);
+        MecDrive.findLine(MecDrive);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed5);
+        MecDrive.findLine(MecDrive);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed6);
 
         telemetry.addData("Signal is ", Vision.currentSignal);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);
         telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
-
     }
 }
 
