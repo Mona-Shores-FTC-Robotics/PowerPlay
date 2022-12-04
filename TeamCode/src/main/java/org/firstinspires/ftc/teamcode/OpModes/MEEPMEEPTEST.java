@@ -104,6 +104,8 @@ public class MEEPMEEPTEST extends LinearOpMode {
         MecDrive.findLine(MecDrive);
         PowerTraj.MakeTrajectories3();
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed3);
+        /*
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed3);
         MecDrive.findLine(MecDrive);
         PowerTraj.MakeTrajectories4();
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed4);
@@ -113,6 +115,8 @@ public class MEEPMEEPTEST extends LinearOpMode {
         MecDrive.findLine(MecDrive);
         PowerTraj.MakeTrajectories6();
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed6);
+      \
+         */
 
         telemetry.addData("Signal is ", Vision.currentSignal);
         telemetry.addData("Selected Starting Position ", ButtonConfig.currentStartPosition);

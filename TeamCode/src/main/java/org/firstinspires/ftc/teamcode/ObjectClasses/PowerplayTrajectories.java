@@ -50,7 +50,7 @@ public class PowerplayTrajectories {
     public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 5.5, -FULL_TILE_DISTANCE_DRIVE);
     public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 6, -1 * (FULL_TILE_DISTANCE_DRIVE - 6));
 
-    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 5.5), -(FULL_TILE_DISTANCE_DRIVE));
+    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 1), -(FULL_TILE_DISTANCE_DRIVE+3));
     public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1 * (FULL_TILE_DISTANCE_DRIVE + 6), -1 * (FULL_TILE_DISTANCE_DRIVE - 6));
 
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
@@ -73,7 +73,7 @@ public class PowerplayTrajectories {
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -HALF_TILE_DISTANCE_DRIVE);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -HALF_TILE_DISTANCE_DRIVE);
     public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(FULL_TILE_DISTANCE_DRIVE * 2 + HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(180));
-    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-60, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(0));
+    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE *2) , -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(0));
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(FULL_TILE_DISTANCE_DRIVE + HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE);
     public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-1 * (FULL_TILE_DISTANCE_DRIVE + HALF_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE);
 
@@ -273,14 +273,7 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Lift.StartLifting(startingJunctionHeight, Arm);
                 })
-                .build();
-    }
-
-    public void MakeTrajectories2() {
-
-        //---FIRST CONE FROM CONE STACK DELIVERY SEQUENCE-------//
-        trajSeqSixMed2 = MecDrive.trajectorySequenceBuilder(currentPose)
-                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                     Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
@@ -289,6 +282,14 @@ public class PowerplayTrajectories {
                 .setReversed(false)
                 .setTangent(Math.toRadians(80))
                 .splineToSplineHeading(coneStackPose, coneStackHeading)
+                .build();
+    }
+
+    public void MakeTrajectories2() {
+
+        //---FIRST CONE FROM CONE STACK DELIVERY SEQUENCE-------//
+        trajSeqSixMed2 = MecDrive.trajectorySequenceBuilder(currentPose)
+                .back(10)
                 .waitSeconds(.200)
                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Intake.turnIntakeOff();
@@ -310,6 +311,15 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
                 })
+                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+                    Claw.setEasyIntake();
+                    Intake.turnIntakeOn();
+                })
+                .setReversed(false)
+                .setTangent(Math.toRadians(80))
+                .splineToSplineHeading(coneStackPose, coneStackHeading)
                 .build();
     }
 
@@ -317,14 +327,7 @@ public class PowerplayTrajectories {
 
         //----SECOND CONE FROM CONE STACK DELIVERY SEQUENCE-------//
         trajSeqSixMed3 = MecDrive.trajectorySequenceBuilder(currentPose)
-                .setReversed(true)
-                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
-                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                    Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
-                    Claw.setEasyIntake();
-                    Intake.turnIntakeOn();
-                })
-                .splineToSplineHeading(coneStackPose, coneStackHeading)
+                .back(10)
                 .waitSeconds(.200)
                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Intake.turnIntakeOff();
