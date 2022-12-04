@@ -1,11 +1,18 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.EIGHTH_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
+import static org.firstinspires.ftc.teamcode.ObjectClasses.PowerplayTrajectories.startPose;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.apache.commons.math3.analysis.function.Power;
 import org.firstinspires.ftc.teamcode.ObjectClasses.AprilTagVision;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Arm;
 import org.firstinspires.ftc.teamcode.ObjectClasses.ButtonConfig;
@@ -87,19 +94,24 @@ public class MEEPMEEPTEST extends LinearOpMode {
         telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
 
-        PowerTraj.MakeTrajectories();
+        PowerTraj.MakeTrajectories1();
         MecDrive.setPoseEstimate(PowerplayTrajectories.startPose);
 
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed1);
         MecDrive.findLine(MecDrive);
+        PowerTraj.MakeTrajectories2();
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed2);
         MecDrive.findLine(MecDrive);
+        PowerTraj.MakeTrajectories3();
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed3);
         MecDrive.findLine(MecDrive);
+        PowerTraj.MakeTrajectories4();
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed4);
         MecDrive.findLine(MecDrive);
+        PowerTraj.MakeTrajectories5();
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed5);
         MecDrive.findLine(MecDrive);
+        PowerTraj.MakeTrajectories6();
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed6);
 
         telemetry.addData("Signal is ", Vision.currentSignal);
