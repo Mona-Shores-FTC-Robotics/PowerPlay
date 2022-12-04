@@ -65,13 +65,15 @@ public class PowerplayTrajectories {
     public static Pose2d LEFT_SIDE_MIDDLE_TILE_D2 = new Pose2d( -1*(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE), -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
     public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -1*HALF_TILE_DISTANCE_DRIVE, -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(90));
 
+    public static Vector2d RIGHT_STRAFE_TILE = new Vector2d (FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -(HALF_TILE_DISTANCE_DRIVE));
+    public static Vector2d LEFT_STRAFE_TILE = new Vector2d (-1*(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -(HALF_TILE_DISTANCE_DRIVE+4));
 
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -9);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -9);
     public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2+HALF_TILE_DISTANCE_DRIVE, -10, Math.toRadians(180));
     public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE*2+HALF_TILE_DISTANCE_DRIVE), -10, Math.toRadians(0));
-    public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -10);
-    public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -10);
+    public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_STRAFE);
+    public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE);
     public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(45, -9, Math.toRadians(180));
     public static Pose2d LEFT_CONE_STACK_LINE = new Pose2d(-45, -9, Math.toRadians(0));
 
@@ -163,8 +165,7 @@ public class PowerplayTrajectories {
     public static double coneStackHeading;
     public static double firstJunctionHeading;
 
-    public static Vector2d RIGHT_STRAFE_TILE = new Vector2d (FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -(HALF_TILE_DISTANCE_DRIVE));
-    public static Vector2d LEFT_STRAFE_TILE = new Vector2d (-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -(HALF_TILE_DISTANCE_DRIVE));
+
     public static Vector2d strafeTile;
 
     public void MakeTrajectories() {
@@ -179,7 +180,7 @@ public class PowerplayTrajectories {
 
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
-            firstJunctionHeading = Math.toRadians(135);
+            firstJunctionHeading = Math.toRadians(140);
 
             startingJunction = MEDIUM_JUNCTION_Y4;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
@@ -209,7 +210,7 @@ public class PowerplayTrajectories {
             }
 
         } else {
-            startPose = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_STRAFE), -62, Math.toRadians(90));
+            startPose = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -62, Math.toRadians(90));
             coneStackLine = LEFT_CONE_STACK_LINE;
             coneStackEndOfLine = LEFT_CONE_STACK_END_OF_LINE;
             coneStackPose = LEFT_CONE_STACK_POSE;
