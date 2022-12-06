@@ -7,7 +7,7 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 //6 Medium
-public class MeepMeepTesting {
+public class Leg1 {
 
     public static final double FULL_TILE_DISTANCE_DRIVE= 23.5;
     public static final double HALF_TILE_DISTANCE_DRIVE = FULL_TILE_DISTANCE_DRIVE /2;
@@ -31,7 +31,7 @@ public class MeepMeepTesting {
 
 
     public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 5.5, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+4.5, -1*(FULL_TILE_DISTANCE_DRIVE-4.5));
+    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+6, -1*(FULL_TILE_DISTANCE_DRIVE-6));
 
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 5.5), -(FULL_TILE_DISTANCE_DRIVE));
     public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+6), -1*(FULL_TILE_DISTANCE_DRIVE-6));
@@ -271,43 +271,40 @@ public class MeepMeepTesting {
                 endAutoPosition = LEFT_SIDE_RIGHT_TILE_D3;
             }
         }
-        startPose = coneStackPose;
+
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width`
                 .setDimensions(15, 15.125)
                 .setConstraints(50, 50, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-                                .back(10)
-                                .waitSeconds(.200)
-                                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
-//                                    Intake.turnIntakeOff();
-//                                    Claw.closeClaw();
-//                                    Lift.StartLifting(fifthJunctionHeight, Arm);
+                                .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
+//                                    Lift.StartLifting(startingJunctionHeight, Arm);
                                 })
-                                .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(fifthJunction, firstJunctionHeading), firstJunctionHeading)
-                                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
-//                                    Arm.setPosition(fifthJunctionArm);
+                                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+//                                    Arm.setPosition(startingJunctionArm);
                                 })
-                                .waitSeconds(.600)
-                                .UNSTABLE_addTemporalMarkerOffset(-.6, () -> {
-//                                    Lift.StartLifting(fifthJunctionHeight - 325, Arm);
-                                })
+                                .splineToConstantHeading(startingJunction, startingJunctionTangent)
+                                .waitSeconds(.400)
                                 .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+//                                    Lift.StartLifting(startingJunctionHeight - 325, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(-.25, () -> {
 //                                    Claw.openClaw();
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                                    Lift.StartLifting(fifthJunctionHeight, Arm);
+//                                    Lift.StartLifting(startingJunctionHeight, Arm);
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
 //                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-//                                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
 //                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
                                 })
-                                .back(12)
-                                .setReversed(true)
-                                .lineToLinearHeading(endAutoPosition)
+                                .setReversed(false)
+                                .setTangent(270)
+                                .splineToConstantHeading(stagingSpot, Math.toRadians(0))
+                                .splineToSplineHeading(coneStackPose, coneStackHeading)
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)

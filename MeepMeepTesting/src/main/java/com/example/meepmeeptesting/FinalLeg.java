@@ -7,7 +7,7 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 //6 Medium
-public class MeepMeepTesting {
+public class FinalLeg {
 
     public static final double FULL_TILE_DISTANCE_DRIVE= 23.5;
     public static final double HALF_TILE_DISTANCE_DRIVE = FULL_TILE_DISTANCE_DRIVE /2;

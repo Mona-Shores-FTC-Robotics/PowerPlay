@@ -7,7 +7,7 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 //6 Medium
-public class MeepMeepTesting {
+public class leg2 {
 
     public static final double FULL_TILE_DISTANCE_DRIVE= 23.5;
     public static final double HALF_TILE_DISTANCE_DRIVE = FULL_TILE_DISTANCE_DRIVE /2;
@@ -283,31 +283,32 @@ public class MeepMeepTesting {
                                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
 //                                    Intake.turnIntakeOff();
 //                                    Claw.closeClaw();
-//                                    Lift.StartLifting(fifthJunctionHeight, Arm);
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
                                 })
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(fifthJunction, firstJunctionHeading), firstJunctionHeading)
+                                .splineToSplineHeading(new Pose2d(firstJunction, firstJunctionHeading), firstJunctionHeading)
                                 .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
-//                                    Arm.setPosition(fifthJunctionArm);
+//                                    Arm.setPosition(firstJunctionArm);
                                 })
                                 .waitSeconds(.600)
                                 .UNSTABLE_addTemporalMarkerOffset(-.6, () -> {
-//                                    Lift.StartLifting(fifthJunctionHeight - 325, Arm);
+//                                    Lift.StartLifting(firstJunctionHeight - 325, Arm);
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
 //                                    Claw.openClaw();
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                                    Lift.StartLifting(fifthJunctionHeight, Arm);
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
 //                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-//                                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
 //                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
                                 })
-                                .back(12)
                                 .setReversed(true)
-                                .lineToLinearHeading(endAutoPosition)
+                                .setTangent(Math.toRadians(40))
+                                .splineToSplineHeading(coneStackPose, coneStackHeading)
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)

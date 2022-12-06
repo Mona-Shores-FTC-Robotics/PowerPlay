@@ -7,7 +7,7 @@ import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
 //6 Medium
-public class MeepMeepTesting {
+public class MeepMeepTesting5 {
 
     public static final double FULL_TILE_DISTANCE_DRIVE= 23.5;
     public static final double HALF_TILE_DISTANCE_DRIVE = FULL_TILE_DISTANCE_DRIVE /2;
@@ -31,7 +31,7 @@ public class MeepMeepTesting {
 
 
     public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 5.5, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+4.5, -1*(FULL_TILE_DISTANCE_DRIVE-4.5));
+    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+6, -1*(FULL_TILE_DISTANCE_DRIVE-6));
 
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 5.5), -(FULL_TILE_DISTANCE_DRIVE));
     public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+6), -1*(FULL_TILE_DISTANCE_DRIVE-6));
@@ -56,8 +56,8 @@ public class MeepMeepTesting {
 
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -HALF_TILE_DISTANCE_DRIVE);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -HALF_TILE_DISTANCE_DRIVE);
-    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2+QUARTER_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(180));
-    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE*2+QUARTER_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(0));
+    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2+HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(180));
+    public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-60, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(0));
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE);
     public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE);
 
@@ -66,10 +66,6 @@ public class MeepMeepTesting {
 
     public static Pose2d RIGHT_CONE_STACK_LINE = new Pose2d(45, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(180));
     public static Pose2d LEFT_CONE_STACK_LINE = new Pose2d(-45, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(0));
-
-    public static Vector2d RIGHT_STAGING_SPOT = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE, -(HALF_TILE_DISTANCE_DRIVE+SIXTEENTH_TILE_DISTANCE_DRIVE));
-    public static Vector2d LEFT_STAGING_SPOT = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE), -(HALF_TILE_DISTANCE_DRIVE+SIXTEENTH_TILE_DISTANCE_DRIVE));
-
 
     public static Pose2d startPose;
     public static Pose2d currentPose;
@@ -173,8 +169,6 @@ public class MeepMeepTesting {
     //Set default to MIDDLE in case something goes wrong with vision
     public static Signal currentSignal;
 
-    public static Vector2d stagingSpot;
-
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(1200);
 
@@ -188,7 +182,6 @@ public class MeepMeepTesting {
             coneStack = RIGHT_CONE_STACK_MIDDLE_OF_LINE;
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
             coneStackMiddleOfLine = RIGHT_CONE_STACK_MIDDLE_OF_LINE;
-            stagingSpot = RIGHT_STAGING_SPOT;
 
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
@@ -236,7 +229,6 @@ public class MeepMeepTesting {
             coneStackHeading = Math.toRadians(180);
             startingJunctionTangent = Math.toRadians(0);
             firstJunctionHeading = Math.toRadians(315);
-            stagingSpot = LEFT_STAGING_SPOT;
 
             startingJunction = MEDIUM_JUNCTION_Y2;
 
@@ -271,14 +263,169 @@ public class MeepMeepTesting {
                 endAutoPosition = LEFT_SIDE_RIGHT_TILE_D3;
             }
         }
-        startPose = coneStackPose;
+
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width`
                 .setDimensions(15, 15.125)
                 .setConstraints(50, 50, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-                                .back(10)
+
+                                //----STARTING CONE ROBOT MANEUVERS-------//
+                                .addTemporalMarker(STARTING_CONE_LIFT_TIME, () -> {
+//                                    Lift.StartLifting(startingJunctionHeight, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+//                                    Arm.setPosition(startingJunctionArm);
+                                })
+                                .splineToConstantHeading(startingJunction, startingJunctionTangent)
+                                .waitSeconds(.400)
+                                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+//                                    Lift.StartLifting(startingJunctionHeight - 325, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(-.25, () -> {
+//                                    Claw.openClaw();
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                                    Lift.StartLifting(startingJunctionHeight, Arm);
+                                })
+
+
+                                //---FIRST CONE ROBOT MANEUVERS-------//
+
+                                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+//                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+//                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
+                                })
+                                .setReversed(false)
+                                .setTangent(Math.toRadians(80))
+                                .splineToSplineHeading(coneStackPose, coneStackHeading)
+                                .waitSeconds(.200)
+                                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+//                                    Intake.turnIntakeOff();
+//                                    Claw.closeClaw();
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
+                                })
+                                .setReversed(false)
+                                .splineToSplineHeading(new Pose2d(firstJunction, firstJunctionHeading), firstJunctionHeading)
+                                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+//                                    Arm.setPosition(firstJunctionArm);
+                                })
+                                .waitSeconds(.600)
+                                .UNSTABLE_addTemporalMarkerOffset(-.6, () -> {
+//                                    Lift.StartLifting(firstJunctionHeight - 325, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+//                                    Claw.openClaw();
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
+                                })
+
+                                //----SECOND CONE ROBOT MANEUVERS-------//
+                                .setReversed(true)
+                                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
+//                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+//                                    Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
+                                })
+                                .splineToSplineHeading(coneStackPose, coneStackHeading)
+                                .waitSeconds(.200)
+                                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+//                                    Intake.turnIntakeOff();
+//                                    Claw.closeClaw();
+//                                    Lift.StartLifting(secondJunctionHeight, Arm);
+                                })
+                                .setReversed(false)
+                                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+//                                    Arm.setPosition(secondJunctionArm);
+                                })
+                                .splineToSplineHeading(new Pose2d(secondJunction, firstJunctionHeading), firstJunctionHeading)
+                                .waitSeconds(.400)
+                                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+//                                    Lift.StartLifting(secondJunctionHeight - 325, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
+//                                    Claw.openClaw();
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                                    Lift.StartLifting(secondJunctionHeight, Arm);
+                                })
+
+                                //----THIRD CONE ROBOT MANEUVERS-------//
+                                .setReversed(true)
+                                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
+//                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+//                                    Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
+                                })
+                                .splineToSplineHeading(coneStackPose, coneStackHeading)
+                                .waitSeconds(.200)
+                                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+//                                    Intake.turnIntakeOff();
+//                                    Claw.closeClaw();
+//                                    Lift.StartLifting(thirdJunctionHeight, Arm);
+                                })
+                                .setReversed(false)
+                                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+//                                    Arm.setPosition(thirdJunctionArm);
+                                })
+                                .splineToSplineHeading(new Pose2d(thirdJunction, firstJunctionHeading), firstJunctionHeading)
+                                .waitSeconds(.400)
+                                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+//                                    Lift.StartLifting(thirdJunctionHeight - 325, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
+//                                    Claw.openClaw();
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                                    Lift.StartLifting(thirdJunctionHeight, Arm);
+                                })
+//bannan
+                                //----FOURTH CONE ROBOT MANEUVERS-------//
+                                .setReversed(true)
+                                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
+//                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+//                                    Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
+                                })
+                                .splineToSplineHeading(coneStackPose, coneStackHeading)
+                                .waitSeconds(.200)
+                                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+//                                    Intake.turnIntakeOff();
+//                                    Claw.closeClaw();
+//                                    Lift.StartLifting(fourthJunctionHeight, Arm);
+                                })
+                                .setReversed(false)
+                                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+//                                    Arm.setPosition(fourthJunctionArm);
+                                })
+                                .splineToSplineHeading(new Pose2d(fourthJunction, firstJunctionHeading), firstJunctionHeading)
+                                .waitSeconds(.400)
+                                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+//                                    Lift.StartLifting(fourthJunctionHeight - 325, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
+//                                    Claw.openClaw();
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                                    Lift.StartLifting(fourthJunctionHeight, Arm);
+                                })
+
+                                //----FIFTH CONE ROBOT MANEUVERS-------//
+                                .setReversed(true)
+                                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
+//                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+//                                    Lift.StartLifting(ONE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
+                                })
+                                .splineToSplineHeading(coneStackPose, coneStackHeading)
                                 .waitSeconds(.200)
                                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
 //                                    Intake.turnIntakeOff();
@@ -286,21 +433,24 @@ public class MeepMeepTesting {
 //                                    Lift.StartLifting(fifthJunctionHeight, Arm);
                                 })
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(fifthJunction, firstJunctionHeading), firstJunctionHeading)
-                                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
+                                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
 //                                    Arm.setPosition(fifthJunctionArm);
                                 })
-                                .waitSeconds(.600)
-                                .UNSTABLE_addTemporalMarkerOffset(-.6, () -> {
+                                .splineToSplineHeading(new Pose2d(fifthJunction, firstJunctionHeading), firstJunctionHeading)
+                                .waitSeconds(.400)
+                                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
 //                                    Lift.StartLifting(fifthJunctionHeight - 325, Arm);
                                 })
-                                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+                                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
 //                                    Claw.openClaw();
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
 //                                    Lift.StartLifting(fifthJunctionHeight, Arm);
                                 })
-                                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+
+
+                                //----PARKING-------//
+                                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
 //                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
 //                                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
 //                                    Claw.setEasyIntake();
