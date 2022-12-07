@@ -25,6 +25,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.THREE_C
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -127,35 +128,14 @@ public class AUTO_SCORE_3_AND_PARK_SAFE extends LinearOpMode {
 
         //Drive Forward - 3s (3s)
         Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
-        MecDrive.startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE_DRIVE * 2) + EIGHTH_TILE_DISTANCE_STRAFE+SIXTEENTH_TILE_DISTANCE_DRIVE);
-        while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
-            MecDrive.ContinueDriving();
-            Lift.ContinueLifting();
-        }
-        //
-        //Rotate - 1s (4s)
-        if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE))
-        {
-            MecDrive.turnToPID(90, Gyro);
-        }
-        else
-        {
-            MecDrive.turnToPID(-90, Gyro);
-        }
-        while (opModeIsActive() && MecDrive.alreadyPIDTurning == true) {
-            MecDrive.ContinuePIDTurning(Gyro);
-        }
-
-        //Drive in Front of Mid Pole - 2s (6s)
-        MecDrive.startEncoderDrive(MED_SPEED, HALF_TILE_DISTANCE_DRIVE + THIRTYSECOND_TILE_DISTANCE_DRIVE);
-        Lift.StartLifting(MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL, ServoArm);
+        MecDrive.startEncoderDrive(MED_SPEED, (FULL_TILE_DISTANCE_DRIVE + HALF_TILE_DISTANCE_DRIVE) + EIGHTH_TILE_DISTANCE_DRIVE);
         while (opModeIsActive() && (Lift.alreadyLifting || MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
         }
 
         //Strafe close to Mid Pole - 3s (9s)
-        MecDrive.startStrafeDrive(LOW_SPEED, (QUARTER_TILE_DISTANCE_DRIVE + SIXTEENTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(LOW_SPEED, (QUARTER_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
         if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE)) {
             ServoArm.setArmState(armState.ARM_LEFT, null);
         } else ServoArm.setArmState(armState.ARM_RIGHT, null);
@@ -179,17 +159,32 @@ public class AUTO_SCORE_3_AND_PARK_SAFE extends LinearOpMode {
             Lift.ContinueLifting();
         }
 
-        //Strafe away from High Pole - 1s (12s)
+        //Strafe away from mid Pole - 1s (12s)
         MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
             MecDrive.ContinueStrafing();
         }
 
-        //turn to 90 - 0s (12s)
-        MecDrive.turnToPID(-90* ButtonConfig.startPositionMultiplier, Gyro);
-        while (opModeIsActive() && (MecDrive.alreadyPIDTurning)) {
+        //drive to center of tile
+        MecDrive.startEncoderDrive(MED_SPEED, (QUARTER_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE));
+        while (opModeIsActive() && MecDrive.alreadyDriving == true) {
+            MecDrive.ContinueDriving();
+        }
+
+        //Rotate - 1s (4s)
+        if ((ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE))
+        {
+            MecDrive.turnToPID(90, Gyro);
+        }
+        else
+        {
+            MecDrive.turnToPID(-90, Gyro);
+        }
+        while (opModeIsActive() && MecDrive.alreadyPIDTurning == true) {
             MecDrive.ContinuePIDTurning(Gyro);
         }
+
+
 
         int coneDeliveryTracker = 1;
         int coneStackTracker = 5;
@@ -203,7 +198,7 @@ public class AUTO_SCORE_3_AND_PARK_SAFE extends LinearOpMode {
         //Drive to the cone stack line - 2s (14s)
         ServoArm.setPosition(ARM_CENTER_INTAKE);
         Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, ServoArm);
-        MecDrive.startEncoderDrive(.5, -(FULL_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE));
+        MecDrive.startEncoderDrive(.5, -(HALF_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE));
         while (opModeIsActive() && (MecDrive.alreadyDriving)) {
             MecDrive.ContinueDriving();
             Lift.ContinueLifting();
