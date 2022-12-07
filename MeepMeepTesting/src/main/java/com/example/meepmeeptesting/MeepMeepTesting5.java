@@ -170,7 +170,7 @@ public class MeepMeepTesting5 {
     public static Signal currentSignal;
 
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(1200);
+        MeepMeep meepMeep = new MeepMeep(800);
 
         currentStartPosition = StartingPosition.RIGHT_SIDE;
         currentSignal = Signal.LEFT;

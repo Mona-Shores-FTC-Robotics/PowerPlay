@@ -176,7 +176,7 @@ public class leg2 {
     public static Vector2d stagingSpot;
 
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(1200);
+        MeepMeep meepMeep = new MeepMeep(800);
 
         currentStartPosition = StartingPosition.RIGHT_SIDE;
         currentSignal = Signal.LEFT;

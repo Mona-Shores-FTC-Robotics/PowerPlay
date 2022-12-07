@@ -364,7 +364,7 @@ public class PowerplayTrajectories {
                 })
                 .back(12)
                 .setReversed(true)
-                .lineToLinearHeading(endAutoPosition)
+                .lineToLinearHeading(endAutoPosition) // todo: I don't think it's receiving the value
                 .build();
     }
 }

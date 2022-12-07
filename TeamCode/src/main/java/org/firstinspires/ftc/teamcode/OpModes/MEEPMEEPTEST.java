@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.PowerplayTrajectories;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 
-@Autonomous(name = "AUTO_SCORE_6MED_AND_PARK - RUN ME")
+@Autonomous(name = "AUTO_SCORE_3RR_AND_PARK - RUN ME")
 public class MEEPMEEPTEST extends LinearOpMode {
     AprilTagVision Vision = new AprilTagVision();
     ButtonConfig BConfig = new ButtonConfig(this);
