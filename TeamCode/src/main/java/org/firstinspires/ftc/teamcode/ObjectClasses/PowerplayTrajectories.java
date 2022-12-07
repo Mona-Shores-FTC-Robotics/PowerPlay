@@ -205,11 +205,11 @@ public class PowerplayTrajectories {
             fifthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
 
             if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-                endAutoPosition = RIGHT_SIDE_LEFT_TILE_D4;
+                PowerplayTrajectories.endAutoPosition  = RIGHT_SIDE_LEFT_TILE_D4;
             } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
-                endAutoPosition = RIGHT_SIDE_MIDDLE_TILE_D5;
+                PowerplayTrajectories.endAutoPosition  = RIGHT_SIDE_MIDDLE_TILE_D5;
             } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-                endAutoPosition = RIGHT_SIDE_RIGHT_TILE_D6;
+                PowerplayTrajectories.endAutoPosition  = RIGHT_SIDE_RIGHT_TILE_D6;
             }
 
         } else {
@@ -244,11 +244,11 @@ public class PowerplayTrajectories {
             ;
 
             if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
-                endAutoPosition = LEFT_SIDE_LEFT_TILE_D1;
+                PowerplayTrajectories.endAutoPosition = LEFT_SIDE_LEFT_TILE_D1;
             } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
-                endAutoPosition = LEFT_SIDE_MIDDLE_TILE_D2;
+                PowerplayTrajectories.endAutoPosition = LEFT_SIDE_MIDDLE_TILE_D2;
             } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
-                endAutoPosition = LEFT_SIDE_RIGHT_TILE_D3;
+                PowerplayTrajectories.endAutoPosition  = LEFT_SIDE_RIGHT_TILE_D3;
             }
 
         }
@@ -326,6 +326,8 @@ public class PowerplayTrajectories {
 
     public void MakeTrajectoriesPark() {
         //----FIFTH CONE FROM CONE STACK DELIVERY SEQUENCE-------//
+
+
         //----AND PARKING-----//
         trajSeqSixMedPark = MecDrive.trajectorySequenceBuilder(currentPose)
                 .setReversed(true)
@@ -364,7 +366,7 @@ public class PowerplayTrajectories {
                 })
                 .back(12)
                 .setReversed(true)
-                .lineToLinearHeading(endAutoPosition) // todo: I don't think it's receiving the value
+                .lineToLinearHeading(PowerplayTrajectories.endAutoPosition ) // todo: I don't think it's receiving the value
                 .build();
     }
 }
