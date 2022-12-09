@@ -160,7 +160,7 @@ public class AUTO_SCORE_3_AND_PARK_SAFE extends LinearOpMode {
         }
 
         //Strafe away from mid Pole - 1s (12s)
-        MecDrive.startStrafeDrive(LOW_SPEED, -(QUARTER_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
+        MecDrive.startStrafeDrive(MED_SPEED, -(QUARTER_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
         while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
             MecDrive.ContinueStrafing();
         }
@@ -250,7 +250,7 @@ public class AUTO_SCORE_3_AND_PARK_SAFE extends LinearOpMode {
             }
 
             //Drive near cone stack while setting lift to correct height - 1s (15s)
-            MecDrive.startEncoderDrive(MED_SPEED, -(QUARTER_TILE_DISTANCE_DRIVE));
+            MecDrive.startEncoderDrive(MED_SPEED, -(EIGHTH_TILE_DISTANCE_DRIVE+SIXTEENTH_TILE_DISTANCE_DRIVE));
             while (opModeIsActive() && (MecDrive.alreadyDriving)) {
                 MecDrive.ContinueDriving();
                 Lift.ContinueLifting();
@@ -321,7 +321,7 @@ public class AUTO_SCORE_3_AND_PARK_SAFE extends LinearOpMode {
                 ServoArm.setPosition(ARM_LEFT_OUTTAKE);}
 
             //Strafe to the LOW pole- 2s (20s)
-            MecDrive.startStrafeDrive(LOW_SPEED,(QUARTER_TILE_DISTANCE_STRAFE+SIXTEENTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
+            MecDrive.startStrafeDrive(MED_SPEED,(QUARTER_TILE_DISTANCE_STRAFE+SIXTEENTH_TILE_DISTANCE_DRIVE) * ButtonConfig.startPositionMultiplier);
             while (opModeIsActive() && (MecDrive.alreadyStrafing)) {
                 MecDrive.ContinueStrafing();
                 Lift.ContinueLifting();
@@ -357,7 +357,7 @@ public class AUTO_SCORE_3_AND_PARK_SAFE extends LinearOpMode {
             telemetry.update();
 
             //strafe away from the LOW pole - 1s (23s)
-            MecDrive.startStrafeDrive(LOW_SPEED,-(QUARTER_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
+            MecDrive.startStrafeDrive(MED_SPEED,-(QUARTER_TILE_DISTANCE_STRAFE) * ButtonConfig.startPositionMultiplier);
             while (opModeIsActive() && MecDrive.alreadyStrafing == true) {
                 MecDrive.ContinueStrafing();
             }
@@ -470,15 +470,12 @@ public class AUTO_SCORE_3_AND_PARK_SAFE extends LinearOpMode {
         }
 
 
-
+;
 
         telemetry.addData("Cones:", "Stack(%s)/Delivered(%s)", coneStackTracker, coneDeliveryTracker);
         telemetry.addData("Current Lift Height", Lift.liftMotor.getCurrentPosition());
         telemetry.addData("Status", "Run Time: " + runtime);
         telemetry.update();
-        sleep(750);
+        sleep(350); // ORIGALY 750
     }
 }
-
-
-
