@@ -12,6 +12,7 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.SIXTEENTH_TILE_DISTANCE_DRIVE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -25,7 +26,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
-
+@Disabled
 @Autonomous(name = "AUTO_SCORE_ONE_AND_PARK")
 public class AUTO_SCORE_ONE_AND_PARK extends LinearOpMode {
 

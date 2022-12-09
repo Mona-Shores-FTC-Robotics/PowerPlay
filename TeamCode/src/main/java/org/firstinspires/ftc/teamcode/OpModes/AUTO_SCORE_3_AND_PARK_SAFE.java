@@ -39,6 +39,7 @@ import org.firstinspires.ftc.teamcode.ObjectClasses.Gyro;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Intake;
 import org.firstinspires.ftc.teamcode.ObjectClasses.Lift;
 
+@Disabled
 @Autonomous(name = "AUTO_SCORE_3_AND_PARK_SAFE")
 public class AUTO_SCORE_3_AND_PARK_SAFE extends LinearOpMode {
 
