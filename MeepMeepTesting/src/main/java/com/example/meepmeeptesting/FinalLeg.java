@@ -34,7 +34,7 @@ public class FinalLeg {
     public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+4.5, -1*(FULL_TILE_DISTANCE_DRIVE-4.5));
 
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 5.5), -(FULL_TILE_DISTANCE_DRIVE));
-    public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+6), -1*(FULL_TILE_DISTANCE_DRIVE-6));
+    public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+4.5), -1*(FULL_TILE_DISTANCE_DRIVE-4.5));
 
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
     public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
@@ -178,8 +178,8 @@ public class FinalLeg {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
-        currentStartPosition = StartingPosition.RIGHT_SIDE;
-        currentSignal = Signal.LEFT;
+        currentStartPosition = StartingPosition.LEFT_SIDE;
+        currentSignal = Signal.RIGHT;
 
         if (currentStartPosition == StartingPosition.RIGHT_SIDE) {
             startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE, -62, Math.toRadians(90));
@@ -275,7 +275,7 @@ public class FinalLeg {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width`
                 .setDimensions(15, 15.125)
-                .setConstraints(50, 50, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
+                .setConstraints(40, 40, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
                                 .back(10)
@@ -305,7 +305,7 @@ public class FinalLeg {
 //                                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
 //                                    Claw.setEasyIntake();
                                 })
-                                .back(12)
+                                .back(11)
                                 .setReversed(true)
                                 .lineToLinearHeading(endAutoPosition)
                                 .build());

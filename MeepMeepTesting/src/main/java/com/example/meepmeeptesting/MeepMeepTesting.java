@@ -34,7 +34,7 @@ public class MeepMeepTesting {
     public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+4.5, -1*(FULL_TILE_DISTANCE_DRIVE-4.5));
 
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 5.5), -(FULL_TILE_DISTANCE_DRIVE));
-    public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+6), -1*(FULL_TILE_DISTANCE_DRIVE-6));
+    public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+4.5), -1*(FULL_TILE_DISTANCE_DRIVE-4.5));
 
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
     public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
@@ -174,11 +174,12 @@ public class MeepMeepTesting {
     public static Signal currentSignal;
 
     public static Vector2d stagingSpot;
+    public static double deliveryHeading;
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
-        currentStartPosition = StartingPosition.RIGHT_SIDE;
+        currentStartPosition = StartingPosition.LEFT_SIDE;
         currentSignal = Signal.LEFT;
 
         if (currentStartPosition == StartingPosition.RIGHT_SIDE) {
@@ -193,6 +194,7 @@ public class MeepMeepTesting {
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
             firstJunctionHeading = Math.toRadians(225);
+            deliveryHeading = Math.toRadians(45);
 
             startingJunction = MEDIUM_JUNCTION_Y4;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
@@ -236,6 +238,8 @@ public class MeepMeepTesting {
             coneStackHeading = Math.toRadians(180);
             startingJunctionTangent = Math.toRadians(0);
             firstJunctionHeading = Math.toRadians(315);
+            deliveryHeading = Math.toRadians(135);
+
             stagingSpot = LEFT_STAGING_SPOT;
 
             startingJunction = MEDIUM_JUNCTION_Y2;
@@ -275,7 +279,7 @@ public class MeepMeepTesting {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width`
                 .setDimensions(15, 15.125)
-                .setConstraints(50, 50, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
+                .setConstraints(40, 40, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
                                 .back(10)
@@ -283,31 +287,32 @@ public class MeepMeepTesting {
                                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
 //                                    Intake.turnIntakeOff();
 //                                    Claw.closeClaw();
-//                                    Lift.StartLifting(fifthJunctionHeight, Arm);
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
                                 })
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(fifthJunction, firstJunctionHeading), firstJunctionHeading)
+                                .splineToSplineHeading(new Pose2d(firstJunction, firstJunctionHeading), firstJunctionHeading)
                                 .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
-//                                    Arm.setPosition(fifthJunctionArm);
+//                                    Arm.setPosition(firstJunctionArm);
                                 })
                                 .waitSeconds(.600)
                                 .UNSTABLE_addTemporalMarkerOffset(-.6, () -> {
-//                                    Lift.StartLifting(fifthJunctionHeight - 325, Arm);
+//                                    Lift.StartLifting(firstJunctionHeight - 325, Arm);
                                 })
-                                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+                                .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
 //                                    Claw.openClaw();
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                                    Lift.StartLifting(fifthJunctionHeight, Arm);
+//                                    Lift.StartLifting(firstJunctionHeight, Arm);
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(1, () -> {
 //                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-//                                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
+//                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
 //                                    Claw.setEasyIntake();
+//                                    Intake.turnIntakeOn();
                                 })
-                                .back(12)
                                 .setReversed(true)
-                                .lineToLinearHeading(endAutoPosition)
+                                .setTangent(deliveryHeading)
+                                .splineToSplineHeading(coneStackPose, coneStackHeading)
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
