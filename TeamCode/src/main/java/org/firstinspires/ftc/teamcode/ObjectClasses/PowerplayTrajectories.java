@@ -280,11 +280,13 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-.25, () -> {
                                     Claw.openClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
-                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
-                                    Claw.setEasyIntake();
-                                    Intake.turnIntakeOn();
+                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
+                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+                    Claw.setEasyIntake();
+                    Intake.turnIntakeOn();
                 })
                 .setReversed(false)
                 .setTangent(lineupHeading)
@@ -302,14 +304,14 @@ public class PowerplayTrajectories {
                     Intake.turnIntakeOff();
                     Claw.closeClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
+                    Arm.setPosition(firstJunctionArm);
                 })
                 .setReversed(false)
                 .splineToSplineHeading(new Pose2d(firstJunction, firstJunctionHeading), firstJunctionHeading)
-                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
-                    Arm.setPosition(firstJunctionArm);
-                })
                 .waitSeconds(.300)
                 .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
                     Lift.StartLifting(firstJunctionHeight - 350, Arm);
@@ -317,14 +319,10 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Claw.openClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    //Lift.StartLifting(firstJunctionHeight, Arm);
-                })
                 .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                 })
-
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
                     Lift.StartLifting(FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                     Intake.turnIntakeOn();
@@ -339,19 +337,19 @@ public class PowerplayTrajectories {
         //---FIRST CONE FROM CONE STACK DELIVERY SEQUENCE-------//
         trajSeqSixMed2 = MecDrive.trajectorySequenceBuilder(currentPose)
                 .back(7.5)
-                .waitSeconds(.10)
-                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                .waitSeconds(.2)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Intake.turnIntakeOff();
                     Claw.closeClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                    Arm.setPosition(firstJunctionArm);
                 })
                 .setReversed(false)
                 .splineToSplineHeading(new Pose2d(firstJunction, firstJunctionHeading), firstJunctionHeading)
-                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
-                    Arm.setPosition(firstJunctionArm);
-                })
                 .waitSeconds(.300)
                 .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
                     Lift.StartLifting(firstJunctionHeight - 350, Arm);
@@ -359,14 +357,10 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Claw.openClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    //Lift.StartLifting(firstJunctionHeight, Arm);
-                })
                 .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                 })
-
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
                     Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                     Intake.turnIntakeOn();
@@ -386,14 +380,14 @@ public class PowerplayTrajectories {
                     Intake.turnIntakeOff();
                     Claw.closeClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                    Arm.setPosition(firstJunctionArm);
                 })
                 .setReversed(false)
                 .splineToSplineHeading(new Pose2d(firstJunction, firstJunctionHeading), firstJunctionHeading)
-                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
-                    Arm.setPosition(firstJunctionArm);
-                })
                 .waitSeconds(.300)
                 .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
                     Lift.StartLifting(firstJunctionHeight - 350, Arm);
@@ -401,14 +395,10 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Claw.openClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    //Lift.StartLifting(firstJunctionHeight, Arm);
-                })
                 .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                 })
-
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
                     Lift.StartLifting(TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                     Intake.turnIntakeOn();
@@ -428,14 +418,14 @@ public class PowerplayTrajectories {
                     Intake.turnIntakeOff();
                     Claw.closeClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                    Arm.setPosition(firstJunctionArm);
                 })
                 .setReversed(false)
                 .splineToSplineHeading(new Pose2d(firstJunction, firstJunctionHeading), firstJunctionHeading)
-                .UNSTABLE_addTemporalMarkerOffset(-1, () -> {
-                    Arm.setPosition(firstJunctionArm);
-                })
                 .waitSeconds(.300)
                 .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
                     Lift.StartLifting(firstJunctionHeight - 350, Arm);
@@ -443,14 +433,10 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Claw.openClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    //Lift.StartLifting(firstJunctionHeight, Arm);
-                })
                 .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
                 })
-
-                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
                     Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                     Intake.turnIntakeOn();
