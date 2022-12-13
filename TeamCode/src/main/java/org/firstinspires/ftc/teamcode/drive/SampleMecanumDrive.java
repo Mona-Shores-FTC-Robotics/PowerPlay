@@ -313,5 +313,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         setWeightedDrivePower(new Pose2d(0,0, 0));
         MecDrive.update();
         currentPose = MecDrive.getPoseEstimate();
+
+        //currentPose = new Pose2d(currentPose.component1(), -12.2, Math.toRadians(0));
+        //MecDrive.setPoseEstimate(currentPose);
+        //MecDrive.update();
+
     }
 }
