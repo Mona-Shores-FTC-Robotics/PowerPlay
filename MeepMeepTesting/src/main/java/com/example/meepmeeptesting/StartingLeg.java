@@ -238,7 +238,7 @@ public class StartingLeg {
             coneStackHeading = Math.toRadians(180);
             startingJunctionTangent = Math.toRadians(0);
             firstJunctionHeading = Math.toRadians(315);
-            lineupHeading =Math.toRadians(180);
+            lineupHeading =Math.toRadians(135);
 
 
             stagingSpot = LEFT_STAGING_SPOT;
@@ -308,8 +308,8 @@ public class StartingLeg {
                                 })
                                 .setReversed(false)
                                 .setTangent(lineupHeading)
-                                .splineToConstantHeading(stagingSpot, coneStackHeading)
-                                .splineToSplineHeading(coneStackPose, coneStackHeading)
+                                .splineToLinearHeading(new Pose2d(stagingSpot, Math.toRadians(0)), coneStackHeading)
+                                .lineToLinearHeading(coneStackPose)
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)

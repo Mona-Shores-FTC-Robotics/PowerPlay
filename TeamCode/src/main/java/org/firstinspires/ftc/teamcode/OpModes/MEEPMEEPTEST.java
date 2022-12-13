@@ -87,23 +87,26 @@ public class MEEPMEEPTEST extends LinearOpMode {
         telemetry.addData("Status", "Run Time: " + getRuntime());
         telemetry.update();
 
-        PowerTraj.MakeTrajectories1();
+        PowerTraj.MakeTrajectoriesStart();
         MecDrive.setPoseEstimate(PowerplayTrajectories.startPose);
 
         //first cone
         MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMedStart);
         MecDrive.findLine(MecDrive);
-        PowerTraj.MakeTrajectoriesRepeat();
+        PowerTraj.MakeTrajectories1();
 
         //second cone
-        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMedRepeat);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed1);
         MecDrive.findLine(MecDrive);
+        PowerTraj.MakeTrajectories2();
 //        //third cone
-//        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMedRepeat);
-//        MecDrive.findLine(MecDrive);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed2);
+        MecDrive.findLine(MecDrive);
+        PowerTraj.MakeTrajectories3();
 //        //fourth cone
-//        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMedRepeat);
-//        MecDrive.findLine(MecDrive);
+        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMed3);
+        MecDrive.findLine(MecDrive);
+        //PowerTraj.MakeTrajectories4();
 //        //fifth cone
 //        MecDrive.followTrajectorySequence(PowerTraj.trajSeqSixMedRepeat);
 //        MecDrive.findLine(MecDrive);

@@ -29,8 +29,8 @@ public final class GameConstants {
     //public static final double GROUND_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL = 250;
 
     public static final double ONE_CONE_INTAKE_HEIGHT_ENC_VAL = 0;
-    public static final double TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 110;
-    public static final double THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 170;
-    public static final double FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 230;
-    public static final double FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 320;
+    public static final double TWO_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 120;
+    public static final double THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 180;
+    public static final double FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 240;
+    public static final double FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 340;
 }
