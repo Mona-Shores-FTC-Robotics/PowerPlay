@@ -97,6 +97,7 @@ public class FinalLeg {
     public static double fifthJunctionArm;
     public static Boolean startPosRIGHT = false;
     public static Pose2d endAutoPosition;
+    public static double relativeEndAutoPosition;
 
     public static int numberSignal = 1;
 
@@ -158,6 +159,7 @@ public class FinalLeg {
     public static double startingJunctionTangent;
     public static double coneStackHeading;
     public static double firstJunctionHeading;
+    public static double relativeEndAutoHeading;
 
     public static StartingPosition currentStartPosition;
 
@@ -178,7 +180,7 @@ public class FinalLeg {
         MeepMeep meepMeep = new MeepMeep(800);
 
         currentStartPosition = StartingPosition.LEFT_SIDE;
-        currentSignal = Signal.MIDDLE;
+        currentSignal = Signal.LEFT;
 
         if (currentStartPosition == StartingPosition.RIGHT_SIDE) {
             startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE, -62, Math.toRadians(90));
@@ -188,6 +190,7 @@ public class FinalLeg {
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
             coneStackMiddleOfLine = RIGHT_CONE_STACK_MIDDLE_OF_LINE;
             stagingSpot = RIGHT_STAGING_SPOT;
+            relativeEndAutoHeading = Math.toRadians(-45);
 
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
@@ -220,10 +223,13 @@ public class FinalLeg {
 
             if (currentSignal == Signal.LEFT) {
                 endAutoPosition = RIGHT_SIDE_LEFT_TILE_D4;
+                relativeEndAutoPosition = FULL_TILE_DISTANCE_DRIVE;
             } else if (currentSignal == Signal.MIDDLE) {
                 endAutoPosition = RIGHT_SIDE_MIDDLE_TILE_D5;
+                relativeEndAutoPosition = SIXTEENTH_TILE_DISTANCE_DRIVE;
             } else if (currentSignal == Signal.RIGHT ) {
                 endAutoPosition = RIGHT_SIDE_RIGHT_TILE_D6;
+                relativeEndAutoPosition = -FULL_TILE_DISTANCE_DRIVE;
             }
 
         } else {
@@ -236,6 +242,7 @@ public class FinalLeg {
             startingJunctionTangent = Math.toRadians(0);
             firstJunctionHeading = Math.toRadians(315);
             stagingSpot = LEFT_STAGING_SPOT;
+            relativeEndAutoHeading = Math.toRadians(45);
 
             startingJunction = MEDIUM_JUNCTION_Y2;
 
@@ -264,10 +271,13 @@ public class FinalLeg {
 
             if (currentSignal == Signal.LEFT) {
                 endAutoPosition = LEFT_SIDE_LEFT_TILE_D1;
+                relativeEndAutoPosition = -FULL_TILE_DISTANCE_DRIVE;
             } else if (currentSignal == Signal.MIDDLE) {
                 endAutoPosition = LEFT_SIDE_MIDDLE_TILE_D2;
+                relativeEndAutoPosition = .01;
             } else if (currentSignal == Signal.RIGHT) {
                 endAutoPosition = LEFT_SIDE_RIGHT_TILE_D3;
+                relativeEndAutoPosition = FULL_TILE_DISTANCE_DRIVE;
             }
         }
         startPose = coneStackPose;
@@ -304,9 +314,10 @@ public class FinalLeg {
 //                                    Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
 //                                    Claw.setEasyIntake();
                                 })
-                                .back(6)
+                                .back(10)
                                 .setReversed(true)
-                                .splineToLinearHeading(endAutoPosition, coneStackHeading)
+                                .turn(relativeEndAutoHeading)
+                                .forward(relativeEndAutoPosition)
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)

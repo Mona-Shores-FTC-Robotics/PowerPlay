@@ -50,7 +50,6 @@ public class PowerplayTrajectories {
         Vision = vision;
     }
 
-
     public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 4, -FULL_TILE_DISTANCE_DRIVE+1.5);
     public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -1*(FULL_TILE_DISTANCE_DRIVE-4));
 
@@ -74,11 +73,12 @@ public class PowerplayTrajectories {
     public static Pose2d LEFT_SIDE_MIDDLE_TILE_D2 = new Pose2d( -1*(HALF_TILE_DISTANCE_DRIVE+FULL_TILE_DISTANCE_DRIVE), -1*HALF_TILE_DISTANCE_DRIVE,Math.toRadians(0));
     public static Pose2d LEFT_SIDE_RIGHT_TILE_D3 =  new Pose2d( -1*HALF_TILE_DISTANCE_DRIVE, -1*(HALF_TILE_DISTANCE_DRIVE),Math.toRadians(0));
 
-
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -HALF_TILE_DISTANCE_DRIVE);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -HALF_TILE_DISTANCE_DRIVE);
+
     public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2+EIGHTH_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(180));
     public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE*2+EIGHTH_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(0));
+
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE);
     public static Vector2d LEFT_CONE_STACK_END_OF_LINE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE);
 
@@ -90,7 +90,6 @@ public class PowerplayTrajectories {
 
     public static Vector2d RIGHT_STAGING_SPOT = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE, -(HALF_TILE_DISTANCE_DRIVE));
     public static Vector2d LEFT_STAGING_SPOT = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE), -(HALF_TILE_DISTANCE_DRIVE));
-
 
     public static Pose2d startPose;
     public static Pose2d currentPose;
@@ -119,72 +118,16 @@ public class PowerplayTrajectories {
     public static double fifthJunctionArm;
     public static Boolean startPosRIGHT = false;
     public static Pose2d endAutoPosition;
-
-    public static int numberSignal = 1;
-
-    // Lift@Deliver
+    public static double relativeEndAutoPosition;
     public static double STARTING_CONE_LIFT_TIME = 0;
-    // Rotate Arm
-    public static double STARTING_CONE_ARM_TIME = STARTING_CONE_LIFT_TIME + 1.2;
-    // Lift@Dunk
-    public static double STARTING_CONE_DUNK_TIME = STARTING_CONE_ARM_TIME + 1.8;
-    // Open Claw
-    public static double STARTING_CONE_DELIVER_TIME = STARTING_CONE_DUNK_TIME + .3;
-    // Lift@Undunk
-    public static double STARTING_CONE_UNDUNK_TIME = STARTING_CONE_DELIVER_TIME + .2;
-
-
-    // Arm Center, Lift@Pickup, Claw Easy, Intake On;
-    public static double FIRST_CONE_APPROACH_TIME = 0;
-    // Intake Off, Close Claw, Lift@+200
-    public static double FIRST_CONE_GRAB_TIME = FIRST_CONE_APPROACH_TIME + 1.5;
-    // Lift@Deliver, Rotate Arm
-    public static double FIRST_CONE_DELIVERY_SETUP_TIME = FIRST_CONE_GRAB_TIME + 1.1;
-    // Lift@Dunk
-    public static double FIRST_CONE_DUNK_TIME = FIRST_CONE_DELIVERY_SETUP_TIME + 1.1;
-    // Open Claw
-    public static double FIRST_CONE_DELIVER_TIME = FIRST_CONE_DUNK_TIME + .2;
-    // Lift@Undunk
-    public static double FIRST_CONE_UNDUNK_TIME = FIRST_CONE_DELIVER_TIME + .2;
-
-
-    public static double SECOND_CONE_APPROACH_TIME = 4.8;
-    public static double SECOND_CONE_GRAB_TIME = SECOND_CONE_APPROACH_TIME + 1.5;
-    public static double SECOND_CONE_DELIVERY_SETUP_TIME = SECOND_CONE_GRAB_TIME + 1.1;
-    public static double SECOND_CONE_DUNK_TIME = SECOND_CONE_DELIVERY_SETUP_TIME + 1.1;
-    public static double SECOND_CONE_DELIVER_TIME = SECOND_CONE_DUNK_TIME + .2;
-    public static double SECOND_CONE_UNDUNK_TIME = SECOND_CONE_DELIVER_TIME + .2;
-
-    public static double THIRD_CONE_APPROACH_TIME = 8.7;
-    public static double THIRD_CONE_GRAB_TIME = THIRD_CONE_APPROACH_TIME + 1.5;
-    public static double THIRD_CONE_DELIVERY_SETUP_TIME = THIRD_CONE_GRAB_TIME + 1.1;
-    public static double THIRD_CONE_DUNK_TIME = THIRD_CONE_DELIVERY_SETUP_TIME + 1.1;
-    public static double THIRD_CONE_DELIVER_TIME = THIRD_CONE_DUNK_TIME + .2;
-    public static double THIRD_CONE_UNDUNK_TIME = THIRD_CONE_DELIVER_TIME + .2;
-
-    public static double FOURTH_CONE_APPROACH_TIME = 12.8;
-    public static double FOURTH_CONE_GRAB_TIME = FOURTH_CONE_APPROACH_TIME + 1.5;
-    public static double FOURTH_CONE_DELIVERY_SETUP_TIME = FOURTH_CONE_GRAB_TIME + 1.1;
-    public static double FOURTH_CONE_DUNK_TIME = FOURTH_CONE_DELIVERY_SETUP_TIME + 1.1;
-    public static double FOURTH_CONE_DELIVER_TIME = FOURTH_CONE_DUNK_TIME + .2;
-    public static double FOURTH_CONE_UNDUNK_TIME = FOURTH_CONE_DELIVER_TIME + .2;
-
-    public static double FIFTH_CONE_APPROACH_TIME = 17.1;
-    public static double FIFTH_CONE_GRAB_TIME = FIFTH_CONE_APPROACH_TIME + 1.5;
-    public static double FIFTH_CONE_DELIVERY_SETUP_TIME = FIFTH_CONE_GRAB_TIME + 1.1;
-    public static double FIFTH_CONE_DUNK_TIME = FIFTH_CONE_DELIVERY_SETUP_TIME + 1.1;
-    public static double FIFTH_CONE_DELIVER_TIME = FIFTH_CONE_DUNK_TIME + .2;
-    public static double FIFTH_CONE_UNDUNK_TIME = FIFTH_CONE_DELIVER_TIME + .2;
-
-    public static double END_RESET_TIME = 24;
     public static double startingJunctionTangent;
     public static double coneStackHeading;
     public static double firstJunctionHeading;
-
     public static Vector2d stagingSpot;
     public static double lineupHeading;
     public static double deliveryHeading;
     public static double stagingHeading;
+    public static double relativeEndAutoHeading;
 
     public void MakeTrajectoriesStart() {
 
@@ -201,6 +144,7 @@ public class PowerplayTrajectories {
             lineupHeading =Math.toRadians(270);
             deliveryHeading = Math.toRadians(45);
             stagingHeading = Math.toRadians(180);
+            relativeEndAutoHeading = Math.toRadians(-45);
 
             stagingSpot = RIGHT_STAGING_SPOT;
 
@@ -235,6 +179,7 @@ public class PowerplayTrajectories {
             deliveryHeading = Math.toRadians(135);
             stagingHeading = Math.toRadians(0);
             stagingSpot = LEFT_STAGING_SPOT;
+            relativeEndAutoHeading = Math.toRadians(45);
 
             startingJunction = MEDIUM_JUNCTION_Y2;
             startingJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
@@ -453,22 +398,28 @@ public class PowerplayTrajectories {
 
             if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
                 PowerplayTrajectories.endAutoPosition = RIGHT_SIDE_LEFT_TILE_D4;
+                relativeEndAutoPosition = FULL_TILE_DISTANCE_DRIVE;
             } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
                 PowerplayTrajectories.endAutoPosition = RIGHT_SIDE_MIDDLE_TILE_D5;
+                relativeEndAutoPosition = .01;
             } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
                 PowerplayTrajectories.endAutoPosition = RIGHT_SIDE_RIGHT_TILE_D6;
+                relativeEndAutoPosition = -FULL_TILE_DISTANCE_DRIVE;
             }
+
         } else {
 
             if (Vision.currentSignal == AprilTagVision.Signal.LEFT) {
                 PowerplayTrajectories.endAutoPosition = LEFT_SIDE_LEFT_TILE_D1;
+                relativeEndAutoPosition = -FULL_TILE_DISTANCE_DRIVE;
             } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
                 PowerplayTrajectories.endAutoPosition = LEFT_SIDE_MIDDLE_TILE_D2;
+                relativeEndAutoPosition = .01;
             } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
                 PowerplayTrajectories.endAutoPosition = LEFT_SIDE_RIGHT_TILE_D3;
+                relativeEndAutoPosition = FULL_TILE_DISTANCE_DRIVE;
             }
         }
-
         //----FIFTH CONE FROM CONE STACK DELIVERY SEQUENCE-------//
         //----AND PARKING-----//
         trajSeqSixMedPark = MecDrive.trajectorySequenceBuilder(currentPose)
@@ -500,9 +451,14 @@ public class PowerplayTrajectories {
                     Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
                 })
-                .back(7)
+                //.back(7)
+                //.setReversed(true)
+                //.splineToLinearHeading(endAutoPosition, coneStackHeading)
+
+                .back(10)
                 .setReversed(true)
-                .splineToLinearHeading(endAutoPosition, coneStackHeading)
+                .turn(relativeEndAutoHeading)
+                .forward(relativeEndAutoPosition)
                 .build();
     }
 }
