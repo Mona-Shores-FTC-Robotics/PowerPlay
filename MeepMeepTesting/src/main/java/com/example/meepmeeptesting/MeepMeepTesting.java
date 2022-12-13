@@ -30,11 +30,11 @@ public class MeepMeepTesting {
     public static final double FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 320;
 
 
-    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 5.5, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+4.5, -1*(FULL_TILE_DISTANCE_DRIVE-4.5));
+    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 4, -FULL_TILE_DISTANCE_DRIVE+1.5);
+    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -1*(FULL_TILE_DISTANCE_DRIVE-4));
 
-    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 5.5), -(FULL_TILE_DISTANCE_DRIVE));
-    public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+4.5), -1*(FULL_TILE_DISTANCE_DRIVE-4.5));
+    public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 4), -(FULL_TILE_DISTANCE_DRIVE+1.5));
+    public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+4), -1*(FULL_TILE_DISTANCE_DRIVE-4));
 
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
     public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
@@ -282,7 +282,7 @@ public class MeepMeepTesting {
                 .setConstraints(40, 40, Math.toRadians(254.96620790491366), Math.toRadians(60), 17.96)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-                                .back(10)
+                                .back(7.5)
                                 .waitSeconds(.200)
                                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
 //                                    Intake.turnIntakeOff();
