@@ -77,19 +77,26 @@ public class TeleOp_Linear_Turret_Bot extends LinearOpMode {
             /**
             Alert driver 5 seconds until END GAME
              */
-            if (runtime.seconds() > 84 && runtime.seconds() < 85) {
-                gamepad1.rumble(100);
-                gamepad2.rumble(100);
+            if (runtime.seconds() > 82 && runtime.seconds() < 83) {
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
             }
+
+            if (runtime.seconds() > 84 && runtime.seconds() < 85) {
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
+            }
+
 
             /**
             Alert driver 5 seconds until GAME END
              */
 
             if (runtime.seconds() > 114 && runtime.seconds() < 115) {
-                gamepad1.rumble(100);
-                gamepad2.rumble(100);
+                gamepad1.rumble(500);
+                gamepad2.rumble(500);
             }
+
 
             //------------------------------------------------------//
             //--------------------OPERATOR CONTROLS-----------------//

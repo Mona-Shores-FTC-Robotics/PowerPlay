@@ -232,7 +232,7 @@ public class Arm {
             claw.openClaw();
             activeOpMode.sleep(200);
 
-            lift.StartLifting(lift.liftMotor.getCurrentPosition()+300, this);
+            //lift.StartLifting(lift.liftMotor.getCurrentPosition()+300, this);
 
             // small delay before rotating
 
@@ -260,7 +260,7 @@ public class Arm {
                 targetLiftPositionAfterArmRotation = target;
             }
             //Center the Arm
-            arm.setPosition(ARM_CENTER_INTAKE);
+            //arm.setPosition(ARM_CENTER_INTAKE);
 
             //Set the targetState so the lift will be lowered to the intake position on a future loop once enough time to ensure the arm is centered has passed
             currentArmState = ARM_CENTERED_LIFT_DELAY;

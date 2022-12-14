@@ -50,8 +50,8 @@ public class PowerplayTrajectories {
         Vision = vision;
     }
 
-    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 4, -FULL_TILE_DISTANCE_DRIVE+1.5);
-    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -1*(FULL_TILE_DISTANCE_DRIVE-4));
+    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 4, -FULL_TILE_DISTANCE_DRIVE);
+    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE, -1*(FULL_TILE_DISTANCE_DRIVE-4));
 
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 4), -(FULL_TILE_DISTANCE_DRIVE+1.5));
     public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE), -1*(FULL_TILE_DISTANCE_DRIVE-4));
@@ -132,7 +132,7 @@ public class PowerplayTrajectories {
     public void MakeTrajectoriesStart() {
 
         if (ButtonConfig.currentStartPosition == ButtonConfig.StartingPosition.RIGHT_SIDE) {
-            PowerplayTrajectories.startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE, -62, Math.toRadians(90));
+            PowerplayTrajectories.startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE, -58.1, Math.toRadians(90));
             coneStackLine = RIGHT_CONE_STACK_LINE;
             coneStackPose = RIGHT_CONE_STACK_POSE;
             coneStack = RIGHT_CONE_STACK_MIDDLE_OF_LINE;
@@ -152,19 +152,19 @@ public class PowerplayTrajectories {
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             startingJunctionArm = Arm.ARM_LEFT_OUTTAKE;
             firstJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            firstJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            firstJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             firstJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             secondJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            secondJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            secondJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             secondJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             thirdJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            thirdJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            thirdJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             thirdJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             fourthJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            fourthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fourthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             fourthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             fifthJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
-            fifthJunctionHeight = HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+            fifthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             fifthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
 
         } else {
@@ -218,11 +218,11 @@ public class PowerplayTrajectories {
                                     Arm.setPosition(startingJunctionArm);
                 })
                 .splineToConstantHeading(startingJunction, startingJunctionTangent)
-                .waitSeconds(.400)
-                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
+                .waitSeconds(.200)
+                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                                     Lift.StartLifting(startingJunctionHeight - 350, Arm);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(-.25, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                                     Claw.openClaw();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
@@ -243,7 +243,7 @@ public class PowerplayTrajectories {
     public void MakeTrajectories1() {
         //---FIRST CONE FROM CONE STACK DELIVERY SEQUENCE-------//
         trajSeqSixMed1 = MecDrive.trajectorySequenceBuilder(currentPose)
-                .back(7.5)
+                .back(8)
                 .waitSeconds(.2)
                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
                     Intake.turnIntakeOff();
@@ -290,7 +290,7 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(firstJunctionArm);
                 })
                 .setReversed(false)
@@ -328,7 +328,7 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(firstJunctionArm);
                 })
                 .setReversed(false)
@@ -366,7 +366,7 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
                     Lift.StartLifting(firstJunctionHeight, Arm);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
                     Arm.setPosition(firstJunctionArm);
                 })
                 .setReversed(false)
@@ -401,7 +401,7 @@ public class PowerplayTrajectories {
                 relativeEndAutoPosition = FULL_TILE_DISTANCE_DRIVE;
             } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
                 PowerplayTrajectories.endAutoPosition = RIGHT_SIDE_MIDDLE_TILE_D5;
-                relativeEndAutoPosition = .01;
+                relativeEndAutoPosition = SIXTEENTH_TILE_DISTANCE_DRIVE;
             } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
                 PowerplayTrajectories.endAutoPosition = RIGHT_SIDE_RIGHT_TILE_D6;
                 relativeEndAutoPosition = -FULL_TILE_DISTANCE_DRIVE;
@@ -414,7 +414,7 @@ public class PowerplayTrajectories {
                 relativeEndAutoPosition = -FULL_TILE_DISTANCE_DRIVE;
             } else if (Vision.currentSignal == AprilTagVision.Signal.MIDDLE) {
                 PowerplayTrajectories.endAutoPosition = LEFT_SIDE_MIDDLE_TILE_D2;
-                relativeEndAutoPosition = .01;
+                relativeEndAutoPosition = SIXTEENTH_TILE_DISTANCE_DRIVE;
             } else if (Vision.currentSignal == AprilTagVision.Signal.RIGHT) {
                 PowerplayTrajectories.endAutoPosition = LEFT_SIDE_RIGHT_TILE_D3;
                 relativeEndAutoPosition = FULL_TILE_DISTANCE_DRIVE;
