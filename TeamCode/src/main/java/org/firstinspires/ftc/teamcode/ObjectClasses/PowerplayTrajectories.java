@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FIVE_CO
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.FULL_TILE_DISTANCE_DRIVE;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HALF_TILE_DISTANCE_DRIVE;
-import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.HIGH_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.ONE_CONE_INTAKE_HEIGHT_ENC_VAL;
 import static org.firstinspires.ftc.teamcode.ObjectClasses.GameConstants.QUARTER_TILE_DISTANCE_DRIVE;
@@ -141,7 +140,7 @@ public class PowerplayTrajectories {
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
             firstJunctionHeading = Math.toRadians(225);
-            lineupHeading =Math.toRadians(270);
+            lineupHeading =Math.toRadians(60);
             deliveryHeading = Math.toRadians(45);
             stagingHeading = Math.toRadians(180);
             relativeEndAutoHeading = Math.toRadians(-45);

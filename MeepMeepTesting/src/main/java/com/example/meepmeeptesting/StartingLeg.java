@@ -159,6 +159,11 @@ public class StartingLeg {
     public static double startingJunctionTangent;
     public static double coneStackHeading;
     public static double firstJunctionHeading;
+    public static Vector2d stagingSpot;
+    public static double lineupHeading;
+    public static double deliveryHeading;
+    public static double stagingHeading;
+    public static double relativeEndAutoHeading;
 
     public static StartingPosition currentStartPosition;
 
@@ -173,108 +178,81 @@ public class StartingLeg {
     //Set default to MIDDLE in case something goes wrong with vision
     public static Signal currentSignal;
 
-    public static Vector2d stagingSpot;
-    public static double lineupHeading;
-
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
-        currentStartPosition = StartingPosition.LEFT_SIDE;
+        currentStartPosition = StartingPosition.RIGHT_SIDE;
         currentSignal = Signal.LEFT;
 
         if (currentStartPosition == StartingPosition.RIGHT_SIDE) {
-            startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE, -62, Math.toRadians(90));
+            startPose = new Pose2d(FULL_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE, -58.1, Math.toRadians(90));
             coneStackLine = RIGHT_CONE_STACK_LINE;
             coneStackPose = RIGHT_CONE_STACK_POSE;
             coneStack = RIGHT_CONE_STACK_MIDDLE_OF_LINE;
             coneStackEndOfLine = RIGHT_CONE_STACK_END_OF_LINE;
-            coneStackMiddleOfLine = RIGHT_CONE_STACK_MIDDLE_OF_LINE;
-            stagingSpot = RIGHT_STAGING_SPOT;
 
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
             firstJunctionHeading = Math.toRadians(225);
-            lineupHeading =Math.toRadians(0);
+            lineupHeading =Math.toRadians(60);
+            deliveryHeading = Math.toRadians(45);
+            stagingHeading = Math.toRadians(180);
+            relativeEndAutoHeading = Math.toRadians(-45);
+
+            stagingSpot = RIGHT_STAGING_SPOT;
 
             startingJunction = MEDIUM_JUNCTION_Y4;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
+//            startingJunctionArm = Arm.ARM_LEFT_OUTTAKE;
             firstJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
             firstJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
+//            firstJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             secondJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
             secondJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
+//            secondJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             thirdJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
             thirdJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
+//            thirdJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             fourthJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
             fourthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
+//            fourthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             fifthJunction = MEDIUM_JUNCTION_Y4_WITH_CONE;
             fifthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
-            //startingJunctionArm = Arm.ARM_LEFT_OUTTAKE;
-            //firstJunctionArm = Arm.ARM_FRONT_OUTTAKE;
-            //secondJunctionArm = Arm.ARM_FRONT_OUTTAKE;
-            //thirdJunctionArm = Arm.ARM_FRONT_OUTTAKE;
-            //fourthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
-            //fifthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
-
-            if (currentSignal == Signal.LEFT) {
-                endAutoPosition = RIGHT_SIDE_LEFT_TILE_D4;
-            } else if (currentSignal == Signal.MIDDLE) {
-                endAutoPosition = RIGHT_SIDE_MIDDLE_TILE_D5;
-            } else if (currentSignal == Signal.RIGHT ) {
-                endAutoPosition = RIGHT_SIDE_RIGHT_TILE_D6;
-            }
+//            fifthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
 
         } else {
-            startPose = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE+QUARTER_TILE_DISTANCE_DRIVE+EIGHTH_TILE_DISTANCE_DRIVE), -62, Math.toRadians(90));
+            startPose = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE + QUARTER_TILE_DISTANCE_DRIVE + EIGHTH_TILE_DISTANCE_DRIVE), -58.1, Math.toRadians(90));
             coneStackLine = LEFT_CONE_STACK_LINE;
             coneStackEndOfLine = LEFT_CONE_STACK_END_OF_LINE;
-            coneStackMiddleOfLine = LEFT_CONE_STACK_MIDDLE_OF_LINE;
             coneStackPose = LEFT_CONE_STACK_POSE;
             coneStackHeading = Math.toRadians(180);
             startingJunctionTangent = Math.toRadians(0);
             firstJunctionHeading = Math.toRadians(315);
-            lineupHeading =Math.toRadians(135);
-
-
+            lineupHeading = Math.toRadians(135);
+            deliveryHeading = Math.toRadians(135);
+            stagingHeading = Math.toRadians(0);
             stagingSpot = LEFT_STAGING_SPOT;
+            relativeEndAutoHeading = Math.toRadians(45);
 
             startingJunction = MEDIUM_JUNCTION_Y2;
-
+//            startingJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
             startingJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
             firstJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
             firstJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
+//            firstJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             secondJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
             secondJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
+//            secondJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             thirdJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
             thirdJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
+//            thirdJunctionArm = Arm.ARM_FRONT_OUTTAKE;
             fourthJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
             fourthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
+//            fourthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
 
             fifthJunction = MEDIUM_JUNCTION_Y2_WITH_CONE;
             fifthJunctionHeight = MEDIUM_CONE_JUNCTION_SCORE_HEIGHT_ENC_VAL;
-
-//            startingJunctionArm = Arm.ARM_RIGHT_OUTTAKE;
-//            firstJunctionArm = Arm.ARM_FRONT_OUTTAKE;
-//            secondJunctionArm = Arm.ARM_FRONT_OUTTAKE;
-//            thirdJunctionArm = Arm.ARM_FRONT_OUTTAKE;
-//            fourthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
 //            fifthJunctionArm = Arm.ARM_FRONT_OUTTAKE;
-
-            if (currentSignal == Signal.LEFT) {
-                endAutoPosition = LEFT_SIDE_LEFT_TILE_D1;
-            } else if (currentSignal == Signal.MIDDLE) {
-                endAutoPosition = LEFT_SIDE_MIDDLE_TILE_D2;
-            } else if (currentSignal == Signal.RIGHT) {
-                endAutoPosition = LEFT_SIDE_RIGHT_TILE_D3;
-            }
         }
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -290,25 +268,24 @@ public class StartingLeg {
 //                                    Arm.setPosition(startingJunctionArm);
                                 })
                                 .splineToConstantHeading(startingJunction, startingJunctionTangent)
-                                .waitSeconds(.400)
-                                .UNSTABLE_addTemporalMarkerOffset(-.4, () -> {
-//                                    Lift.StartLifting(startingJunctionHeight - 325, Arm);
-                                })
-                                .UNSTABLE_addTemporalMarkerOffset(-.25, () -> {
-//                                    Claw.openClaw();
+                                .waitSeconds(.200)
+                                .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
+//                                    Lift.StartLifting(startingJunctionHeight - 350, Arm);
                                 })
                                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                                    Lift.StartLifting(startingJunctionHeight, Arm);
+//                                    Claw.openClaw();
                                 })
-                                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
 //                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
 //                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
 //                                    Claw.setEasyIntake();
 //                                    Intake.turnIntakeOn();
                                 })
                                 .setReversed(false)
                                 .setTangent(lineupHeading)
-                                .splineToLinearHeading(new Pose2d(stagingSpot, Math.toRadians(0)), coneStackHeading)
+                                .splineToLinearHeading(new Pose2d(stagingSpot, stagingHeading), coneStackHeading)
                                 .lineToLinearHeading(coneStackPose)
                                 .build());
 
