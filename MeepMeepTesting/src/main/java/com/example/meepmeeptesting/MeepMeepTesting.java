@@ -29,12 +29,11 @@ public class MeepMeepTesting {
     public static final double FOUR_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 230;
     public static final double FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL = 320;
 
-
-    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 4, -FULL_TILE_DISTANCE_DRIVE+1.5);
-    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -1*(FULL_TILE_DISTANCE_DRIVE-4));
+    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 4, -FULL_TILE_DISTANCE_DRIVE);
+    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -1*(FULL_TILE_DISTANCE_DRIVE-3));
 
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 4), -(FULL_TILE_DISTANCE_DRIVE+1.5));
-    public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE+4), -1*(FULL_TILE_DISTANCE_DRIVE-4));
+    public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE), -1*(FULL_TILE_DISTANCE_DRIVE-4));
 
     public static Vector2d LOW_JUNCTION_Y5 = new Vector2d(47.2, -23.6);
     public static Vector2d LOW_JUNCTION_Y1 = new Vector2d(-47.2, -23.6);
@@ -179,7 +178,7 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
-        currentStartPosition = StartingPosition.LEFT_SIDE;
+        currentStartPosition = StartingPosition.RIGHT_SIDE;
         currentSignal = Signal.LEFT;
 
         if (currentStartPosition == StartingPosition.RIGHT_SIDE) {
@@ -283,34 +282,35 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
                                 .back(7.5)
-                                .waitSeconds(.200)
+                                .waitSeconds(.2)
                                 .UNSTABLE_addTemporalMarkerOffset(-.2, () -> {
 //                                    Intake.turnIntakeOff();
 //                                    Claw.closeClaw();
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
 //                                    Lift.StartLifting(firstJunctionHeight, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
+//                                    Arm.setPosition(firstJunctionArm);
                                 })
                                 .setReversed(false)
                                 .splineToSplineHeading(new Pose2d(firstJunction, firstJunctionHeading), firstJunctionHeading)
-                                .UNSTABLE_addTemporalMarkerOffset(-2, () -> {
-//                                    Arm.setPosition(firstJunctionArm);
-                                })
-                                .waitSeconds(.600)
-                                .UNSTABLE_addTemporalMarkerOffset(-.6, () -> {
-//                                    Lift.StartLifting(firstJunctionHeight - 325, Arm);
-                                })
+                                .waitSeconds(.300)
                                 .UNSTABLE_addTemporalMarkerOffset(-.3, () -> {
+//                                    Lift.StartLifting(firstJunctionHeight - 350, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
 //                                    Claw.openClaw();
                                 })
-                                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                                    Lift.StartLifting(firstJunctionHeight, Arm);
-                                })
-                                .UNSTABLE_addTemporalMarkerOffset(1, () -> {
+                                .UNSTABLE_addTemporalMarkerOffset(.4, () -> {
 //                                    Arm.setPosition(org.firstinspires.ftc.teamcode.ObjectClasses.Arm.ARM_CENTER_INTAKE);
-//                                    Lift.StartLifting(FIVE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
+                                })
+                                .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
+//                                    Lift.StartLifting(THREE_CONE_STACK_INTAKE_HEIGHT_ENC_VAL, Arm);
 //                                    Claw.setEasyIntake();
 //                                    Intake.turnIntakeOn();
                                 })
-                                .setReversed(true)
+                                .setReversed(false)
                                 .setTangent(deliveryHeading)
                                 .splineToSplineHeading(coneStackPose, coneStackHeading)
                                 .build());
