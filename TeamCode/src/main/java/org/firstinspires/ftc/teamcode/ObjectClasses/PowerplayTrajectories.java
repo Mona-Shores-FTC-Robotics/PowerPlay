@@ -50,7 +50,7 @@ public class PowerplayTrajectories {
     }
 
     public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 4, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -1*(FULL_TILE_DISTANCE_DRIVE-3));
+    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -1*(FULL_TILE_DISTANCE_DRIVE-3)); //TODO: this might need to be adjusted
 
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 4), -(FULL_TILE_DISTANCE_DRIVE+1.5));
     public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE), -1*(FULL_TILE_DISTANCE_DRIVE-4));
@@ -140,7 +140,7 @@ public class PowerplayTrajectories {
             coneStackHeading = Math.toRadians(0);
             startingJunctionTangent = Math.toRadians(180);
             firstJunctionHeading = Math.toRadians(225);
-            lineupHeading =Math.toRadians(60);
+            lineupHeading =Math.toRadians(60); //TODO: this was like 215 or something before, I think 45 or 60 should be right
             deliveryHeading = Math.toRadians(45);
             stagingHeading = Math.toRadians(180);
             relativeEndAutoHeading = Math.toRadians(-45);
@@ -233,7 +233,7 @@ public class PowerplayTrajectories {
                     Intake.turnIntakeOn();
                 })
                 .setReversed(false)
-                .setTangent(lineupHeading)
+                .setTangent(lineupHeading) //TODO: this might need to be adjusted
                 .splineToLinearHeading(new Pose2d(stagingSpot, stagingHeading), coneStackHeading)
                 .lineToLinearHeading(coneStackPose)
                 .build();
