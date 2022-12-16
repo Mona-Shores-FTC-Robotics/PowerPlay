@@ -49,8 +49,8 @@ public class PowerplayTrajectories {
         Vision = vision;
     }
 
-    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 4, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+1.5, -1*(FULL_TILE_DISTANCE_DRIVE-2.5)); //TODO: this might need to be adjusted
+    public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 2.1, -(FULL_TILE_DISTANCE_DRIVE-.6));
+    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+.1, -1*(FULL_TILE_DISTANCE_DRIVE-4.2)); //TODO: this might need to be adjusted
 
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 4), -(FULL_TILE_DISTANCE_DRIVE+1.5));
     public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE), -1*(FULL_TILE_DISTANCE_DRIVE-4));
@@ -75,7 +75,7 @@ public class PowerplayTrajectories {
     public static Vector2d RIGHT_CONE_STACK_RIGHT = new Vector2d(60, -HALF_TILE_DISTANCE_DRIVE);
     public static Vector2d LEFT_CONE_STACK_LEFT = new Vector2d(-60, -HALF_TILE_DISTANCE_DRIVE);
 
-    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2+EIGHTH_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(180));
+    public static Pose2d RIGHT_CONE_STACK_POSE = new Pose2d(FULL_TILE_DISTANCE_DRIVE*2+SIXTEENTH_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(180)); //TODO: trying sixteenth here maybe?
     public static Pose2d LEFT_CONE_STACK_POSE = new Pose2d(-(FULL_TILE_DISTANCE_DRIVE*2+EIGHTH_TILE_DISTANCE_DRIVE), -HALF_TILE_DISTANCE_DRIVE, Math.toRadians(0));
 
     public static Vector2d RIGHT_CONE_STACK_END_OF_LINE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+HALF_TILE_DISTANCE_DRIVE, -HALF_TILE_DISTANCE_DRIVE);

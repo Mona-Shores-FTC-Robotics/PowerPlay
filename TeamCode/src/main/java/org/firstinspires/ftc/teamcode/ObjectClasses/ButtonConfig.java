@@ -26,7 +26,7 @@ public class ButtonConfig {
     }
 
     public void init() {
-        ButtonConfig.currentStartPosition = StartingPosition.RIGHT_SIDE;
+        ButtonConfig.currentStartPosition = StartingPosition.LEFT_SIDE;
         ButtonConfig.startPositionMultiplier = -1;
         ButtonConfig.confirmStartingPositionSelection = false;
     }
