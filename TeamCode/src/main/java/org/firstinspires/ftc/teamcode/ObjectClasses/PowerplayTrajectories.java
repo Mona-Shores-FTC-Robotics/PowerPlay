@@ -50,7 +50,7 @@ public class PowerplayTrajectories {
     }
 
     public static Vector2d MEDIUM_JUNCTION_Y4 = new Vector2d(FULL_TILE_DISTANCE_DRIVE + 4, -FULL_TILE_DISTANCE_DRIVE);
-    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+3, -1*(FULL_TILE_DISTANCE_DRIVE-3)); //TODO: this might need to be adjusted
+    public static Vector2d MEDIUM_JUNCTION_Y4_WITH_CONE = new Vector2d(FULL_TILE_DISTANCE_DRIVE+1.5, -1*(FULL_TILE_DISTANCE_DRIVE-2.5)); //TODO: this might need to be adjusted
 
     public static Vector2d MEDIUM_JUNCTION_Y2 = new Vector2d(-(FULL_TILE_DISTANCE_DRIVE + 4), -(FULL_TILE_DISTANCE_DRIVE+1.5));
     public static Vector2d MEDIUM_JUNCTION_Y2_WITH_CONE = new Vector2d(-1*(FULL_TILE_DISTANCE_DRIVE), -1*(FULL_TILE_DISTANCE_DRIVE-4));
@@ -449,6 +449,7 @@ public class PowerplayTrajectories {
                 .UNSTABLE_addTemporalMarkerOffset(.8, () -> {
                     Lift.StartLifting(ONE_CONE_INTAKE_HEIGHT_ENC_VAL, Arm);
                     Claw.setEasyIntake();
+                    Intake.turnIntakeOn();
                 })
                 //.back(7)
                 //.setReversed(true)
