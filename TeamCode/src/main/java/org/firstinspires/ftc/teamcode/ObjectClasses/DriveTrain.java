@@ -48,7 +48,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class DriveTrain {
 
     //DriveTrain Constants
-    public static final double STARTING_DRIVE_MULTIPLIER = .5;
+    public static final double STARTING_DRIVE_MULTIPLIER = .8;
     public double MINMULT = .5;
     public double MAXMULT = 1;
 
@@ -425,10 +425,14 @@ public class DriveTrain {
         leftBackPower = (drive * dPercent) + (-strafe * sPercent) + (-turn * tPercent);
 
         if (!Double.isNaN(leftFrontPower) && !Double.isNaN(rightFrontPower) && !Double.isNaN(leftBackPower) && !Double.isNaN(rightBackPower)) {
-            LFDrive.setPower(leftFrontPower);
+
+            /*LFDrive.setPower(leftFrontPower);
             RFDrive.setPower(rightFrontPower);
             LBDrive.setPower(leftBackPower);
             RBDrive.setPower(rightBackPower);
+            */
+            setMotorPower(leftFrontPower, rightFrontPower, leftBackPower, rightBackPower);
+
         } else {
             LFDrive.setPower(0);
             RFDrive.setPower(0);
